@@ -1,0 +1,26 @@
+{
+  "name": "minsky-link",
+  "version": "0.0.0",
+  "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utk-cs/team-minsky.git"
+  },
+  "keywords": [
+    "atom",
+    "plugin",
+    "typescript",
+    "github",
+    "gitlab"
+  ],
+  "author": "Ben Klein, Brian Lundell, Ian Lumsden, Jonathan Bueckman",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/utk-cs/team-minsky/issues"
+  },
+  "homepage": "https://github.com/utk-cs/team-minsky#readme"
+}
