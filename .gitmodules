@@ -1,3 +1,0 @@
-[submodule "rest.js"]
-	path = rest.js
-	url = ../../octokit/rest.js.git
