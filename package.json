@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/utk-cs/team-minsky/issues"
   },
-  "homepage": "https://github.com/utk-cs/team-minsky#readme"
+  "homepage": "https://github.com/utk-cs/team-minsky#readme",
+  "dependencies": {
+    "@octokit/rest": "^15.11.1"
+  }
 }
