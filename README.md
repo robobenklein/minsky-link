@@ -5,4 +5,4 @@
 Best Team Let's Go. 
 
 ## Dependencies
-* Octokit/node.js: `npm install @octokit/rest`
+* [Octokit/node.js](https://github.com/octokit/rest.js/): `npm install @octokit/rest`
