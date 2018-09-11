@@ -46,5 +46,7 @@ You can fix this by converting your submodule into a relative submodule. This is
 ```
 [submodule "octokit/rest.js]
     path = octokit/rest.js
-    url = ~~git@github.com:octokit/rest.js.git~~ ../../octokit/rest.js
+-   url = git@github.com:octokit/rest.js.git 
++   url = ../../octokit/rest.js
+
 ```
