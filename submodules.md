@@ -10,15 +10,15 @@ This is a basic tutorial/intro to git submodules. We may add some in the future,
 ```
 git submodule init --recursive
 ```
-  * The `--recursive` flag initializes any submodules that are in a top-level submodule.
+    * The `--recursive` flag initializes any submodules that are in a top-level submodule.
 
 3. Update/clone the submodule
 ```
 git submodule update [--force] [--init] [--recursive]
 ```
-  * `--force`: checks out the submodule using `git clone --force ...`
-  * `--init`: initializes any submodules that are not already initialized
-  * `--recursive`: runs the update on submodules in a top-level submodule
+    * `--force`: checks out the submodule using `git clone --force ...`
+    * `--init`: initializes any submodules that are not already initialized
+    * `--recursive`: runs the update on submodules in a top-level submodule
 
 ## Creating a Git Submodule
 
@@ -30,8 +30,8 @@ git submodule update [--force] [--init] [--recursive]
 ```
 git submodule add link [pathname]
 ```
-  * `link` is the GitHub/GitLab clone link from step 2
-  * `pathname` is the path to the location where you want to add the submodule.
+    * `link` is the GitHub/GitLab clone link from step 2
+    * `pathname` is the path to the location where you want to add the submodule.
 
 4. Perform steps 2 and 3 from _Using Git Submodules_.
 
