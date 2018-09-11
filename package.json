@@ -1,8 +1,10 @@
 {
   "name": "minsky-link",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
-  "engines": {"atom": ">=1.0.0 <2.0.0"},
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
