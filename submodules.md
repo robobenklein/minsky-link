@@ -43,10 +43,9 @@ When you create a submodule using the steps above, you'll find that it will be d
 
 You can fix this by converting your submodule into a relative submodule. This is done by making the following change to each submodule's entry in the `.gitmodules` file.
 
-```
+```diff
 [submodule "octokit/rest.js]
     path = octokit/rest.js
 -   url = git@github.com:octokit/rest.js.git 
 +   url = ../../octokit/rest.js
-
 ```
