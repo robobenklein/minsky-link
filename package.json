@@ -57,7 +57,29 @@
     "@types/atom": "~1.28",
     "prettier": "^1.14.3",
     "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-language-service": "^0.9.9"
+    "tslint": "^5.11.0"
+  },
+  "configSchema": {
+    "enable_viewmode_drawers": {
+      "title": "Enable Drawers",
+      "description": "Enables inline, resizable and collapsible drawers.",
+      "type": "boolean",
+      "default": true,
+      "order": 42
+    },
+    "enable_viewmode_hoverover": {
+      "title": "Show snippets on hover",
+      "description": "Enables snippets to be shown when you hover over a issue tag.",
+      "type": "boolean",
+      "default": true,
+      "order": 41
+    },
+    "enable_viewmode_panes": {
+      "title": "Enable Panes",
+      "description": "Enables issue pages to be expanded to full panes.",
+      "type": "boolean",
+      "default": true,
+      "order": 43
+    }
   }
 }
