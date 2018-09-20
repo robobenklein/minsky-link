@@ -1,10 +1,12 @@
-interface Git
+export interface Issue
 {
     // Functions
-    createIssue(title: string, body: string, milestone: number, labels: string[],
-        assignees: string[]): boolean;
+    
+    // Turn into Constructor for Implementations
+    //createIssue(title: string, body: string, milestone: number, labels: string[],
+    //    assignees: string[]): boolean;
 
-    addAssignee(id: number, assignees: string[]): boolean;
+    addAssignees(assignees: string[]): boolean;
 
     getAvailableAssignees(per_page: number, page: number): any;
 
@@ -12,13 +14,14 @@ interface Git
 
     removeAssignees(id: number, assignees: string[]): boolean;
 
-    createComment(id: number, body: string): boolean;
+    createComment(body: string): boolean;
 
     editComment(id: string, body: string): boolean;
 
     getComment(id: string, per_page: number, page: number): any;
 
-    getAllComments(issue_id: number, since: string, per_page: number, page: number): Array<any>;
+    getAllComments(issue_id: number, since: string, 
+        per_page: number, page: number): Array<any>;
 
     getAllCommentsInRepo(sort: string, direction: string, since: string): Array<any>;
 
@@ -39,7 +42,7 @@ interface Git
 
     getLabel(name: string): any;
 
-    addLabels(id: number, labels: string[]): boolean;
+    addLabels(labels: string[]): boolean;
 
     deleteLabel(name: string): boolean;
 
@@ -67,4 +70,5 @@ interface Git
     // Properties
     owner: string;
     repo: string;
+    id: number;
 }
