@@ -2,12 +2,35 @@
   "name": "minsky-link",
   "version": "0.0.3",
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
+  "main": "index.js",
+  "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p ./lib",
+    "prettier": "ts-node scripts/prettier.ts write",
+    "prettier-check": "ts-node scripts/prettier.ts check",
+    "typecheck": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts && tsc --noEmit -p ./spec",
+    "lint": "tslint --project ./lib && tslint --project ./spec",
+    "test": "npm run typecheck && npm run lint && npm run prettier-check"
+  },
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "provideAutocomplete"
+      }
+    },
+    "intentions:list": {
+      "versions": {
+        "1.0.0": "provideIntentions"
+      }
+    },
+    "code-actions": {
+      "versions": {
+        "0.1.0": "provideCodeActions"
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -29,5 +52,12 @@
   "dependencies": {
     "@octokit/rest": "^15.11.1",
     "typescript": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/atom": "~1.28",
+    "prettier": "^1.14.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-language-service": "^0.9.9"
   }
 }
