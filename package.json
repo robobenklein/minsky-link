@@ -1,6 +1,6 @@
 {
   "name": "minsky-link",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
   "main": "index.js",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
