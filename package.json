@@ -92,10 +92,10 @@
       "type": "string",
       "default": "origin",
       "order": 45
-    }
+    },
     "default_drawer_height": {
       "title": "Drawer Height",
-      "description": "Change the Drawer",
+      "description": "Change the Drawer: Either the number of lines OR pixels height",
       "type": "integer",
       "default": 64,
       "order": 46
@@ -115,7 +115,7 @@
       "order": 48
     },
     "extended_popup_project": {
-      "title": "Extend Popup Projevt",
+      "title": "Extend Popup Project",
       "description": "Show the issue project box in popup",
       "type": "boolean",
       "default": false,
