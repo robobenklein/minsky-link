@@ -102,7 +102,7 @@
     },
     "extended_popup_description": {
       "title": "Extend Popup Description",
-      "description": "Show the issue description box in popup",
+      "description": "Shows the issue description box in popup",
       "type": "boolean",
       "default": true,
       "order": 47
