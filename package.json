@@ -95,7 +95,7 @@
     },
     "default_drawer_height": {
       "title": "Drawer Height",
-      "description": "Change the Drawer: Either the number of lines OR pixels height",
+      "description": "Change the drawer height, number of lines shown. This is resizeable in use as well",
       "type": "integer",
       "default": 64,
       "order": 46
