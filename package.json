@@ -97,7 +97,7 @@
       "title": "Drawer Height",
       "description": "Change the drawer height, number of lines shown. This is resizeable in use as well",
       "type": "integer",
-      "default": 64,
+      "default": 12,
       "order": 46
     },
     "extended_popup_description": {
