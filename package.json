@@ -80,6 +80,62 @@
       "type": "boolean",
       "default": true,
       "order": 43
+    },
+    "issue_tag_regex": {
+      "title": "Issue Regex Tag",
+      "description": "Allows changing the regex used to locate issue tags",
+      "type": "string",
+      "default": ".*( GH([0-9]+)).*",
+      "order": 44
+    },
+    "default_git_remote": {
+      "title":  "Default Git Remote",
+      "description": "Changes the Git remote",
+      "type": "string",
+      "default": "origin",
+      "order": 45
+    },
+    "default_drawer_height": {
+      "title": "Drawer Height",
+      "description": "Change the drawer height, number of lines shown. This is resizeable in use as well",
+      "type": "integer",
+      "default": 12,
+      "order": 46
+    },
+    "extended_popup_description": {
+      "title": "Extend Popup Description",
+      "description": "Shows the issue description box in popup",
+      "type": "boolean",
+      "default": true,
+      "order": 47
+    },
+    "extended_popup_milestone": {
+      "title": "Extend Popup Milestone",
+      "description": "Show the issue milestone box in popup",
+      "type": "boolean",
+      "default": false,
+      "order": 48
+    },
+    "extended_popup_project": {
+      "title": "Extend Popup Project",
+      "description": "Show the issue project box in popup",
+      "type": "boolean",
+      "default": false,
+      "order": 49
+    },
+    "extended_popup_assignee": {
+      "title": "Extend Popup Assignee",
+      "description": "Show the users assigned box in popup",
+      "type": "boolean",
+      "default": false,
+      "order": 50
+    },
+    "extended_popup_label": {
+      "title": "Extend Popup Label",
+      "description": "Show the issue labels box in popup",
+      "type": "boolean",
+      "default": false,
+      "order": 51
     }
   }
 }
