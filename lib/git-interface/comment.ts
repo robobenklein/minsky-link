@@ -41,3 +41,15 @@ export class GitReplyComment extends GitPRComment
         this.in_reply_to = c_irt;
     }
 }
+
+export class GitReviewComment extends GitPRComment
+{
+    public review_id: string;
+
+    constructor(c_owner: string, c_repo: string, c_prid: number, c_id="", 
+        c_body: string, c_path="", c_dposition=NaN, c_revid)
+    {
+        super(c_owner, c_repo, c_prid, c_id, c_body, c_path, c_dposition);
+        this.review_id = c_revid;
+    }
+}
