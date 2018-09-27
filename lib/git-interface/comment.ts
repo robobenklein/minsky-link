@@ -29,3 +29,15 @@ export class GitPRComment extends GitComment
         this.diff_position = c_dposition;
     }
 }
+
+export class GitReplyComment extends GitPRComment
+{
+    public in_reply_to: number;
+
+    constructor(c_owner: string, c_repo: string, c_prid: number, c_id="", 
+        c_body: string, c_path="", c_dposition=NaN, c_irt=NaN)
+    {
+        super(c_owner, c_repo, c_prid, c_id, c_body, c_path, c_dposition);
+        this.in_reply_to = c_irt;
+    }
+}
