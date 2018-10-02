@@ -39,9 +39,12 @@
   "keywords": [
     "atom",
     "plugin",
-    "typescript",
+    "issues",
     "github",
-    "gitlab"
+    "gitlab",
+    "projects",
+    "productivity",
+    "tool"
   ],
   "author": "Ben Klein, Brian Lundell, Ian Lumsden, Jonathan Bueckman",
   "license": "MPL-2.0",
