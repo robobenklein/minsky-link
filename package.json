@@ -1,6 +1,6 @@
 {
   "name": "minsky-link",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
   "main": "index.js",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
@@ -92,7 +92,7 @@
       "order": 44
     },
     "default_git_remote": {
-      "title":  "Default Git Remote",
+      "title": "Default Git Remote",
       "description": "Changes the Git remote",
       "type": "string",
       "default": "origin",
