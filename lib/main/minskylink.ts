@@ -1,3 +1,3 @@
 // import {StatusBar} from "atom/status-bar"
 
-console.log(String("hi"))
+console.log(String("Loading Minsky Link"))
