@@ -1,4 +1,15 @@
 import { Issue } from "./issue"
+import { User } from "./user"
+import { GitComment, GitPRComment, GitReplyComment, GitReviewComment } from "./comment"
+
+export class Branch
+{
+    public label: string;
+    public ref: string;
+    public sha: string;
+    public user: User;
+    public repo: string;
+}
 
 export interface PullRequest extends Issue
 {
@@ -48,8 +59,32 @@ export interface PullRequest extends Issue
         base: string, maintainer_can_modify: boolean): boolean;
 
     // Properties
-    owner: string;
-    repo: string;
-    id: number;
+
+    // The following properties are inherited from the Issue interface, but
+    // should not be used with Pull/Merge Requests:
+    //   * repository_url
+    //   * events_url
+    //   * labels_url
+    //   * corresponding_pr
+
+    diff_url: string;
+    patch_url: string;
+    issue_url: string;
+    commits_url: string;
+    review_comments_url: string;
+    review_comment_url: string;
+    statuses_url: string;
+    merged_at: string;
+    head: Branch;
+    base: Branch;
+    merge_commit_sha: string;
+    merged: boolean;
     mergable: boolean;
+    merged_by: User;
+    num_comments: number;
+    num_commits: number;
+    num_additions: number;
+    num_deletions: number;
+    num_changed_files: number;
+    maintainer_can_modify: bool;
 }
