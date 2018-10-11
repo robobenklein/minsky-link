@@ -23,66 +23,66 @@ export enum IssueState {
   All = "all"
 }
 
-export interface Issue {
+export abstract class Issue {
   // Functions
 
   // Turn into Constructor for Implementations
   //createIssue(title: string, body: string, milestone: number, labels: string[],
   //    assignees: string[]): boolean;
 
-  addAssignees(assignees: string[]): boolean;
+  abstract addAssignees(assignees: string[]): boolean;
 
-  getAvailableAssignees(per_page: number, page: number): Array<User>;
+  abstract getAvailableAssignees(per_page: number, page: number): Array<User>;
 
-  checkAssignability(assignee: string): boolean;
+  abstract checkAssignability(assignee: string): boolean;
 
-  removeAssignees(assignees: string[]): boolean;
+  abstract removeAssignees(assignees: string[]): boolean;
 
-  createComment(body: string): boolean;
+  abstract createComment(body: string): boolean;
 
-  editComment(comment_id: string, body: string): boolean;
+  abstract editComment(comment_id: string, body: string): boolean;
 
-  getComment(comment_id: string, per_page: number, page: number): GitComment;
+  abstract getComment(comment_id: string, per_page: number, page: number): GitComment;
 
-  getAllComments(
+  abstract getAllComments(
     since: string,
     per_page: number,
     page: number
   ): Array<GitComment>;
 
-  deleteComment(comment_id: string): boolean;
+  abstract deleteComment(comment_id: string): boolean;
 
-  createLabel(name: string, color: string, description: string): boolean;
+  abstract createLabel(name: string, color: string, description: string): boolean;
 
-  updateLabel(
+  abstract updateLabel(
     current_name: string,
     new_name: string,
     new_color: string,
     new_description: string
   ): boolean;
 
-  replaceAllLabels(labels: string[]): boolean;
+  abstract replaceAllLabels(labels: string[]): boolean;
 
-  removeLabel(name: string): boolean;
+  abstract removeLabel(name: string): boolean;
 
-  removeAllLabels(): boolean;
+  abstract removeAllLabels(): boolean;
 
-  getAllLabels(per_page: number, page: number): Array<Label>;
+  abstract getAllLabels(per_page: number, page: number): Array<Label>;
 
-  getLabel(name: string): Label;
+  abstract getLabel(name: string): Label;
 
-  addLabels(labels: string[]): boolean;
+  abstract addLabels(labels: string[]): boolean;
 
-  deleteLabel(name: string): boolean;
+  abstract deleteLabel(name: string): boolean;
 
-  createMilestone(
+  abstract createMilestone(
     title: string,
     state: string,
     description: string,
     due_on: string
   ): boolean;
 
-  updateMilestone(
+  abstract updateMilestone(
     milestone_id: number,
     title: string,
     state: string,
@@ -90,46 +90,46 @@ export interface Issue {
     due_on: string
   ): boolean;
 
-  getMilestone(milestone_id: number): Milestone;
+  abstract getMilestone(milestone_id: number): Milestone;
 
-  getMilestoneLabels(
+  abstract getMilestoneLabels(
     milestone_id: number,
     per_page: number,
     page: number
   ): Array<any>;
 
-  deleteMilestone(milestone_id: number): boolean;
+  abstract deleteMilestone(milestone_id: number): boolean;
 
   //editIssue(id: number, title: string, body: string, state: string, milestone: number,
   //    labels: string[], assignees: string[]): boolean;
 
-  lock(lock_reason: string): boolean;
+  abstract lock(lock_reason: string): boolean;
 
-  unlock(): boolean;
+  abstract unlock(): boolean;
 
   // Properties
-  id: number;
-  url: string;
-  repository_url: string;
+  protected id: number;
+  protected url: string;
+  protected repository_url: string;
   // The URL should end with "{/name}". That needs to be replaced with the
   // name of the label for the URL to work.
-  labels_url: string;
-  comments_url: string;
-  events_url: string;
-  html_url: string;
-  inumber: number;
-  state: IssueState;
-  title: string;
-  body: string;
-  user: User;
-  labels: Array<Label>;
-  assignees: Array<User>;
-  milestone: Milestone;
-  locked: boolean;
-  active_lock_reason: string;
-  num_comments: number;
-  corresponding_pr: PRCorrespondingWithIssue;
-  created_at: string;
-  closed_at: string; // Should be null by default
-  updated_at: string;
+  protected labels_url: string;
+  protected comments_url: string;
+  protected events_url: string;
+  protected html_url: string;
+  protected inumber: number;
+  protected state: IssueState;
+  protected title: string;
+  protected body: string;
+  protected user: User;
+  protected labels: Array<Label>;
+  protected assignees: Array<User>;
+  protected milestone: Milestone;
+  protected locked: boolean;
+  protected active_lock_reason: string;
+  protected num_comments: number;
+  protected corresponding_pr: PRCorrespondingWithIssue;
+  protected created_at: string;
+  protected closed_at: string; // Should be null by default
+  protected updated_at: string;
 }
