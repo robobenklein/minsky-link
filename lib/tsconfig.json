@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": "..",
+    "paths": {
+      "octokit": ["node_modules/@octokit/rest/index"]
+    },
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "jsx": "react",

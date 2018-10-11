@@ -1,7 +1,7 @@
 # team-minsky
 [![Waffle.io - Issues in progress](https://badge.waffle.io/utk-cs/team-minsky.png?label=in%20progress&title=In%20Progress)](http://waffle.io/utk-cs/team-minsky)
 ![GitHub package version](https://img.shields.io/github/package-json/v/utk-cs/team-minsky.svg)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/utk-cs/team-minsky.svg)](https://github.com/utk-cs/team-minsky)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/4w/utk-cs/team-minsky.svg)](https://github.com/utk-cs/team-minsky)
 ![GitHub contributors](https://img.shields.io/github/contributors/utk-cs/team-minsky.svg)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 ![GitHub stars](https://img.shields.io/github/stars/utk-cs/team-minsky.svg?style=social&label=Stars)
