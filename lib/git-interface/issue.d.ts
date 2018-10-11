@@ -24,6 +24,7 @@ export enum IssueState {
 }
 
 export abstract class Issue {
+    constructor() {  }
   // Functions
 
   // Turn into Constructor for Implementations
@@ -132,4 +133,7 @@ export abstract class Issue {
   protected created_at: string;
   protected closed_at: string; // Should be null by default
   protected updated_at: string;
+  // Repo Info
+  protected org: string;
+  protected repo: string;
 }
