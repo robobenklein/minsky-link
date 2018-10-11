@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@types/atom": "~1.28",
+    "@types/node": "^10.11.7",
     "prettier": "^1.14.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0"
