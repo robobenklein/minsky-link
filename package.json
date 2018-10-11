@@ -4,6 +4,7 @@
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
   "main": "./dist/main/minskylink",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
+  "cursorHoverTest": "./lib/hoverMain.js",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
