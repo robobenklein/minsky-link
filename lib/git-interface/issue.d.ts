@@ -1,118 +1,135 @@
-import { GitComment } from "./comment"
+import { GitComment } from "./comment";
 import { Label } from "./label";
-import { Milestone } from "./milestone"
-import { User } from "./user"
+import { Milestone } from "./milestone";
+import { User } from "./user";
 
-export class PRCorrespondingWithIssue
-{
-    url: string;
-    html_url: string;
-    diff_url: string;
-    patch_url: string;
+export class PRCorrespondingWithIssue {
+  url: string;
+  html_url: string;
+  diff_url: string;
+  patch_url: string;
 
-    constructor(url="", html_url="", diff_url="", patch_url="")
-    {
-        this.url = url;
-        this.html_url = html_url;
-        this.diff_url = diff_url;
-        this.patch_url = patch_url;
-    }
+  constructor(url = "", html_url = "", diff_url = "", patch_url = "") {
+    this.url = url;
+    this.html_url = html_url;
+    this.diff_url = diff_url;
+    this.patch_url = patch_url;
+  }
 }
 
-export enum IssueState
-{
-    Open = "open",
-    Closed = "closed",
-    All = "all",
+export enum IssueState {
+  Open = "open",
+  Closed = "closed",
+  All = "all"
 }
 
-export interface Issue
-{
-    // Functions
-    
-    // Turn into Constructor for Implementations
-    //createIssue(title: string, body: string, milestone: number, labels: string[],
-    //    assignees: string[]): boolean;
+export interface Issue {
+  // Functions
 
-    addAssignees(assignees: string[]): boolean;
+  // Turn into Constructor for Implementations
+  //createIssue(title: string, body: string, milestone: number, labels: string[],
+  //    assignees: string[]): boolean;
 
-    getAvailableAssignees(per_page: number, page: number): Array<User>;
+  addAssignees(assignees: string[]): boolean;
 
-    checkAssignability(assignee: string): boolean;
+  getAvailableAssignees(per_page: number, page: number): Array<User>;
 
-    removeAssignees(assignees: string[]): boolean;
+  checkAssignability(assignee: string): boolean;
 
-    createComment(body: string): boolean;
+  removeAssignees(assignees: string[]): boolean;
 
-    editComment(comment_id: string, body: string): boolean;
+  createComment(body: string): boolean;
 
-    getComment(comment_id: string, per_page: number, page: number): GitComment;
+  editComment(comment_id: string, body: string): boolean;
 
-    getAllComments(since: string, per_page: number, page: number): Array<GitComment>;
+  getComment(comment_id: string, per_page: number, page: number): GitComment;
 
-    deleteComment(comment_id: string): boolean;
+  getAllComments(
+    since: string,
+    per_page: number,
+    page: number
+  ): Array<GitComment>;
 
-    createLabel(name: string, color: string, description: string): boolean;
+  deleteComment(comment_id: string): boolean;
 
-    updateLabel(current_name: string, new_name: string, 
-        new_color: string, new_description: string): boolean;
+  createLabel(name: string, color: string, description: string): boolean;
 
-    replaceAllLabels(labels: string[]): boolean;
+  updateLabel(
+    current_name: string,
+    new_name: string,
+    new_color: string,
+    new_description: string
+  ): boolean;
 
-    removeLabel(name: string): boolean;
+  replaceAllLabels(labels: string[]): boolean;
 
-    removeAllLabels(): boolean;
+  removeLabel(name: string): boolean;
 
-    getAllLabels(per_page: number, page: number): Array<Label>;
+  removeAllLabels(): boolean;
 
-    getLabel(name: string): Label;
+  getAllLabels(per_page: number, page: number): Array<Label>;
 
-    addLabels(labels: string[]): boolean;
+  getLabel(name: string): Label;
 
-    deleteLabel(name: string): boolean;
+  addLabels(labels: string[]): boolean;
 
-    createMilestone(title: string, state: string, description: string, 
-        due_on: string): boolean;
+  deleteLabel(name: string): boolean;
 
-    updateMilestone(milestone_id: number, title: string, state: string, 
-        description: string, due_on: string): boolean;
+  createMilestone(
+    title: string,
+    state: string,
+    description: string,
+    due_on: string
+  ): boolean;
 
-    getMilestone(milestone_id: number): Milestone;
+  updateMilestone(
+    milestone_id: number,
+    title: string,
+    state: string,
+    description: string,
+    due_on: string
+  ): boolean;
 
-    getMilestoneLabels(milestone_id: number, per_page: number, page: number): Array<any>;
+  getMilestone(milestone_id: number): Milestone;
 
-    deleteMilestone(milestone_id: number): boolean;
+  getMilestoneLabels(
+    milestone_id: number,
+    per_page: number,
+    page: number
+  ): Array<any>;
 
-    //editIssue(id: number, title: string, body: string, state: string, milestone: number,
-    //    labels: string[], assignees: string[]): boolean;
+  deleteMilestone(milestone_id: number): boolean;
 
-    lock(lock_reason: string): boolean;
+  //editIssue(id: number, title: string, body: string, state: string, milestone: number,
+  //    labels: string[], assignees: string[]): boolean;
 
-    unlock(): boolean;
+  lock(lock_reason: string): boolean;
 
-    // Properties
-    id: number;
-    url: string;
-    repository_url: string;
-    // The URL should end with "{/name}". That needs to be replaced with the 
-    // name of the label for the URL to work.
-    labels_url: string;
-    comments_url: string;
-    events_url: string;
-    html_url: string;
-    inumber: number;
-    state: IssueState;
-    title: string;
-    body: string;
-    user: User;
-    labels: Array<Label>;
-    assignees: Array<User>;
-    milestone: Milestone;
-    locked: boolean;
-    active_lock_reason: string;
-    num_comments: number;
-    corresponding_pr: PRCorrespondingWithIssue; 
-    created_at: string;
-    closed_at: string; // Should be null by default
-    updated_at: string;
+  unlock(): boolean;
+
+  // Properties
+  id: number;
+  url: string;
+  repository_url: string;
+  // The URL should end with "{/name}". That needs to be replaced with the
+  // name of the label for the URL to work.
+  labels_url: string;
+  comments_url: string;
+  events_url: string;
+  html_url: string;
+  inumber: number;
+  state: IssueState;
+  title: string;
+  body: string;
+  user: User;
+  labels: Array<Label>;
+  assignees: Array<User>;
+  milestone: Milestone;
+  locked: boolean;
+  active_lock_reason: string;
+  num_comments: number;
+  corresponding_pr: PRCorrespondingWithIssue;
+  created_at: string;
+  closed_at: string; // Should be null by default
+  updated_at: string;
 }
