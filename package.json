@@ -2,13 +2,13 @@
   "name": "minsky-link",
   "version": "0.0.5",
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
-  "main": "index.js",
+  "main": "./dist/main/minskylink",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
   "scripts": {
-    "build": "tsc -p ./lib",
+    "build": "tsc -p ./lib/",
     "prettier": "ts-node scripts/prettier.ts write",
     "prettier-check": "ts-node scripts/prettier.ts check",
     "typecheck": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts && tsc --noEmit -p ./spec",
