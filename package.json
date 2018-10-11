@@ -12,8 +12,8 @@
     "build": "tsc -p ./lib/",
     "prettier": "ts-node scripts/prettier.ts write",
     "prettier-check": "ts-node scripts/prettier.ts check",
-    "typecheck": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts && tsc --noEmit -p ./spec",
-    "lint": "tslint --project ./lib && tslint --project ./spec",
+    "typecheck": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts",
+    "lint": "tslint --project ./lib",
     "test": "npm run typecheck && npm run lint && npm run prettier-check"
   },
   "providedServices": {
@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@types/atom": "~1.28",
+    "@types/node": "^10.11.7",
     "prettier": "^1.14.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0"
