@@ -1,16 +1,17 @@
 export class Label
 {
     // Parameters
-    public owner: string;
-    public repo: string;
+    public id: number;
+    public url: string;
     public name: string;
     public color: string;
     public description: string;
+    public ldefault: boolean;
     // Constructor
-    constructor(c_owner: string, c_repo: string, c_name: string, 
-        c_color: string, c_description="")
+    constructor(c_id: number, c_url: string, c_name: string, 
+        c_color: string, c_description="", c_default=true)
     {
-        this.owner = c_owner; this.repo = c_repo; this.name = c_name; 
-        this.color = c_color; this.description = c_description;
+        this.name = c_name; this.id = c_id; this.color = c_color; 
+        this.description = c_description; this.url = c_url; this.ldefault = c_default;
     }
 }

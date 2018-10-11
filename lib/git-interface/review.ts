@@ -1,26 +1,39 @@
+import { User } from "./user"
+
 export enum Pr_Event
 {
     Approve = "APPROVE",
     RequestChange = "REQUEST_CHANGES",
     MakeComment = "COMMENT",
-    Pending = "",
+}
+
+export enum Pr_State
+{
+    Appr = "APPROVED",
+    Pend = "PENDING",
+    Change = "CHANGES_REQUESTED",
+    Dissmiss = "DISMISSED",
 }
 
 export class Review
 {
-    public owner: string;
-    public repo: string;
     public pr_id: number;
+    public user: User;
     public body: string;
-    public pr_event: Pr_Event;
+    public commit_id: string;
+    public state: Pr_State;
+    public html_url: string;
+    public pull_request_url: string;
 
-    constructor(r_owner: string, r_repo: string, r_id: number, 
-        r_body="", r_event=Pr_Event.Pending)
+    constructor(pr_id: number, user: User, body: string, commit_id: string, html_url: string, 
+        pr_url: string, state=Pr_State.Pend)
     {
-        this.owner = r_owner;
-        this.repo = r_repo;
-        this.pr_id = r_id;
-        this.body = r_body;
-        this.pr_event = r_event;
+        this.pr_id = pr_id;
+        this.user = user;
+        this.body = body;
+        this.commit_id = commit_id;
+        this.html_url = html_url;
+        this.pull_request_url = pr_url;
+        this.state = state;
     }
 }
