@@ -1,5 +1,5 @@
-import 'atom';
-import {TextBuffer} from 'atom';
+import "atom";
+import { TextBuffer } from "atom";
 
 console.log(String("Loading Minsky Link"));
 
@@ -7,8 +7,8 @@ console.log(String("Loading Minsky Link"));
 
 // search for issue tags in a TextBuffer and apply markers to them
 function findIssueTags(textToSearch: TextBuffer) {
-  var regex1 = new RegExp( /( GH([0-9]+))/ );
-  textToSearch.scan(regex1, (scanResult) => {
+  var regex1 = new RegExp(/( GH([0-9]+))/);
+  textToSearch.scan(regex1, scanResult => {
     console.log("Found issue tag: " + scanResult.matchText);
   });
 }
