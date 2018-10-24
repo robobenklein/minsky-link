@@ -2,7 +2,6 @@ import { User } from "./user";
 
 export class GitComment {
   public id: number;
-  public comment_id: string;
   public url: string;
   public html_url: string;
   public body: string;
@@ -18,7 +17,6 @@ export class GitComment {
     org: string,
     repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -30,7 +28,6 @@ export class GitComment {
     this.repo = repo;
     this.body = c_body;
     this.user = user;
-    this.comment_id = comment_id;
     this.url = url;
     this.html_url = html_url;
     this.created_at = created_at;
@@ -47,7 +44,6 @@ export class GitPRComment extends GitComment {
     org: string,
     repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -56,7 +52,7 @@ export class GitPRComment extends GitComment {
     c_path = "",
     c_dposition = NaN
   ) {
-    super(c_body, org, repo, id, comment_id, url, html_url, user, created_at, updated_at);
+    super(c_body, org, repo, id, url, html_url, user, created_at, updated_at);
     this.path = c_path;
     this.diff_position = c_dposition;
   }
@@ -70,7 +66,6 @@ export class GitReplyComment extends GitPRComment {
     org: string,
     repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -85,7 +80,6 @@ export class GitReplyComment extends GitPRComment {
       org,
       repo,
       id,
-      comment_id,
       url,
       html_url,
       user,
@@ -111,7 +105,6 @@ export class GitReviewComment extends GitReplyComment {
     org: string,
     repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -130,7 +123,6 @@ export class GitReviewComment extends GitReplyComment {
       org,
       repo,
       id,
-      comment_id,
       url,
       html_url,
       user,

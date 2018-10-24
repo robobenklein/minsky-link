@@ -24,64 +24,64 @@ export enum IssueState {
 }
 
 export abstract class Issue {
-    constructor() {  }
+  constructor() {opts = {baseUrl: "https://api.github.com",}}
   // Functions
 
   // Turn into Constructor for Implementations
   //createIssue(title: string, body: string, milestone: number, labels: string[],
   //    assignees: string[]): boolean;
 
-  abstract addAssignees(assignees: string[]): boolean;
+  abstract addAssignees(assignees: string[]): Promise<boolean>;
 
-  abstract getAvailableAssignees(per_page: number, page: number): Array<User>;
+  abstract getAvailableAssignees(per_page: number, page: number): Promise<Array<User>>;
 
-  abstract checkAssignability(assignee: string): boolean;
+  abstract checkAssignability(assignee: string): Promise<boolean>;
 
-  abstract removeAssignees(assignees: string[]): boolean;
+  abstract removeAssignees(assignees: string[]): Promise<boolean>;
 
-  abstract createComment(body: string): boolean;
+  abstract createComment(body: string): Promise<boolean>;
 
-  abstract editComment(comment_id: string, body: string): boolean;
+  abstract editComment(comment_id: string, body: string): Promise<boolean>;
 
-  abstract getComment(comment_id: string, per_page: number, page: number): GitComment;
+  abstract getComment(comment_id: string, per_page: number, page: number): Promise<GitComment>;
 
   abstract getAllComments(
     since: string,
     per_page: number,
     page: number
-  ): Array<GitComment>;
+  ): Promise<Array<GitComment>>;
 
-  abstract deleteComment(comment_id: string): boolean;
+  abstract deleteComment(comment_id: string): Promise<boolean>;
 
-  abstract createLabel(name: string, color: string, description: string): boolean;
+  abstract createLabel(name: string, color: string, description: string): Promise<boolean>;
 
   abstract updateLabel(
     current_name: string,
     new_name: string,
     new_color: string,
     new_description: string
-  ): boolean;
+  ): Promise<boolean>;
 
-  abstract replaceAllLabels(labels: string[]): boolean;
+  abstract replaceAllLabels(labels: string[]): Promise<boolean>;
 
-  abstract removeLabel(name: string): boolean;
+  abstract removeLabel(name: string): Promise<boolean>;
 
-  abstract removeAllLabels(): boolean;
+  abstract removeAllLabels(): Promise<boolean>;
 
-  abstract getAllLabels(per_page: number, page: number): Array<Label>;
+  abstract getAllLabels(per_page: number, page: number): Promise<Array<Label>>;
 
-  abstract getLabel(name: string): Label;
+  abstract getLabel(name: string): Promise<Label>;
 
-  abstract addLabels(labels: string[]): boolean;
+  abstract addLabels(labels: string[]): Promise<boolean>;
 
-  abstract deleteLabel(name: string): boolean;
+  abstract deleteLabel(name: string): Promise<boolean>;
 
   abstract createMilestone(
     title: string,
     state: string,
     description: string,
     due_on: string
-  ): boolean;
+  ): Promise<boolean>;
 
   abstract updateMilestone(
     milestone_id: number,
@@ -89,51 +89,53 @@ export abstract class Issue {
     state: string,
     description: string,
     due_on: string
-  ): boolean;
+  ): Promise<boolean>;
 
-  abstract getMilestone(milestone_id: number): Milestone;
+  abstract getMilestone(milestone_id: number): Promise<Milestone>;
 
   abstract getMilestoneLabels(
     milestone_id: number,
     per_page: number,
     page: number
-  ): Array<any>;
+  ): Promise<Array<any>>;
 
-  abstract deleteMilestone(milestone_id: number): boolean;
+  abstract deleteMilestone(milestone_id: number): Promise<boolean>;
 
   //editIssue(id: number, title: string, body: string, state: string, milestone: number,
   //    labels: string[], assignees: string[]): boolean;
 
-  abstract lock(lock_reason: string): boolean;
+  abstract lock(lock_reason: string): Promise<boolean>;
 
-  abstract unlock(): boolean;
+  abstract unlock(): Promise<boolean>;
 
   // Properties
-  protected id: number;
-  protected url: string;
-  protected repository_url: string;
+  public id: number;
+  public url: string;
+  public repository_url: string;
   // The URL should end with "{/name}". That needs to be replaced with the
   // name of the label for the URL to work.
-  protected labels_url: string;
-  protected comments_url: string;
-  protected events_url: string;
-  protected html_url: string;
-  protected inumber: number;
-  protected state: IssueState;
-  protected title: string;
-  protected body: string;
-  protected user: User;
-  protected labels: Array<Label>;
-  protected assignees: Array<User>;
-  protected milestone: Milestone;
-  protected locked: boolean;
-  protected active_lock_reason: string;
-  protected num_comments: number;
-  protected corresponding_pr: PRCorrespondingWithIssue;
-  protected created_at: string;
-  protected closed_at: string; // Should be null by default
-  protected updated_at: string;
+  public labels_url: string;
+  public comments_url: string;
+  public events_url: string;
+  public html_url: string;
+  public inumber: number;
+  public state: IssueState;
+  public title: string;
+  public body: string;
+  public user: User;
+  public labels: Array<Label>;
+  public assignees: Array<User>;
+  public milestone: Milestone;
+  public locked: boolean;
+  public active_lock_reason: string;
+  public num_comments: number;
+  public corresponding_pr: PRCorrespondingWithIssue;
+  public created_at: string;
+  public closed_at: string; // Should be null by default
+  public updated_at: string;
   // Repo Info
-  protected org: string;
-  protected repo: string;
+  public org: string;
+  public repo: string;
+
+  protected opts: Github.Options;
 }
