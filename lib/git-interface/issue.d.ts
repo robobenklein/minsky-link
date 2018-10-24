@@ -1,6 +1,6 @@
 import { GitComment } from "./comment";
 import { Label } from "./label";
-import { Milestone } from "./milestone";
+import { M_State, Milestone } from "./milestone";
 import { User } from "./user";
 
 export class PRCorrespondingWithIssue {
@@ -23,8 +23,17 @@ export enum IssueState {
   All = "all"
 }
 
+export enum LockReason {
+  OffTopic = "off-topic",
+  TooHeated = "too heated",
+  Resolved = "resolved",
+  Spam = "spam"
+}
+
 export abstract class Issue {
-  constructor() {opts = {baseUrl: "https://api.github.com",}}
+  constructor() {
+    this.opts = { baseUrl: "https://api.github.com" };
+  }
   // Functions
 
   // Turn into Constructor for Implementations
@@ -33,7 +42,10 @@ export abstract class Issue {
 
   abstract addAssignees(assignees: string[]): Promise<boolean>;
 
-  abstract getAvailableAssignees(per_page: number, page: number): Promise<Array<User>>;
+  abstract getAvailableAssignees(
+    per_page: number,
+    page: number
+  ): Promise<Array<User>>;
 
   abstract checkAssignability(assignee: string): Promise<boolean>;
 
@@ -43,7 +55,11 @@ export abstract class Issue {
 
   abstract editComment(comment_id: number, body: string): Promise<GitComment>;
 
-  abstract getComment(comment_id: number, per_page: number, page: number): Promise<GitComment>;
+  abstract getComment(
+    comment_id: number,
+    per_page: number,
+    page: number
+  ): Promise<GitComment>;
 
   abstract getAllComments(
     since: string,
@@ -53,7 +69,11 @@ export abstract class Issue {
 
   abstract deleteComment(comment_id: number): Promise<boolean>;
 
-  abstract createLabel(name: string, color: string, description?: string): Promise<Label>;
+  abstract createLabel(
+    name: string,
+    color: string,
+    description?: string
+  ): Promise<Label>;
 
   abstract updateLabel(
     current_name: string,
@@ -80,7 +100,7 @@ export abstract class Issue {
     title: string,
     description?: string,
     due_on?: string,
-    state: string
+    state: M_State
   ): Promise<Milestone>;
 
   abstract updateMilestone(
@@ -88,7 +108,7 @@ export abstract class Issue {
     title?: string,
     description?: string,
     due_on?: string,
-    state: string
+    state: M_State
   ): Promise<Milestone>;
 
   abstract getMilestone(milestone_id: number): Promise<Milestone>;
@@ -104,7 +124,7 @@ export abstract class Issue {
   //editIssue(id: number, title: string, body: string, state: string, milestone: number,
   //    labels: string[], assignees: string[]): boolean;
 
-  abstract lock(lock_reason: string): Promise<boolean>;
+  abstract lock(lock_reason: LockReason): Promise<boolean>;
 
   abstract unlock(): Promise<boolean>;
 

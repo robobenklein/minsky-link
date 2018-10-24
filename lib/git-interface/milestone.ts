@@ -26,14 +26,14 @@ export class Milestone {
   public repo: string;
 
   constructor(
-    org="",
-    repo="",
-    url="",
-    html_url="",
-    labels_url="",
-    id=0,
-    cnumber=0,
-    title="",
+    org = "",
+    repo = "",
+    url = "",
+    html_url = "",
+    labels_url = "",
+    id = 0,
+    cnumber = 0,
+    title = "",
     state = M_State.Open,
     description = "",
     creator = new User(),

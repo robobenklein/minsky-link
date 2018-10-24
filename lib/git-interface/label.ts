@@ -26,7 +26,7 @@ export class Label {
     this.description = c_description;
     this.url = c_url;
     this.ldefault = c_default;
-    this.org=org;
-    this.repo=repo;
+    this.org = org;
+    this.repo = repo;
   }
 }
