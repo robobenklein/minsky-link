@@ -1,10 +1,18 @@
 import { PRCorrespondingWithIssue, IssueState, Issue } from "../git-interface/issue"
 import { GitComment } from "../git-interface/comment"
 import { Label } from "../git-interface/label"
-import { Milestone } from "../git-interface/milestone"
+import { M_State, Milestone } from "../git-interface/milestone"
 import { User } from "../git-interface/user"
 
 import * as Github from "../../node_modules/@octokit/rest/index"
+
+export enum LockReason
+{
+    OffTopic = "off-topic",
+    TooHeated = "too heated",
+    Resolved = "resolved",
+    Spam = "spam"
+}
 
 export class GitHubIssue extends Issue
 {
@@ -347,64 +355,182 @@ export class GitHubIssue extends Issue
         return new Promise<Label>((resolve) => {resolve(lab)});
     }
   
-    addLabels(labels: string[]): boolean
+    async addLabels(labels: string[]): Promise<Array<Label>>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.addLabels({owner: this.org, repo: this.repo,
+                             number: this.id, labels: labels});
+        var data;
+        if (result.status >= 200 && result.status < 205)
+        {
+            data = result.data;
+        }
+        else
+        {
+            return new Promise<Array<Label>>((resolve, reject) => 
+                {reject(new Error("HTML Request Failed"))});
+        }
+        var labs = new Array<Label>();
+        for (var l of data)
+        {
+            var lab = new Label(l.id, l.url, l.name, l.color, this.org, 
+                                this.repo, l.description, l.default)
+            labs.push(lab)
+        }
+        return new Promise<Array<Label>>((resolve) => {resolve(labs)});
     }
   
-    deleteLabel(name: string): boolean
+    async deleteLabel(name: string): Promise<boolean>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.deleteLabel({owner: this.org, repo: this.repo, name: name});
+        return new Promise<boolean>((resolve) => {resolve(result.status == 204)});
     }
 
-    createMilestone(
+    async createMilestone(
       title: string,
-      state: string,
-      description: string,
-      due_on: string
-    ): boolean
+      state=M_State.Open,
+      description="",
+      due_on=""
+    ): Promise<Milestone>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.createMilestone({owner: this.org, repo: this.repo,
+                             title: title, state: state, description: description, 
+                             due_on: due_on});
+        var data;
+        if (result.status == 201)
+        {
+            data = result.data;
+        }
+        else
+        {
+            return new Promise<Milestone>((resolve, reject) => 
+                {reject(new Error("HTML Request Failed"))});
+        }
+        var us = new User(data.creator.login, data.creator.id, data.creator.avatar_url,
+                          data.creator.gravatar_id, data.creator.url, data.creator.html_url,
+                          data.creator.events_url, data.creator.received_events_url,
+                          data.creator.type, data.creator.site_admin);
+        var mstate = (data.state == "open") ? M_State.Open : M_State.Closed;
+        var mile = new Milestone(this.org, this.repo, data.url, data.html_url, data.labels_url,
+                                 data.id, data.number, data.title, mstate, data.description,
+                                 us, data.open_issues, data.closed_issues, data.created_at,
+                                 data.closed_at, data.due_on);
+        return new Promise<Milestone>((resolve) => {resolve(mile)});
     }
   
-    updateMilestone(
+    async updateMilestone(
       milestone_id: number,
-      title: string,
-      state: string,
-      description: string,
-      due_on: string
-    ): boolean
+      title="",
+      state=M_State.Open,
+      description="",
+      due_on=""
+    ): Promise<Milestone>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.updateMilestone({owner: this.org, repo: this.repo,
+                             number: milestone_id, title: title, state: state, 
+                             description: description, due_on: due_on});
+        var data;
+        if (result.status == 200)
+        {
+            data = result.data;
+        }
+        else
+        {
+            return new Promise<Milestone>((resolve, reject) => 
+                {reject(new Error("HTML Request Failed"))});
+        }
+        var us = new User(data.creator.login, data.creator.id, data.creator.avatar_url,
+                          data.creator.gravatar_id, data.creator.url, data.creator.html_url,
+                          data.creator.events_url, data.creator.received_events_url,
+                          data.creator.type, data.creator.site_admin);
+        var mstate = (data.state == "open") ? M_State.Open : M_State.Closed;
+        var mile = new Milestone(this.org, this.repo, data.url, data.html_url, data.labels_url,
+                                 data.id, data.number, data.title, mstate, data.description,
+                                 us, data.open_issues, data.closed_issues, data.created_at,
+                                 data.closed_at, data.due_on);
+        return new Promise<Milestone>((resolve) => {resolve(mile)});
     }
   
-    getMilestone(milestone_id: number): Milestone
+    async getMilestone(milestone_id: number): Promise<Milestone>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.getMilestone({owner: this.org, repo: this.repo,
+                             number: milestone_id});
+        var data;
+        if (result.status == 200)
+        {
+            data = result.data;
+        }
+        else
+        {
+            return new Promise<Milestone>((resolve, reject) => 
+                {reject(new Error("HTML Request Failed"))});
+        }
+        var us = new User(data.creator.login, data.creator.id, data.creator.avatar_url,
+                          data.creator.gravatar_id, data.creator.url, data.creator.html_url,
+                          data.creator.events_url, data.creator.received_events_url,
+                          data.creator.type, data.creator.site_admin);
+        var mstate = (data.state == "open") ? M_State.Open : M_State.Closed;
+        var mile = new Milestone(this.org, this.repo, data.url, data.html_url, data.labels_url,
+                                 data.id, data.number, data.title, mstate, data.description,
+                                 us, data.open_issues, data.closed_issues, data.created_at,
+                                 data.closed_at, data.due_on);
+        return new Promise<Milestone>((resolve) => {resolve(mile)});
     }
   
-    getMilestoneLabels(
+    async getMilestoneLabels(
       milestone_id: number,
       per_page: number,
       page: number
-    ): Array<any>
+    ): Promise<Array<Label>>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.getMilestoneLabels({owner: this.org, repo: this.repo,
+                             number: milestone_id, per_page: per_page, page: page});
+        var data;
+        if (result.status == 200)
+        {
+            data = result.data;
+        }
+        else
+        {
+            return new Promise<Array<Label>>((resolve, reject) => 
+                {reject(new Error("HTML Request Failed"))});
+        }
+        var labs = new Array<Label>();
+        for (var l of data)
+        {
+            var lab = new Label(l.id, l.url, l.name, l.color, this.org, 
+                                this.repo, l.description, l.default)
+            labs.push(lab)
+        }
+        return new Promise<Array<Label>>((resolve) => {resolve(labs)});
     }
   
-    deleteMilestone(milestone_id: number): boolean
+    async deleteMilestone(milestone_id: number): Promise<boolean>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.deleteMilestone({owner: this.org, repo: this.repo, 
+                             number: milestone_id});
+        return new Promise<boolean>((resolve) => {resolve(result.status == 204)});
     }
   
-    lock(lock_reason: string): boolean
+    async lock(lock_reason=LockReason.Resolved): Promise<boolean>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.lock({owner: this.org, repo: this.repo,
+                             number: this.id, lock_reason: lock_reason});
+        return new Promise<boolean>((resolve) => {resolve(result.status == 204)});
     }
   
-    unlock(): boolean
+    async unlock(): Promise<boolean>
     {
-    
+        var gh = new Github(this.opts)
+        const result = await gh.issues.unlock({owner: this.org, repo: this.repo, number: this.id})
+        return new Promise<boolean>((resolve) => {resolve(result.status == 204)})
     }
 
 }
