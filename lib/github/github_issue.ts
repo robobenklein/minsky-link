@@ -156,7 +156,7 @@ export class GitHubIssue extends Issue
         return new Promise<GitComment>((resolve) => {resolve(comment)});
     }
   
-    async getComment(comment_id: number, per_page: number, page: number): Promise<GitComment>
+    async getComment(comment_id: number, per_page=30, page=1): Promise<GitComment>
     {
         var gh = new Github(this.opts)
         const result = await gh.issues.getComment({owner: this.org, repo: this.repo,
@@ -183,8 +183,8 @@ export class GitHubIssue extends Issue
   
     async getAllComments(
       since: string,
-      per_page: number,
-      page: number
+      per_page=30,
+      page=1
     ): Promise<Array<GitComment>>
     {
         var gh = new Github(this.opts)
@@ -223,7 +223,7 @@ export class GitHubIssue extends Issue
         return new Promise<boolean>((resolve) => {resolve(result.status == 204)});
     }
   
-    async createLabel(name: string, color: string, description=""): Promise<Label>
+    async createLabel(name: string, color: string, description?: string): Promise<Label>
     {
         var gh = new Github(this.opts)
         const result = await gh.issues.createLabel({owner: this.org, repo: this.repo,
@@ -245,9 +245,9 @@ export class GitHubIssue extends Issue
   
     async updateLabel(
       current_name: string,
-      new_name="",
-      new_color="",
-      new_description=""
+      new_name?: string,
+      new_color?: string,
+      new_description?: string
     ): Promise<Label>
     {
         var gh = new Github(this.opts)
@@ -310,7 +310,7 @@ export class GitHubIssue extends Issue
         return new Promise<boolean>((resolve) => {resolve(result.status == 204)});
     }
   
-    async getAllLabels(per_page: number, page: number): Promise<Array<Label>>
+    async getAllLabels(per_page=30, page=1): Promise<Array<Label>>
     {
         var gh = new Github(this.opts)
         const result = await gh.issues.getLabels({owner: this.org, repo: this.repo,
@@ -389,9 +389,9 @@ export class GitHubIssue extends Issue
 
     async createMilestone(
       title: string,
-      state=M_State.Open,
-      description="",
-      due_on=""
+      description?: string,
+      due_on?: string,
+      state=M_State.Open
     ): Promise<Milestone>
     {
         var gh = new Github(this.opts)
@@ -422,10 +422,10 @@ export class GitHubIssue extends Issue
   
     async updateMilestone(
       milestone_id: number,
-      title="",
-      state=M_State.Open,
-      description="",
-      due_on=""
+      title?: string,
+      description?: string,
+      due_on?: string,
+      state=M_State.Open
     ): Promise<Milestone>
     {
         var gh = new Github(this.opts)
@@ -483,8 +483,8 @@ export class GitHubIssue extends Issue
   
     async getMilestoneLabels(
       milestone_id: number,
-      per_page: number,
-      page: number
+      per_page=30,
+      page=1
     ): Promise<Array<Label>>
     {
         var gh = new Github(this.opts)

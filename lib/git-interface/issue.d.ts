@@ -39,11 +39,11 @@ export abstract class Issue {
 
   abstract removeAssignees(assignees: string[]): Promise<boolean>;
 
-  abstract createComment(body: string): Promise<boolean>;
+  abstract createComment(body: string): Promise<GitComment>;
 
-  abstract editComment(comment_id: string, body: string): Promise<boolean>;
+  abstract editComment(comment_id: number, body: string): Promise<GitComment>;
 
-  abstract getComment(comment_id: string, per_page: number, page: number): Promise<GitComment>;
+  abstract getComment(comment_id: number, per_page: number, page: number): Promise<GitComment>;
 
   abstract getAllComments(
     since: string,
@@ -51,18 +51,18 @@ export abstract class Issue {
     page: number
   ): Promise<Array<GitComment>>;
 
-  abstract deleteComment(comment_id: string): Promise<boolean>;
+  abstract deleteComment(comment_id: number): Promise<boolean>;
 
-  abstract createLabel(name: string, color: string, description: string): Promise<boolean>;
+  abstract createLabel(name: string, color: string, description?: string): Promise<Label>;
 
   abstract updateLabel(
     current_name: string,
-    new_name: string,
-    new_color: string,
-    new_description: string
-  ): Promise<boolean>;
+    new_name?: string,
+    new_color?: string,
+    new_description?: string
+  ): Promise<Label>;
 
-  abstract replaceAllLabels(labels: string[]): Promise<boolean>;
+  abstract replaceAllLabels(labels: string[]): Promise<Array<Label>>;
 
   abstract removeLabel(name: string): Promise<boolean>;
 
@@ -72,24 +72,24 @@ export abstract class Issue {
 
   abstract getLabel(name: string): Promise<Label>;
 
-  abstract addLabels(labels: string[]): Promise<boolean>;
+  abstract addLabels(labels: string[]): Promise<Array<Label>>;
 
   abstract deleteLabel(name: string): Promise<boolean>;
 
   abstract createMilestone(
     title: string,
-    state: string,
-    description: string,
-    due_on: string
-  ): Promise<boolean>;
+    description?: string,
+    due_on?: string,
+    state: string
+  ): Promise<Milestone>;
 
   abstract updateMilestone(
     milestone_id: number,
-    title: string,
-    state: string,
-    description: string,
-    due_on: string
-  ): Promise<boolean>;
+    title?: string,
+    description?: string,
+    due_on?: string,
+    state: string
+  ): Promise<Milestone>;
 
   abstract getMilestone(milestone_id: number): Promise<Milestone>;
 
@@ -97,7 +97,7 @@ export abstract class Issue {
     milestone_id: number,
     per_page: number,
     page: number
-  ): Promise<Array<any>>;
+  ): Promise<Array<Label>>;
 
   abstract deleteMilestone(milestone_id: number): Promise<boolean>;
 
