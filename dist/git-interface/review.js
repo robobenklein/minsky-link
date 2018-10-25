@@ -14,7 +14,7 @@ var Pr_State;
     Pr_State["Dissmiss"] = "DISMISSED";
 })(Pr_State = exports.Pr_State || (exports.Pr_State = {}));
 class Review {
-    constructor(pr_id, user, body, commit_id, html_url, pr_url, state = Pr_State.Pend) {
+    constructor(pr_id, user, body, commit_id, html_url, pr_url, org, repo, state = Pr_State.Pend) {
         this.pr_id = pr_id;
         this.user = user;
         this.body = body;
@@ -22,6 +22,8 @@ class Review {
         this.html_url = html_url;
         this.pull_request_url = pr_url;
         this.state = state;
+        this.org = org;
+        this.repo = repo;
     }
 }
 exports.Review = Review;
