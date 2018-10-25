@@ -70,7 +70,9 @@ export class GitHubIssue extends Issue {
       number: this.id,
       assignees
     });
-    return new Promise<boolean>(resolve => resolve(result.status >= 200 && result.status < 205));
+    return new Promise<boolean>(resolve =>
+      resolve(result.status >= 200 && result.status < 205)
+    );
   }
 
   public async getAvailableAssignees(per_page = 30, page = 1): Promise<User[]> {
@@ -173,7 +175,10 @@ export class GitHubIssue extends Issue {
     });
   }
 
-  public async editComment(comment_id: number, body: string): Promise<GitComment> {
+  public async editComment(
+    comment_id: number,
+    body: string
+  ): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
     const result = await gh.issues.editComment({
       owner: this.org,
