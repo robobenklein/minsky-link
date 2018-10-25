@@ -7,7 +7,13 @@ console.log(String("Loading Minsky Link"));
 function findIssueTags(textToSearch) {
     var regex1 = new RegExp(/( GH([0-9]+))/);
     textToSearch.scan(regex1, scanResult => {
+        var issue_number = parseInt(scanResult.match[2]);
         console.log("Found issue tag: " + scanResult.matchText);
+        console.log("Creating marker on " + scanResult.range);
+        var new_marker = textToSearch.markRange(scanResult.range, {
+            invalidate: 'touch'
+        });
+        console.log("Created marker for issue #" + issue_number + ": " + new_marker.getStartPosition());
     });
 }
 // const subscriptions = new CompositeDisposable();
