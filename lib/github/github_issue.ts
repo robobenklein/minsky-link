@@ -84,9 +84,9 @@ export class GitHubIssue extends Issue {
     return new Promise<User[]>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
         const data = result.data;
-        var final_data = new Array<User>();
-        for (var us of data) {
-          var fus = new User(
+        const final_data = new Array<User>();
+        for (const us of data) {
+          const fus = new User(
             us.login,
             us.id,
             us.avatar_url,
@@ -112,10 +112,10 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.checkAssignee({
       owner: this.org,
       repo: this.repo,
-      assignee: assignee
+      assignee
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 
@@ -125,10 +125,10 @@ export class GitHubIssue extends Issue {
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      assignees: assignees
+      assignees
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 200);
+      resolve(result.status === 200);
     });
   }
 
@@ -138,12 +138,12 @@ export class GitHubIssue extends Issue {
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      body: body
+      body
     });
     return new Promise<GitComment>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var us: User = new User(
+        const data = result.data;
+        const us: User = new User(
           data.user.login,
           data.user.id,
           data.user.avatar_url,
@@ -155,7 +155,7 @@ export class GitHubIssue extends Issue {
           data.user.type,
           data.user.site_admin
         );
-        var comment = new GitComment(
+        const comment = new GitComment(
           data.body,
           this.org,
           this.repo,
@@ -178,13 +178,13 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.editComment({
       owner: this.org,
       repo: this.repo,
-      comment_id: comment_id,
-      body: body
+      comment_id: comment_id.toString(),
+      body
     });
     return new Promise<GitComment>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var us: User = new User(
+        const data = result.data;
+        const us: User = new User(
           data.user.login,
           data.user.id,
           data.user.avatar_url,
@@ -196,7 +196,7 @@ export class GitHubIssue extends Issue {
           data.user.type,
           data.user.site_admin
         );
-        var comment = new GitComment(
+        const comment = new GitComment(
           data.body,
           this.org,
           this.repo,
@@ -223,14 +223,14 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.getComment({
       owner: this.org,
       repo: this.repo,
-      comment_id: comment_id,
-      per_page: per_page,
-      page: page
+      comment_id: comment_id.toString(),
+      per_page,
+      page
     });
     return new Promise<GitComment>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var us: User = new User(
+        const data = result.data;
+        const us: User = new User(
           data.user.login,
           data.user.id,
           data.user.avatar_url,
@@ -242,7 +242,7 @@ export class GitHubIssue extends Issue {
           data.user.type,
           data.user.site_admin
         );
-        var comment = new GitComment(
+        const comment = new GitComment(
           data.body,
           this.org,
           this.repo,
@@ -264,22 +264,22 @@ export class GitHubIssue extends Issue {
     since: string,
     per_page = 30,
     page = 1
-  ): Promise<Array<GitComment>> {
+  ): Promise<GitComment[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.issues.getComments({
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      since: since,
-      per_page: per_page,
-      page: page
+      since,
+      per_page,
+      page
     });
-    return new Promise<Array<GitComment>>((resolve, reject) => {
+    return new Promise<GitComment[]>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var comments = new Array<GitComment>();
-        for (var resp of data) {
-          var us: User = new User(
+        const data = result.data;
+        const comments = new Array<GitComment>();
+        for (const resp of data) {
+          const us: User = new User(
             resp.user.login,
             resp.user.id,
             resp.user.avatar_url,
@@ -291,7 +291,7 @@ export class GitHubIssue extends Issue {
             resp.user.type,
             resp.user.site_admin
           );
-          var comment = new GitComment(
+          const comment = new GitComment(
             resp.body,
             this.org,
             this.repo,
@@ -316,10 +316,10 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.deleteComment({
       owner: this.org,
       repo: this.repo,
-      comment_id: comment_id
+      comment_id: comment_id.toString()
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 
@@ -332,14 +332,14 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.createLabel({
       owner: this.org,
       repo: this.repo,
-      name: name,
-      color: color,
-      description: description
+      name,
+      color,
+      description
     });
     return new Promise<Label>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var lab = new Label(
+        const data = result.data;
+        const lab = new Label(
           data.id,
           data.url,
           data.name,
@@ -366,15 +366,15 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.updateLabel({
       owner: this.org,
       repo: this.repo,
-      current_name: current_name,
+      current_name,
       name: new_name,
       color: new_color,
       description: new_description
     });
     return new Promise<Label>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var lab = new Label(
+        const data = result.data;
+        const lab = new Label(
           data.id,
           data.url,
           data.name,
@@ -391,20 +391,20 @@ export class GitHubIssue extends Issue {
     });
   }
 
-  public async replaceAllLabels(labels: string[]): Promise<Array<Label>> {
+  public async replaceAllLabels(labels: string[]): Promise<Label[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.issues.replaceAllLabels({
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      labels: labels
+      labels
     });
-    return new Promise<Array<Label>>((resolve, reject) => {
+    return new Promise<Label[]>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var labs = new Array<Label>();
-        for (var l of data) {
-          var lab = new Label(
+        const data = result.data;
+        const labs = new Array<Label>();
+        for (const l of data) {
+          const lab = new Label(
             l.id,
             l.url,
             l.name,
@@ -429,10 +429,10 @@ export class GitHubIssue extends Issue {
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      name: name
+      name
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 200);
+      resolve(result.status === 200);
     });
   }
 
@@ -444,24 +444,24 @@ export class GitHubIssue extends Issue {
       number: this.id
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 
-  public async getAllLabels(per_page = 30, page = 1): Promise<Array<Label>> {
+  public async getAllLabels(per_page = 30, page = 1): Promise<Label[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.issues.getLabels({
       owner: this.org,
       repo: this.repo,
-      per_page: per_page,
-      page: page
+      per_page,
+      page
     });
-    return new Promise<Array<Label>>((resolve, reject) => {
+    return new Promise<Label[]>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var labs = new Array<Label>();
-        for (var l of data) {
-          var lab = new Label(
+        const data = result.data;
+        const labs = new Array<Label>();
+        for (const l of data) {
+          const lab = new Label(
             l.id,
             l.url,
             l.name,
@@ -485,12 +485,12 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.getLabel({
       owner: this.org,
       repo: this.repo,
-      name: name
+      name
     });
     return new Promise<Label>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var lab = new Label(
+        const data = result.data;
+        const lab = new Label(
           data.id,
           data.url,
           data.name,
@@ -507,20 +507,20 @@ export class GitHubIssue extends Issue {
     });
   }
 
-  public async addLabels(labels: string[]): Promise<Array<Label>> {
+  public async addLabels(labels: string[]): Promise<Label[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.issues.addLabels({
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      labels: labels
+      labels
     });
-    return new Promise<Array<Label>>((resolve, reject) => {
+    return new Promise<Label[]>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        var data = result.data;
-        var labs = new Array<Label>();
-        for (var l of data) {
-          var lab = new Label(
+        const data = result.data;
+        const labs = new Array<Label>();
+        for (const l of data) {
+          const lab = new Label(
             l.id,
             l.url,
             l.name,
@@ -544,10 +544,10 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.deleteLabel({
       owner: this.org,
       repo: this.repo,
-      name: name
+      name
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 
@@ -561,15 +561,15 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.createMilestone({
       owner: this.org,
       repo: this.repo,
-      title: title,
-      state: state,
-      description: description,
-      due_on: due_on
+      title,
+      state,
+      description,
+      due_on
     });
     return new Promise<Milestone>((resolve, reject) => {
-      if (result.status == 201) {
-        var data = result.data;
-        var us = new User(
+      if (result.status === 201) {
+        const data = result.data;
+        const us = new User(
           data.creator.login,
           data.creator.id,
           data.creator.avatar_url,
@@ -581,8 +581,8 @@ export class GitHubIssue extends Issue {
           data.creator.type,
           data.creator.site_admin
         );
-        var mstate = data.state == "open" ? M_State.Open : M_State.Closed;
-        var mile = new Milestone(
+        const mstate = data.state === "open" ? M_State.Open : M_State.Closed;
+        const mile = new Milestone(
           this.org,
           this.repo,
           data.url,
@@ -619,15 +619,15 @@ export class GitHubIssue extends Issue {
       owner: this.org,
       repo: this.repo,
       number: milestone_id,
-      title: title,
-      state: state,
-      description: description,
-      due_on: due_on
+      title,
+      state,
+      description,
+      due_on
     });
     return new Promise<Milestone>((resolve, reject) => {
-      if (result.status == 200) {
-        var data = result.data;
-        var us = new User(
+      if (result.status === 200) {
+        const data = result.data;
+        const us = new User(
           data.creator.login,
           data.creator.id,
           data.creator.avatar_url,
@@ -639,8 +639,8 @@ export class GitHubIssue extends Issue {
           data.creator.type,
           data.creator.site_admin
         );
-        var mstate = data.state == "open" ? M_State.Open : M_State.Closed;
-        var mile = new Milestone(
+        const mstate = data.state === "open" ? M_State.Open : M_State.Closed;
+        const mile = new Milestone(
           this.org,
           this.repo,
           data.url,
@@ -673,9 +673,9 @@ export class GitHubIssue extends Issue {
       number: milestone_id
     });
     return new Promise<Milestone>((resolve, reject) => {
-      if (result.status == 200) {
-        var data = result.data;
-        var us = new User(
+      if (result.status === 200) {
+        const data = result.data;
+        const us = new User(
           data.creator.login,
           data.creator.id,
           data.creator.avatar_url,
@@ -687,8 +687,8 @@ export class GitHubIssue extends Issue {
           data.creator.type,
           data.creator.site_admin
         );
-        var mstate = data.state == "open" ? M_State.Open : M_State.Closed;
-        var mile = new Milestone(
+        const mstate = data.state === "open" ? M_State.Open : M_State.Closed;
+        const mile = new Milestone(
           this.org,
           this.repo,
           data.url,
@@ -717,21 +717,21 @@ export class GitHubIssue extends Issue {
     milestone_id: number,
     per_page = 30,
     page = 1
-  ): Promise<Array<Label>> {
+  ): Promise<Label[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.issues.getMilestoneLabels({
       owner: this.org,
       repo: this.repo,
       number: milestone_id,
-      per_page: per_page,
-      page: page
+      per_page,
+      page
     });
-    return new Promise<Array<Label>>((resolve, reject) => {
-      if (result.status == 200) {
-        var data = result.data;
-        var labs = new Array<Label>();
-        for (var l of data) {
-          var lab = new Label(
+    return new Promise<Label[]>((resolve, reject) => {
+      if (result.status === 200) {
+        const data = result.data;
+        const labs = new Array<Label>();
+        for (const l of data) {
+          const lab = new Label(
             l.id,
             l.url,
             l.name,
@@ -758,7 +758,7 @@ export class GitHubIssue extends Issue {
       number: milestone_id
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 
@@ -768,10 +768,10 @@ export class GitHubIssue extends Issue {
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      lock_reason: lock_reason
+      lock_reason
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 
@@ -783,7 +783,7 @@ export class GitHubIssue extends Issue {
       number: this.id
     });
     return new Promise<boolean>(resolve => {
-      resolve(result.status == 204);
+      resolve(result.status === 204);
     });
   }
 }
