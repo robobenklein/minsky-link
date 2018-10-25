@@ -28,9 +28,10 @@ atom.workspace.observeTextEditors(editor => {
     findIssueTags(editor);
     // TODO place hook on the buffer being edited:
     editor.onDidStopChanging(event_editorchanged => {
-        // event_editorchanged.changes.forEach(text_change => {
-        //   // check if the change range is in any of our issue tags.
-        // })
+        event_editorchanged.changes.forEach(text_change => {
+            // check if the change range is in any of our issue tags.
+            console.log("Changed text: " + text_change.oldRange);
+        });
         findIssueTags(editor);
     });
 });
