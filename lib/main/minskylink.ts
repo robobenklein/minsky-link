@@ -1,12 +1,10 @@
 import { CompositeDisposable } from "atom";
 //import {MenuManager} from "atom";
 
-<<<<<<< HEAD
 console.log(String("Loading Minsky Link"));
 
 //Unsure what loading object should be
 //atom.onload = cursorListerner()
-=======
 let subscriptions: CompositeDisposable | undefined;
 
 export async function activate() {
@@ -35,4 +33,3 @@ export function serialize() {
 export function speaks(): void {
   console.log("Minsky was asked to Speak!");
 }
->>>>>>> be387dd2ec767d314f023da363c76f7b3300e2b9
