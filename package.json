@@ -5,7 +5,7 @@
   "main": "./dist/main/minskylink",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
   "engines": {
-    "atom": ">=1.0.0 <2.0.0"
+    "atom": ">=1.18.0 <2.0.0"
   },
   "scripts": {
     "build": "tsc -p ./lib/",
@@ -14,9 +14,6 @@
     "typecheck": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts",
     "lint": "tslint --project ./lib",
     "test": "npm run typecheck && npm run lint && npm run prettier-check"
-  },
-  "activationCommands": {
-    "atom-workspace": "minsky:speaks"
   },
   "providedServices": {
     "autocomplete.provider": {
@@ -92,7 +89,7 @@
       "title": "Issue Regex Tag",
       "description": "Allows changing the regex used to locate issue tags",
       "type": "string",
-      "default": ".*( GH([0-9]+)).*",
+      "default": "(GH([0-9]+))",
       "order": 44
     },
     "default_git_remote": {
