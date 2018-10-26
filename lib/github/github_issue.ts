@@ -1,20 +1,24 @@
-import {
-  PRCorrespondingWithIssue,
-  IssueState,
-  LockReason,
-  Issue
-} from "../git-interface/issue";
-import { GitComment } from "../git-interface/comment";
-import { Label } from "../git-interface/label";
-import { M_State, Milestone } from "../git-interface/milestone";
-import { User } from "../git-interface/user";
+//import {
+//  PRCorrespondingWithIssue,
+//  IssueState,
+//  LockReason,
+//  Issue
+//} from "../git-interface/issue";
+//import { GitComment } from "../git-interface/comment";
+//import { Label } from "../git-interface/label";
+//import { M_State, Milestone } from "../git-interface/milestone";
+//import { User } from "../git-interface/user";
+
+import { PRCorrespondingWithIssue, IssueState, LockReason, Issue, GitComment, Label, M_State, Milestone, User } from "minsky-link";
 
 import * as Github from "../../node_modules/@octokit/rest/index";
 
 export class GitHubIssue extends Issue {
   constructor(
+    org: string,
+    repo: string,
     id: number,
-    title: string,
+    title = "",
     url = "",
     repository_url = "",
     labels_url = "",
@@ -37,6 +41,8 @@ export class GitHubIssue extends Issue {
     updated_at = ""
   ) {
     super();
+    this.org = org;
+    this.repo = repo;
     this.id = id;
     this.title = title;
     this.url = url;

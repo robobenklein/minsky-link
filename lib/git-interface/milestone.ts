@@ -1,4 +1,5 @@
-import { User } from "./user";
+//import { User } from "./user";
+import { User } from "minsky-link";
 
 export enum M_State {
   Open = "open",

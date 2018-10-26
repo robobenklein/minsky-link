@@ -7,8 +7,10 @@ const milestone_1 = require("../git-interface/milestone");
 const user_1 = require("../git-interface/user");
 const Github = require("../../node_modules/@octokit/rest/index");
 class GitHubIssue extends issue_1.Issue {
-    constructor(id, title, url = "", repository_url = "", labels_url = "", comments_url = "", events_url = "", html_url = "", inumber = 0, state = issue_1.IssueState.Open, body = "", user = new user_1.User(), labels = new Array(), assignees = new Array(), milestone = new milestone_1.Milestone(), locked = false, active_lock_reason = "", num_comments = 0, corresponding_pr = new issue_1.PRCorrespondingWithIssue(), created_at = "", closed_at = "", updated_at = "") {
+    constructor(org, repo, id, title = "", url = "", repository_url = "", labels_url = "", comments_url = "", events_url = "", html_url = "", inumber = 0, state = issue_1.IssueState.Open, body = "", user = new user_1.User(), labels = new Array(), assignees = new Array(), milestone = new milestone_1.Milestone(), locked = false, active_lock_reason = "", num_comments = 0, corresponding_pr = new issue_1.PRCorrespondingWithIssue(), created_at = "", closed_at = "", updated_at = "") {
         super();
+        this.org = org;
+        this.repo = repo;
         this.id = id;
         this.title = title;
         this.url = url;

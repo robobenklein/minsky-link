@@ -1,11 +1,13 @@
-import { Issue } from "./issue";
-import { User } from "./user";
-import {
-  GitComment,
-  GitPRComment,
-  GitReplyComment,
-  GitReviewComment
-} from "./comment";
+//import { Issue } from "./issue";
+//import { User } from "./user";
+//import {
+//  GitComment,
+//  GitPRComment,
+//  GitReplyComment,
+//  GitReviewComment
+//} from "./comment";
+
+import { Issue, User, GitComment, GitPRComment, GitReplyComment, GitReviewComment } from "minsky-link";
 
 export class Branch {
   public label: string;

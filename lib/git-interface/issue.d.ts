@@ -1,7 +1,8 @@
-import { GitComment } from "./comment";
-import { Label } from "./label";
-import { M_State, Milestone } from "./milestone";
-import { User } from "./user";
+//import { GitComment } from "./comment";
+//import { Label } from "./label";
+//import { M_State, Milestone } from "./milestone";
+//import { User } from "./user";
+import { GitComment, Label, M_State, Milestone, User } from "minsky-link"
 
 export class PRCorrespondingWithIssue {
   url: string;
