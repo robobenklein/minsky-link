@@ -6,7 +6,7 @@ console.log(String("Loading Minsky Link"));
 // HOVER LISTENER GH40
 // search for issue tags in a TextBuffer and apply markers to them
 function findIssueTags(textToSearch) {
-    var regex1 = new RegExp(/( GH([0-9]+))/);
+    var regex1 = new RegExp(/(GH([0-9]+))/);
     textToSearch.scan(regex1, scanResult => {
         var issue_number = parseInt(scanResult.match[2]);
         console.log("Found issue tag: " + scanResult.matchText);
