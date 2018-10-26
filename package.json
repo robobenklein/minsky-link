@@ -89,7 +89,7 @@
       "title": "Issue Regex Tag",
       "description": "Allows changing the regex used to locate issue tags",
       "type": "string",
-      "default": ".*( GH([0-9]+)).*",
+      "default": "(GH([0-9]+))",
       "order": 44
     },
     "default_git_remote": {
