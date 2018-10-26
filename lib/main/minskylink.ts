@@ -14,10 +14,15 @@ function findIssueTags(textToSearch: TextEditor) {
     console.log("Found issue tag: " + scanResult.matchText);
     console.log("Creating marker on " + scanResult.range);
     var new_marker = textToSearch.markBufferRange(scanResult.range, {
-      invalidate: 'touch'
+      invalidate: "touch"
     });
-    console.log("Created marker for issue #" + issue_number + ": " + new_marker.getStartBufferPosition);
-    var new_decoration =  textToSearch.decorateMarker(new_marker, {
+    console.log(
+      "Created marker for issue #" +
+        issue_number +
+        ": " +
+        new_marker.getStartBufferPosition
+    );
+    var new_decoration = textToSearch.decorateMarker(new_marker, {
       type: "highlight",
       class: "minskylink_issue_tag"
     });
@@ -44,7 +49,7 @@ let subscriptions: CompositeDisposable | undefined;
 
 subscriptions = new CompositeDisposable();
 
-  // This adds the Active Command to our list of commands in Atom
+// This adds the Active Command to our list of commands in Atom
 subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:speaks": () => speaks()

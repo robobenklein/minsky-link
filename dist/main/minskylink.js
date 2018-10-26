@@ -12,9 +12,12 @@ function findIssueTags(textToSearch) {
         console.log("Found issue tag: " + scanResult.matchText);
         console.log("Creating marker on " + scanResult.range);
         var new_marker = textToSearch.markBufferRange(scanResult.range, {
-            invalidate: 'touch'
+            invalidate: "touch"
         });
-        console.log("Created marker for issue #" + issue_number + ": " + new_marker.getStartBufferPosition);
+        console.log("Created marker for issue #" +
+            issue_number +
+            ": " +
+            new_marker.getStartBufferPosition);
         var new_decoration = textToSearch.decorateMarker(new_marker, {
             type: "highlight",
             class: "minskylink_issue_tag"
