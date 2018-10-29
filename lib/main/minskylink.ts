@@ -23,19 +23,19 @@ function findIssueTags(
     var existing_markers = issuetaglayer.findMarkers({
       intersectsBufferRange: scanResult.range
     });
-    for (var i: number = 0; i < existing_markers.length; i++) {
-      if (existing_markers[i].isValid() == true) {
+    for (var marker_to_check of existing_markers) {
+      if (marker_to_check.isValid() == true) {
         // still is valid? don't bother
         console.log(
           "Issue tag #" +
             issue_number +
             " already known: " +
-            existing_markers[i].getBufferRange()
+            marker_to_check.getBufferRange()
         );
         return;
       } else {
         // destroy the invalid marker:
-        existing_markers[i].destroy();
+        marker_to_check.destroy();
       }
     }
     console.log("Creating marker on " + scanResult.range);
