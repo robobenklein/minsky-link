@@ -155,6 +155,7 @@ export abstract class Issue {
   public created_at!: string;
   public closed_at!: string; // Should be null by default
   public updated_at!: string;
+  public closed_by!: User;
   // Repo Info
   public org!: string;
   public repo!: string;
