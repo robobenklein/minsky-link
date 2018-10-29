@@ -1,17 +1,16 @@
-//import {
-//  PRCorrespondingWithIssue,
-//  IssueState,
-//  LockReason,
-//  Issue
-//} from "../git-interface/issue";
-//import { GitComment } from "../git-interface/comment";
-//import { Label } from "../git-interface/label";
-//import { M_State, Milestone } from "../git-interface/milestone";
-//import { User } from "../git-interface/user";
+import {
+  PRCorrespondingWithIssue,
+  IssueState,
+  LockReason,
+  Issue
+} from "../git-interface/issue";
+import { GitComment } from "../git-interface/comment";
+import { Label } from "../git-interface/label";
+import { M_State, Milestone } from "../git-interface/milestone";
+import { User } from "../git-interface/user";
 
-import { PRCorrespondingWithIssue, IssueState, LockReason, Issue, GitComment, Label, M_State, Milestone, User } from "minsky-link";
-
-import * as Github from "../../node_modules/@octokit/rest/index";
+//import * as Github from "../../node_modules/@octokit/rest/index";
+import * as Github from "@octokit/rest";
 
 export class GitHubIssue extends Issue {
   constructor(
@@ -142,15 +141,19 @@ export class GitHubIssue extends Issue {
 
   public async createComment(body: string): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
+    const headers = {
+        accept: "Accept: application/vnd.github.v3.html+json"
+    }
     const result = await gh.issues.createComment({
       owner: this.org,
       repo: this.repo,
       number: this.id,
-      body
-    });
+      body,
+      headers
+    } as any);
     return new Promise<GitComment>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        const data = result.data;
+        const data = result.data as any;
         const us: User = new User(
           data.user.login,
           data.user.id,
@@ -164,7 +167,7 @@ export class GitHubIssue extends Issue {
           data.user.site_admin
         );
         const comment = new GitComment(
-          data.body,
+          data.body_html,
           this.org,
           this.repo,
           data.id,
@@ -186,15 +189,19 @@ export class GitHubIssue extends Issue {
     body: string
   ): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
+    const headers = {
+        accept: "Accept: application/vnd.github.v3.html+json"
+    }
     const result = await gh.issues.editComment({
       owner: this.org,
       repo: this.repo,
       comment_id: comment_id.toString(),
-      body
-    });
+      body,
+      headers
+    } as any);
     return new Promise<GitComment>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        const data = result.data;
+        const data = result.data as any;
         const us: User = new User(
           data.user.login,
           data.user.id,
@@ -208,7 +215,7 @@ export class GitHubIssue extends Issue {
           data.user.site_admin
         );
         const comment = new GitComment(
-          data.body,
+          data.body_html,
           this.org,
           this.repo,
           data.id,
@@ -231,16 +238,20 @@ export class GitHubIssue extends Issue {
     page = 1
   ): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
+    const headers = {
+        accept: "Accept: application/vnd.github.v3.html+json"
+    }
     const result = await gh.issues.getComment({
       owner: this.org,
       repo: this.repo,
       comment_id: comment_id.toString(),
       per_page,
-      page
-    });
+      page,
+      headers
+    } as any);
     return new Promise<GitComment>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        const data = result.data;
+        const data = result.data as any;
         const us: User = new User(
           data.user.login,
           data.user.id,
@@ -254,7 +265,7 @@ export class GitHubIssue extends Issue {
           data.user.site_admin
         );
         const comment = new GitComment(
-          data.body,
+          data.body_html,
           this.org,
           this.repo,
           data.id,
@@ -277,17 +288,21 @@ export class GitHubIssue extends Issue {
     page = 1
   ): Promise<GitComment[]> {
     const gh: Github = new Github(this.opts);
+    const headers = {
+        accept: "Accept: application/vnd.github.v3.html+json"
+    }
     const result = await gh.issues.getComments({
       owner: this.org,
       repo: this.repo,
       number: this.id,
       since,
       per_page,
-      page
-    });
+      page,
+      headers
+    } as any);
     return new Promise<GitComment[]>((resolve, reject) => {
       if (result.status >= 200 && result.status < 205) {
-        const data = result.data;
+        const data = result.data as Array<any>;
         const comments = new Array<GitComment>();
         for (const resp of data) {
           const us: User = new User(
@@ -303,7 +318,7 @@ export class GitHubIssue extends Issue {
             resp.user.site_admin
           );
           const comment = new GitComment(
-            resp.body,
+            resp.body_html,
             this.org,
             this.repo,
             resp.id,
@@ -798,3 +813,123 @@ export class GitHubIssue extends Issue {
     });
   }
 }
+
+/*export async function getGitHubIssue(owner: string, repo: string, id: number): Promise<GitHubIssue>
+{
+    const gh: Github = new Github({baseUrl: "https://api.github.com"});
+    const result = await gh.issues.get({owner: owner, repo: repo, number: id});
+    return new Promise<GitHubIssue>((resolve, reject) => {
+        if (result.status == 200)
+        {
+            const data = result.data;
+            const state = (data.state === "open") ? IssueState.Open : 
+                          (data.state === "closed") ? IssueState.Closed : IssueState.All;
+            const user = new User(
+              data.user.login,
+              data.user.id,
+              data.user.avatar_url,
+              data.user.gravatar_id,
+              data.user.url,
+              data.user.html_url,
+              data.user.events_url,
+              data.user.received_events_url,
+              data.user.type,
+              data.user.site_admin
+            );
+            const labels = new Array<Label>();
+            for (const l of data.labels)
+            {
+                const lab = new Label(
+                  l.id,
+                  l.url,
+                  l.name,
+                  l.color,
+                  owner,
+                  repo,
+                  l.description,
+                  l.default
+                );
+                labels.push(lab);
+            }
+            const assignees = new Array<User>();
+            for (const us of data.assignees) {
+              const fus = new User(
+                us.login,
+                us.id,
+                us.avatar_url,
+                us.gravatar_id,
+                us.url,
+                us.html_url,
+                us.events_url,
+                us.received_events_url,
+                us.type,
+                us.site_admin
+              );
+              assignees.push(fus);
+            }
+            const milecreator = new User(
+              data.milestone.creator.login,
+              data.milestone.creator.id,
+              data.milestone.creator.avatar_url,
+              data.milestone.creator.gravatar_id,
+              data.milestone.creator.url,
+              data.milestone.creator.html_url,
+              data.milestone.creator.events_url,
+              data.milestone.creator.received_events_url,
+              data.milestone.creator.type,
+              data.milestone.creator.site_admin
+            );
+            const mstate = data.milestone.state === "open" ? M_State.Open : M_State.Closed;
+            const mile = new Milestone(
+              owner,
+              repo,
+              data.milestone.url,
+              data.milestone.html_url,
+              data.milestone.labels_url,
+              data.milestone.id,
+              data.milestone.number,
+              data.milestone.title,
+              mstate,
+              data.milestone.description,
+              us,
+              data.open_issues,
+              data.closed_issues,
+              data.created_at,
+              data.closed_at,
+              data.due_on
+            );
+            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url,
+                           data.repository_url, data.labels_url, data.comments_url,
+                           data.events_url, data.html_url, data.number, state, data.body,
+                           user, labels, )
+    org: string,
+    repo: string,
+    id: number,
+    title = "",
+    url = "",
+    repository_url = "",
+    labels_url = "",
+    comments_url = "",
+    events_url = "",
+    html_url = "",
+    inumber = 0,
+    state = IssueState.Open,
+    body = "",
+    user = new User(),
+    labels = new Array<Label>(),
+    assignees = new Array<User>(),
+    milestone = new Milestone(),
+    locked = false,
+    active_lock_reason = "",
+    num_comments = 0,
+    corresponding_pr = new PRCorrespondingWithIssue(),
+    created_at = "",
+    closed_at = "",
+    updated_at = ""
+        }
+        else
+        {
+            reject(new Error("HTML Request Failed"));
+        }
+    })
+}*/
