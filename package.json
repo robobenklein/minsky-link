@@ -15,9 +15,6 @@
     "lint": "tslint --project ./lib",
     "test": "npm run typecheck && npm run lint && npm run prettier-check"
   },
-  "activationCommands": {
-    "atom-workspace": ["minsky:speaks", "minsky:testComment"]
-  },
   "providedServices": {
     "autocomplete.provider": {
       "versions": {
