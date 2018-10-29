@@ -48,11 +48,13 @@ function findIssueTags(
         ": " +
         new_marker.getStartBufferPosition
     );
+    /*
     var new_decoration = textToSearch.decorateMarker(new_marker, {
       type: "highlight",
       class: "minskylink_issue_tag"
     });
     console.log("Decorated #" + issue_number + " with " + new_decoration);
+    //*/
   });
 
   console.log(
@@ -65,6 +67,10 @@ atom.workspace.observeTextEditors(editor => {
   console.log("Running scan on " + editor.getLongTitle());
 
   var issuetaglayer: DisplayMarkerLayer = editor.addMarkerLayer({});
+  editor.decorateMarkerLayer(issuetaglayer, {
+    type: "highlight",
+    class: "minskylink_issue_tag"
+  });
 
   findIssueTags(editor, issuetaglayer);
 
