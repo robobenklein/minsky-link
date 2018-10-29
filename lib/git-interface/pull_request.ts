@@ -1,10 +1,6 @@
 import { Issue } from "./issue";
 import { User } from "./user";
-import {
-  GitPRComment,
-  GitReplyComment,
-  GitReviewComment
-} from "./comment";
+import { GitPRComment, GitReplyComment, GitReviewComment } from "./comment";
 
 export interface Branch {
   label: string;
@@ -15,71 +11,6 @@ export interface Branch {
 }
 
 export abstract class PullRequest extends Issue {
-  // Functions
-
-  // Functions from API that need to be wrapped in a constructor:
-  //   * create
-  //   * createFromIssue
-  //   * get
-  constructor() {
-    super();
-  }
-
-  abstract checkMerged(): Promise<boolean>;
-
-  abstract createPRComment(
-    body: string,
-    commit_id: string,
-    path: string,
-    diff_position: number
-  ): Promise<GitPRComment>;
-
-  abstract createCommentReply(body: string, in_reply_to: number): Promise<GitReplyComment>;
-
-  // More parameters need to be added
-  abstract createReview(commit_id: string, body: string, rev_event: string): Promise<GitReviewComment>;
-
-  abstract createReviewRequest(reviewers: string[], team_reviewers: string[]): Promise<boolean>;
-
-  abstract getReview(review_id: string): Promise<any>;
-
-  abstract getReviewComments(
-    review_id: string,
-    per_page: number,
-    page: number
-  ): Promise<Array<any>>;
-
-  abstract getReviewRequests(per_page: number, page: number): Promise<Array<any>>;
-
-  abstract getAllReviews(per_page: number, page: number): Promise<Array<any>>;
-
-  abstract submitReview(review_id: string, body: string, rev_event: string): Promise<boolean>;
-
-  abstract dismissReview(review_id: string, message: string): Promise<boolean>;
-
-  abstract deletePendingRevew(review_id: string): Promise<boolean>;
-
-  abstract deleteReviewRequest(reviewers: string[], team_reviewers: string[]): Promise<boolean>;
-
-  abstract getAllCommits(per_page: number, page: number): Promise<Array<any>>;
-
-  abstract getAllFiles(per_page: number, page: number): Promise<Array<any>>;
-
-  abstract merge(
-    commit_title: string,
-    commit_message: string,
-    sha: string,
-    merge_method: string
-  ): Promise<boolean>;
-
-  abstract update(
-    title: string,
-    body: string,
-    state: string,
-    base: string,
-    maintainer_can_modify: boolean
-  ): Promise<boolean>;
-
   // Properties
 
   // The following properties are inherited from the Issue interface, but
@@ -109,4 +40,86 @@ export abstract class PullRequest extends Issue {
   public num_deletions!: number;
   public num_changed_files!: number;
   public maintainer_can_modify!: boolean;
+
+  constructor() {
+    super();
+  }
+
+  public abstract checkMerged(): Promise<boolean>;
+
+  public abstract createPRComment(
+    body: string,
+    commit_id: string,
+    path: string,
+    diff_position: number
+  ): Promise<GitPRComment>;
+
+  public abstract createCommentReply(
+    body: string,
+    in_reply_to: number
+  ): Promise<GitReplyComment>;
+
+  // More parameters need to be added
+  public abstract createReview(
+    commit_id: string,
+    body: string,
+    rev_event: string
+  ): Promise<GitReviewComment>;
+
+  public abstract createReviewRequest(
+    reviewers: string[],
+    team_reviewers: string[]
+  ): Promise<boolean>;
+
+  public abstract getReview(review_id: string): Promise<any>;
+
+  public abstract getReviewComments(
+    review_id: string,
+    per_page: number,
+    page: number
+  ): Promise<any[]>;
+
+  public abstract getReviewRequests(
+    per_page: number,
+    page: number
+  ): Promise<any[]>;
+
+  public abstract getAllReviews(per_page: number, page: number): Promise<any[]>;
+
+  public abstract submitReview(
+    review_id: string,
+    body: string,
+    rev_event: string
+  ): Promise<boolean>;
+
+  public abstract dismissReview(
+    review_id: string,
+    message: string
+  ): Promise<boolean>;
+
+  public abstract deletePendingRevew(review_id: string): Promise<boolean>;
+
+  public abstract deleteReviewRequest(
+    reviewers: string[],
+    team_reviewers: string[]
+  ): Promise<boolean>;
+
+  public abstract getAllCommits(per_page: number, page: number): Promise<any[]>;
+
+  public abstract getAllFiles(per_page: number, page: number): Promise<any[]>;
+
+  public abstract merge(
+    commit_title: string,
+    commit_message: string,
+    sha: string,
+    merge_method: string
+  ): Promise<boolean>;
+
+  public abstract update(
+    title: string,
+    body: string,
+    state: string,
+    base: string,
+    maintainer_can_modify: boolean
+  ): Promise<boolean>;
 }

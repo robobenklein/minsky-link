@@ -144,8 +144,8 @@ export class GitHubIssue extends Issue {
   public async createComment(body: string): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
     const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
-    }
+      accept: "Accept: application/vnd.github.v3.html+json"
+    };
     const result = await gh.issues.createComment({
       owner: this.org,
       repo: this.repo,
@@ -192,8 +192,8 @@ export class GitHubIssue extends Issue {
   ): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
     const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
-    }
+      accept: "Accept: application/vnd.github.v3.html+json"
+    };
     const result = await gh.issues.editComment({
       owner: this.org,
       repo: this.repo,
@@ -241,8 +241,8 @@ export class GitHubIssue extends Issue {
   ): Promise<GitComment> {
     const gh: Github = new Github(this.opts);
     const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
-    }
+      accept: "Accept: application/vnd.github.v3.html+json"
+    };
     const result = await gh.issues.getComment({
       owner: this.org,
       repo: this.repo,
@@ -291,8 +291,8 @@ export class GitHubIssue extends Issue {
   ): Promise<GitComment[]> {
     const gh: Github = new Github(this.opts);
     const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
-    }
+      accept: "Accept: application/vnd.github.v3.html+json"
+    };
     const result = await gh.issues.getComments({
       owner: this.org,
       repo: this.repo,
@@ -816,416 +816,517 @@ export class GitHubIssue extends Issue {
   }
 }
 
-export async function createGitHubIssue(owner: string, repo: string, title: string, 
-                                        body="", milestone?: number, labels?: string[],
-                                        assignees?: string[]): Promise<GitHubIssue>
-{
-    const gh: Github = new Github({baseUrl: "https://api.github.com"});
-    const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
+export async function createGitHubIssue(
+  owner: string,
+  repo: string,
+  title: string,
+  body = "",
+  milestone?: number,
+  labels?: string[],
+  assignees?: string[]
+): Promise<GitHubIssue> {
+  const gh: Github = new Github({ baseUrl: "https://api.github.com" });
+  const headers = {
+    accept: "Accept: application/vnd.github.v3.html+json"
+  };
+  const result = await gh.issues.create({
+    owner: owner,
+    repo: repo,
+    title: title,
+    body: body,
+    milestone: milestone,
+    labels: labels,
+    assignees: assignees,
+    headers
+  } as any);
+  return new Promise<GitHubIssue>((resolve, reject) => {
+    if (result.status == 201) {
+      const data = result.data as any;
+      const state =
+        data.state === "open"
+          ? IssueState.Open
+          : data.state === "closed"
+            ? IssueState.Closed
+            : IssueState.All;
+      const user = new User(
+        data.user.login,
+        data.user.id,
+        data.user.avatar_url,
+        data.user.gravatar_id,
+        data.user.url,
+        data.user.html_url,
+        data.user.events_url,
+        data.user.received_events_url,
+        data.user.type,
+        data.user.site_admin
+      );
+      const labels = new Array<Label>();
+      for (const l of data.labels) {
+        const lab = new Label(
+          l.id,
+          l.url,
+          l.name,
+          l.color,
+          owner,
+          repo,
+          l.description,
+          l.default
+        );
+        labels.push(lab);
+      }
+      const assignees = new Array<User>();
+      for (const us of data.assignees) {
+        const fus = new User(
+          us.login,
+          us.id,
+          us.avatar_url,
+          us.gravatar_id,
+          us.url,
+          us.html_url,
+          us.events_url,
+          us.received_events_url,
+          us.type,
+          us.site_admin
+        );
+        assignees.push(fus);
+      }
+      var mile: Milestone;
+      if (data.milestone != null) {
+        const milecreator = new User(
+          data.milestone.creator.login,
+          data.milestone.creator.id,
+          data.milestone.creator.avatar_url,
+          data.milestone.creator.gravatar_id,
+          data.milestone.creator.url,
+          data.milestone.creator.html_url,
+          data.milestone.creator.events_url,
+          data.milestone.creator.received_events_url,
+          data.milestone.creator.type,
+          data.milestone.creator.site_admin
+        );
+        const mstate =
+          data.milestone.state === "open" ? M_State.Open : M_State.Closed;
+        mile = new Milestone(
+          owner,
+          repo,
+          data.milestone.url,
+          data.milestone.html_url,
+          data.milestone.labels_url,
+          data.milestone.id,
+          data.milestone.number,
+          data.milestone.title,
+          mstate,
+          data.milestone.description,
+          milecreator,
+          data.open_issues,
+          data.closed_issues,
+          data.created_at,
+          data.closed_at,
+          data.due_on
+        );
+      } else {
+        mile = new Milestone();
+      }
+      var closer: User;
+      if (data.closed_by != null) {
+        closer = new User(
+          data.closed_by.login,
+          data.closed_by.id,
+          data.closed_by.avatar_url,
+          data.closed_by.gravatar_id,
+          data.closed_by.url,
+          data.closed_by.html_url,
+          data.closed_by.events_url,
+          data.closed_by.received_events_url,
+          data.closed_by.type,
+          data.closed_by.site_admin
+        );
+      } else {
+        closer = new User();
+      }
+      var pr: PRCorrespondingWithIssue;
+      if (data.pull_request != null) {
+        pr = new PRCorrespondingWithIssue(
+          data.pull_request.url,
+          data.pull_request.html_url,
+          data.pull_request.diff_url,
+          data.pull_request.patch_url
+        );
+      } else {
+        pr = new PRCorrespondingWithIssue();
+      }
+      const gi = new GitHubIssue(
+        owner,
+        repo,
+        data.id,
+        data.title,
+        data.url,
+        data.repository_url,
+        data.labels_url,
+        data.comments_url,
+        data.events_url,
+        data.html_url,
+        data.number,
+        state,
+        data.body_html,
+        user,
+        labels,
+        assignees,
+        mile,
+        data.locked,
+        data.active_lock_reason,
+        data.comments,
+        pr,
+        data.created_at,
+        data.closed_at,
+        data.updated_at,
+        closer
+      );
+      resolve(gi);
+    } else {
+      reject(new Error("HTML Request Failed"));
     }
-    const result = await gh.issues.create({owner: owner, repo: repo, title: title, body: body,
-                         milestone: milestone, labels: labels, assignees: assignees, headers
-                         }as any);
-    return new Promise<GitHubIssue>((resolve, reject) => {
-        if (result.status == 201)
-        {
-            const data = result.data as any;
-            const state = (data.state === "open") ? IssueState.Open : 
-                          (data.state === "closed") ? IssueState.Closed : IssueState.All;
-            const user = new User(
-              data.user.login,
-              data.user.id,
-              data.user.avatar_url,
-              data.user.gravatar_id,
-              data.user.url,
-              data.user.html_url,
-              data.user.events_url,
-              data.user.received_events_url,
-              data.user.type,
-              data.user.site_admin
-            );
-            const labels = new Array<Label>();
-            for (const l of data.labels)
-            {
-                const lab = new Label(
-                  l.id,
-                  l.url,
-                  l.name,
-                  l.color,
-                  owner,
-                  repo,
-                  l.description,
-                  l.default
-                );
-                labels.push(lab);
-            }
-            const assignees = new Array<User>();
-            for (const us of data.assignees) {
-              const fus = new User(
-                us.login,
-                us.id,
-                us.avatar_url,
-                us.gravatar_id,
-                us.url,
-                us.html_url,
-                us.events_url,
-                us.received_events_url,
-                us.type,
-                us.site_admin
-              );
-              assignees.push(fus);
-            }
-            var mile: Milestone;
-            if (data.milestone != null)
-            {
-                const milecreator = new User(
-                  data.milestone.creator.login,
-                  data.milestone.creator.id,
-                  data.milestone.creator.avatar_url,
-                  data.milestone.creator.gravatar_id,
-                  data.milestone.creator.url,
-                  data.milestone.creator.html_url,
-                  data.milestone.creator.events_url,
-                  data.milestone.creator.received_events_url,
-                  data.milestone.creator.type,
-                  data.milestone.creator.site_admin
-                );
-                const mstate = data.milestone.state === "open" ? M_State.Open : M_State.Closed;
-                mile = new Milestone(
-                  owner,
-                  repo,
-                  data.milestone.url,
-                  data.milestone.html_url,
-                  data.milestone.labels_url,
-                  data.milestone.id,
-                  data.milestone.number,
-                  data.milestone.title,
-                  mstate,
-                  data.milestone.description,
-                  milecreator,
-                  data.open_issues,
-                  data.closed_issues,
-                  data.created_at,
-                  data.closed_at,
-                  data.due_on
-                );
-            }
-            else
-            {
-                mile = new Milestone();
-            }
-            var closer: User;
-            if (data.closed_by != null)
-            {
-                closer = new User(data.closed_by.login, data.closed_by.id,
-                                  data.closed_by.avatar_url, data.closed_by.gravatar_id,
-                                  data.closed_by.url, data.closed_by.html_url,
-                                  data.closed_by.events_url, data.closed_by.received_events_url,
-                                  data.closed_by.type, data.closed_by.site_admin);
-            }
-            else
-            {
-                closer = new User()
-            }
-            var pr: PRCorrespondingWithIssue;
-            if (data.pull_request != null)
-            {
-                pr = new PRCorrespondingWithIssue(data.pull_request.url, 
-                               data.pull_request.html_url, data.pull_request.diff_url, 
-                               data.pull_request.patch_url)
-            }
-            else
-            {
-                pr = new PRCorrespondingWithIssue();
-            }
-            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url,
-                           data.repository_url, data.labels_url, data.comments_url,
-                           data.events_url, data.html_url, data.number, state, data.body_html,
-                           user, labels, assignees, mile, data.locked, data.active_lock_reason,
-                           data.comments, pr, data.created_at, data.closed_at, data.updated_at,
-                           closer);
-            resolve(gi);
-        }
-        else
-        {
-            reject(new Error("HTML Request Failed"));
-        }
-    })
+  });
 }
 
-export async function getGitHubIssue(owner: string, repo: string, id: number): Promise<GitHubIssue>
-{
-    const gh: Github = new Github({baseUrl: "https://api.github.com"});
-    const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
+export async function getGitHubIssue(
+  owner: string,
+  repo: string,
+  id: number
+): Promise<GitHubIssue> {
+  const gh: Github = new Github({ baseUrl: "https://api.github.com" });
+  const headers = {
+    accept: "Accept: application/vnd.github.v3.html+json"
+  };
+  const result = await gh.issues.get({
+    owner: owner,
+    repo: repo,
+    number: id,
+    headers
+  } as any);
+  return new Promise<GitHubIssue>((resolve, reject) => {
+    if (result.status == 200) {
+      const data = result.data as any;
+      const state =
+        data.state === "open"
+          ? IssueState.Open
+          : data.state === "closed"
+            ? IssueState.Closed
+            : IssueState.All;
+      const user = new User(
+        data.user.login,
+        data.user.id,
+        data.user.avatar_url,
+        data.user.gravatar_id,
+        data.user.url,
+        data.user.html_url,
+        data.user.events_url,
+        data.user.received_events_url,
+        data.user.type,
+        data.user.site_admin
+      );
+      const labels = new Array<Label>();
+      for (const l of data.labels) {
+        const lab = new Label(
+          l.id,
+          l.url,
+          l.name,
+          l.color,
+          owner,
+          repo,
+          l.description,
+          l.default
+        );
+        labels.push(lab);
+      }
+      const assignees = new Array<User>();
+      for (const us of data.assignees) {
+        const fus = new User(
+          us.login,
+          us.id,
+          us.avatar_url,
+          us.gravatar_id,
+          us.url,
+          us.html_url,
+          us.events_url,
+          us.received_events_url,
+          us.type,
+          us.site_admin
+        );
+        assignees.push(fus);
+      }
+      var mile: Milestone;
+      if (data.milestone != null) {
+        const milecreator = new User(
+          data.milestone.creator.login,
+          data.milestone.creator.id,
+          data.milestone.creator.avatar_url,
+          data.milestone.creator.gravatar_id,
+          data.milestone.creator.url,
+          data.milestone.creator.html_url,
+          data.milestone.creator.events_url,
+          data.milestone.creator.received_events_url,
+          data.milestone.creator.type,
+          data.milestone.creator.site_admin
+        );
+        const mstate =
+          data.milestone.state === "open" ? M_State.Open : M_State.Closed;
+        mile = new Milestone(
+          owner,
+          repo,
+          data.milestone.url,
+          data.milestone.html_url,
+          data.milestone.labels_url,
+          data.milestone.id,
+          data.milestone.number,
+          data.milestone.title,
+          mstate,
+          data.milestone.description,
+          milecreator,
+          data.open_issues,
+          data.closed_issues,
+          data.created_at,
+          data.closed_at,
+          data.due_on
+        );
+      } else {
+        mile = new Milestone();
+      }
+      var closer: User;
+      if (data.closed_by != null) {
+        closer = new User(
+          data.closed_by.login,
+          data.closed_by.id,
+          data.closed_by.avatar_url,
+          data.closed_by.gravatar_id,
+          data.closed_by.url,
+          data.closed_by.html_url,
+          data.closed_by.events_url,
+          data.closed_by.received_events_url,
+          data.closed_by.type,
+          data.closed_by.site_admin
+        );
+      } else {
+        closer = new User();
+      }
+      var pr: PRCorrespondingWithIssue;
+      if (data.pull_request != null) {
+        pr = new PRCorrespondingWithIssue(
+          data.pull_request.url,
+          data.pull_request.html_url,
+          data.pull_request.diff_url,
+          data.pull_request.patch_url
+        );
+      } else {
+        pr = new PRCorrespondingWithIssue();
+      }
+      const gi = new GitHubIssue(
+        owner,
+        repo,
+        data.id,
+        data.title,
+        data.url,
+        data.repository_url,
+        data.labels_url,
+        data.comments_url,
+        data.events_url,
+        data.html_url,
+        data.number,
+        state,
+        data.body_html,
+        user,
+        labels,
+        assignees,
+        mile,
+        data.locked,
+        data.active_lock_reason,
+        data.comments,
+        pr,
+        data.created_at,
+        data.closed_at,
+        data.updated_at,
+        closer
+      );
+      resolve(gi);
+    } else {
+      reject(new Error("HTML Request Failed"));
     }
-    const result = await gh.issues.get({owner: owner, repo: repo, number: id,
-                                        headers} as any);
-    return new Promise<GitHubIssue>((resolve, reject) => {
-        if (result.status == 200)
-        {
-            const data = result.data as any;
-            const state = (data.state === "open") ? IssueState.Open : 
-                          (data.state === "closed") ? IssueState.Closed : IssueState.All;
-            const user = new User(
-              data.user.login,
-              data.user.id,
-              data.user.avatar_url,
-              data.user.gravatar_id,
-              data.user.url,
-              data.user.html_url,
-              data.user.events_url,
-              data.user.received_events_url,
-              data.user.type,
-              data.user.site_admin
-            );
-            const labels = new Array<Label>();
-            for (const l of data.labels)
-            {
-                const lab = new Label(
-                  l.id,
-                  l.url,
-                  l.name,
-                  l.color,
-                  owner,
-                  repo,
-                  l.description,
-                  l.default
-                );
-                labels.push(lab);
-            }
-            const assignees = new Array<User>();
-            for (const us of data.assignees) {
-              const fus = new User(
-                us.login,
-                us.id,
-                us.avatar_url,
-                us.gravatar_id,
-                us.url,
-                us.html_url,
-                us.events_url,
-                us.received_events_url,
-                us.type,
-                us.site_admin
-              );
-              assignees.push(fus);
-            }
-            var mile: Milestone;
-            if (data.milestone != null)
-            {
-                const milecreator = new User(
-                  data.milestone.creator.login,
-                  data.milestone.creator.id,
-                  data.milestone.creator.avatar_url,
-                  data.milestone.creator.gravatar_id,
-                  data.milestone.creator.url,
-                  data.milestone.creator.html_url,
-                  data.milestone.creator.events_url,
-                  data.milestone.creator.received_events_url,
-                  data.milestone.creator.type,
-                  data.milestone.creator.site_admin
-                );
-                const mstate = data.milestone.state === "open" ? M_State.Open : M_State.Closed;
-                mile = new Milestone(
-                  owner,
-                  repo,
-                  data.milestone.url,
-                  data.milestone.html_url,
-                  data.milestone.labels_url,
-                  data.milestone.id,
-                  data.milestone.number,
-                  data.milestone.title,
-                  mstate,
-                  data.milestone.description,
-                  milecreator,
-                  data.open_issues,
-                  data.closed_issues,
-                  data.created_at,
-                  data.closed_at,
-                  data.due_on
-                );
-            }
-            else
-            {
-                mile = new Milestone();
-            }
-            var closer: User;
-            if (data.closed_by != null)
-            {
-                closer = new User(data.closed_by.login, data.closed_by.id,
-                                  data.closed_by.avatar_url, data.closed_by.gravatar_id,
-                                  data.closed_by.url, data.closed_by.html_url,
-                                  data.closed_by.events_url, data.closed_by.received_events_url,
-                                  data.closed_by.type, data.closed_by.site_admin);
-            }
-            else
-            {
-                closer = new User()
-            }
-            var pr: PRCorrespondingWithIssue;
-            if (data.pull_request != null)
-            {
-                pr = new PRCorrespondingWithIssue(data.pull_request.url, 
-                               data.pull_request.html_url, data.pull_request.diff_url, 
-                               data.pull_request.patch_url)
-            }
-            else
-            {
-                pr = new PRCorrespondingWithIssue();
-            }
-            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url,
-                           data.repository_url, data.labels_url, data.comments_url,
-                           data.events_url, data.html_url, data.number, state, data.body_html,
-                           user, labels, assignees, mile, data.locked, data.active_lock_reason,
-                           data.comments, pr, data.created_at, data.closed_at, data.updated_at,
-                           closer);
-            resolve(gi);
-        }
-        else
-        {
-            reject(new Error("HTML Request Failed"));
-        }
-    })
+  });
 }
 
-export async function editGitHubIssue(owner: string, repo: string, id: number,
-                                      title?: string, body?: string, 
-                                      state?: IssueState, milestone?: number, 
-                                      labels?: string[], assignees?: string[]): 
-                                      Promise<GitHubIssue>
-{
-    const gh: Github = new Github({baseUrl: "https://api.github.com"});
-    const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
+export async function editGitHubIssue(
+  owner: string,
+  repo: string,
+  id: number,
+  title?: string,
+  body?: string,
+  state?: IssueState,
+  milestone?: number,
+  labels?: string[],
+  assignees?: string[]
+): Promise<GitHubIssue> {
+  const gh: Github = new Github({ baseUrl: "https://api.github.com" });
+  const headers = {
+    accept: "Accept: application/vnd.github.v3.html+json"
+  };
+  const result = await gh.issues.edit({
+    owner: owner,
+    repo: repo,
+    number: id,
+    title: title,
+    body: body,
+    state: state,
+    milestone: milestone,
+    labels: labels,
+    assignees: assignees,
+    headers
+  } as any);
+  return new Promise<GitHubIssue>((resolve, reject) => {
+    if (result.status == 200) {
+      const data = result.data as any;
+      const state =
+        data.state === "open"
+          ? IssueState.Open
+          : data.state === "closed"
+            ? IssueState.Closed
+            : IssueState.All;
+      const user = new User(
+        data.user.login,
+        data.user.id,
+        data.user.avatar_url,
+        data.user.gravatar_id,
+        data.user.url,
+        data.user.html_url,
+        data.user.events_url,
+        data.user.received_events_url,
+        data.user.type,
+        data.user.site_admin
+      );
+      const labels = new Array<Label>();
+      for (const l of data.labels) {
+        const lab = new Label(
+          l.id,
+          l.url,
+          l.name,
+          l.color,
+          owner,
+          repo,
+          l.description,
+          l.default
+        );
+        labels.push(lab);
+      }
+      const assignees = new Array<User>();
+      for (const us of data.assignees) {
+        const fus = new User(
+          us.login,
+          us.id,
+          us.avatar_url,
+          us.gravatar_id,
+          us.url,
+          us.html_url,
+          us.events_url,
+          us.received_events_url,
+          us.type,
+          us.site_admin
+        );
+        assignees.push(fus);
+      }
+      var mile: Milestone;
+      if (data.milestone != null) {
+        const milecreator = new User(
+          data.milestone.creator.login,
+          data.milestone.creator.id,
+          data.milestone.creator.avatar_url,
+          data.milestone.creator.gravatar_id,
+          data.milestone.creator.url,
+          data.milestone.creator.html_url,
+          data.milestone.creator.events_url,
+          data.milestone.creator.received_events_url,
+          data.milestone.creator.type,
+          data.milestone.creator.site_admin
+        );
+        const mstate =
+          data.milestone.state === "open" ? M_State.Open : M_State.Closed;
+        mile = new Milestone(
+          owner,
+          repo,
+          data.milestone.url,
+          data.milestone.html_url,
+          data.milestone.labels_url,
+          data.milestone.id,
+          data.milestone.number,
+          data.milestone.title,
+          mstate,
+          data.milestone.description,
+          milecreator,
+          data.open_issues,
+          data.closed_issues,
+          data.created_at,
+          data.closed_at,
+          data.due_on
+        );
+      } else {
+        mile = new Milestone();
+      }
+      var closer: User;
+      if (data.closed_by != null) {
+        closer = new User(
+          data.closed_by.login,
+          data.closed_by.id,
+          data.closed_by.avatar_url,
+          data.closed_by.gravatar_id,
+          data.closed_by.url,
+          data.closed_by.html_url,
+          data.closed_by.events_url,
+          data.closed_by.received_events_url,
+          data.closed_by.type,
+          data.closed_by.site_admin
+        );
+      } else {
+        closer = new User();
+      }
+      var pr: PRCorrespondingWithIssue;
+      if (data.pull_request != null) {
+        pr = new PRCorrespondingWithIssue(
+          data.pull_request.url,
+          data.pull_request.html_url,
+          data.pull_request.diff_url,
+          data.pull_request.patch_url
+        );
+      } else {
+        pr = new PRCorrespondingWithIssue();
+      }
+      const gi = new GitHubIssue(
+        owner,
+        repo,
+        data.id,
+        data.title,
+        data.url,
+        data.repository_url,
+        data.labels_url,
+        data.comments_url,
+        data.events_url,
+        data.html_url,
+        data.number,
+        state,
+        data.body_html,
+        user,
+        labels,
+        assignees,
+        mile,
+        data.locked,
+        data.active_lock_reason,
+        data.comments,
+        pr,
+        data.created_at,
+        data.closed_at,
+        data.updated_at,
+        closer
+      );
+      resolve(gi);
+    } else {
+      reject(new Error("HTML Request Failed"));
     }
-    const result = await gh.issues.edit({owner: owner, repo: repo, number: id,
-                         title: title, body: body, state: state, milestone: milestone, 
-                         labels: labels, assignees: assignees, headers
-                         } as any);
-    return new Promise<GitHubIssue>((resolve, reject) => {
-        if (result.status == 200)
-        {
-            const data = result.data as any;
-            const state = (data.state === "open") ? IssueState.Open : 
-                          (data.state === "closed") ? IssueState.Closed : IssueState.All;
-            const user = new User(
-              data.user.login,
-              data.user.id,
-              data.user.avatar_url,
-              data.user.gravatar_id,
-              data.user.url,
-              data.user.html_url,
-              data.user.events_url,
-              data.user.received_events_url,
-              data.user.type,
-              data.user.site_admin
-            );
-            const labels = new Array<Label>();
-            for (const l of data.labels)
-            {
-                const lab = new Label(
-                  l.id,
-                  l.url,
-                  l.name,
-                  l.color,
-                  owner,
-                  repo,
-                  l.description,
-                  l.default
-                );
-                labels.push(lab);
-            }
-            const assignees = new Array<User>();
-            for (const us of data.assignees) {
-              const fus = new User(
-                us.login,
-                us.id,
-                us.avatar_url,
-                us.gravatar_id,
-                us.url,
-                us.html_url,
-                us.events_url,
-                us.received_events_url,
-                us.type,
-                us.site_admin
-              );
-              assignees.push(fus);
-            }
-            var mile: Milestone;
-            if (data.milestone != null)
-            {
-                const milecreator = new User(
-                  data.milestone.creator.login,
-                  data.milestone.creator.id,
-                  data.milestone.creator.avatar_url,
-                  data.milestone.creator.gravatar_id,
-                  data.milestone.creator.url,
-                  data.milestone.creator.html_url,
-                  data.milestone.creator.events_url,
-                  data.milestone.creator.received_events_url,
-                  data.milestone.creator.type,
-                  data.milestone.creator.site_admin
-                );
-                const mstate = data.milestone.state === "open" ? M_State.Open : M_State.Closed;
-                mile = new Milestone(
-                  owner,
-                  repo,
-                  data.milestone.url,
-                  data.milestone.html_url,
-                  data.milestone.labels_url,
-                  data.milestone.id,
-                  data.milestone.number,
-                  data.milestone.title,
-                  mstate,
-                  data.milestone.description,
-                  milecreator,
-                  data.open_issues,
-                  data.closed_issues,
-                  data.created_at,
-                  data.closed_at,
-                  data.due_on
-                );
-            }
-            else
-            {
-                mile = new Milestone();
-            }
-            var closer: User;
-            if (data.closed_by != null)
-            {
-                closer = new User(data.closed_by.login, data.closed_by.id,
-                                  data.closed_by.avatar_url, data.closed_by.gravatar_id,
-                                  data.closed_by.url, data.closed_by.html_url,
-                                  data.closed_by.events_url, data.closed_by.received_events_url,
-                                  data.closed_by.type, data.closed_by.site_admin);
-            }
-            else
-            {
-                closer = new User()
-            }
-            var pr: PRCorrespondingWithIssue;
-            if (data.pull_request != null)
-            {
-                pr = new PRCorrespondingWithIssue(data.pull_request.url, 
-                               data.pull_request.html_url, data.pull_request.diff_url, 
-                               data.pull_request.patch_url)
-            }
-            else
-            {
-                pr = new PRCorrespondingWithIssue();
-            }
-            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url,
-                           data.repository_url, data.labels_url, data.comments_url,
-                           data.events_url, data.html_url, data.number, state, data.body_html,
-                           user, labels, assignees, mile, data.locked, data.active_lock_reason,
-                           data.comments, pr, data.created_at, data.closed_at, data.updated_at,
-                           closer);
-            resolve(gi);
-        }
-        else
-        {
-            reject(new Error("HTML Request Failed"));
-        }
-    })
+  });
 }
