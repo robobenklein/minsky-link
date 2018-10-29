@@ -4,6 +4,7 @@ require("atom");
 const atom_1 = require("atom");
 console.log(String("Loading Minsky Link"));
 // HOVER LISTENER GH40
+// TODO
 // ISSUE TAG FINDER GH33
 // search for issue tags in a TextBuffer and apply markers to them
 function findIssueTags(textToSearch, issuetaglayer) {
@@ -37,16 +38,10 @@ function findIssueTags(textToSearch, issuetaglayer) {
             issue_number +
             ": " +
             new_marker.getStartBufferPosition);
-        /*
-        var new_decoration = textToSearch.decorateMarker(new_marker, {
-          type: "highlight",
-          class: "minskylink_issue_tag"
-        });
-        console.log("Decorated #" + issue_number + " with " + new_decoration);
-        //*/
     });
     console.log("issuetaglayer currently has " + issuetaglayer.getMarkerCount() + " items!");
 }
+// Execute once for every opened editor
 atom.workspace.observeTextEditors(editor => {
     console.log("Opening editor: " + editor.getLongTitle());
     console.log("Running scan on " + editor.getLongTitle());
