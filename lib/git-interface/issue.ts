@@ -60,8 +60,8 @@ export abstract class Issue {
   public updated_at!: string;
   public closed_by!: User;
   // Repo Info
-  protected org!: string;
-  protected repo!: string;
+  public org!: string;
+  public repo!: string;
 
   protected opts: Github.Options;
 
