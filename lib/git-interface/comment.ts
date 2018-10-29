@@ -1,4 +1,4 @@
-import { User } from "minsky-link";
+import { User } from "./user";
 
 export class GitComment {
   public id: number;
