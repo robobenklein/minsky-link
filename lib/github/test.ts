@@ -1,17 +1,9 @@
-import { createGitHubIssue } from "./github_issue";
+import { getGitHubIssue } from "./github_issue";
 
 export function test_getComment(): void {
   const org = "utk-cs";
   const repo = "team-minsky";
-  const result = createGitHubIssue(
-    org,
-    repo,
-    "Test Issue 2",
-    "This is another test issue created by my code.",
-    14,
-    ["testing", "typescript"],
-    ["ilumsden", "robobenklein"]
-  );
+  const result = getGitHubIssue(org, repo, 51);
   //const result = issue.getAllComments("2018-10-11T00:00:00Z");
   //const result = issue.getComment(429101082);
   result.then(res => {

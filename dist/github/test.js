@@ -4,7 +4,7 @@ const github_issue_1 = require("./github_issue");
 function test_getComment() {
     const org = "utk-cs";
     const repo = "team-minsky";
-    const result = github_issue_1.createGitHubIssue(org, repo, "Test Issue 2", "This is another test issue created by my code.", 14, ["testing", "typescript"], ["ilumsden", "robobenklein"]);
+    const result = github_issue_1.getGitHubIssue(org, repo, 51);
     //const result = issue.getAllComments("2018-10-11T00:00:00Z");
     //const result = issue.getComment(429101082);
     result.then(res => {
