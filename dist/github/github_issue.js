@@ -41,7 +41,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.addAssigneesToIssue({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             assignees
         });
         return new Promise(resolve => resolve(result.status >= 200 && result.status < 205));
@@ -85,7 +85,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.removeAssigneesFromIssue({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             assignees
         });
         return new Promise(resolve => {
@@ -100,7 +100,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.createComment({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             body,
             headers
         });
@@ -165,15 +165,21 @@ class GitHubIssue extends issue_1.Issue {
             }
         });
     }
-    async getAllComments(since, per_page = 30, page = 1) {
+    async getAllComments(since = "1970-01-01T00:00:00", per_page = 30, page = 1) {
         const gh = new Github(this.opts);
         const headers = {
             accept: "Accept: application/vnd.github.v3.html+json"
         };
+        console.log("Org is " + this.org);
+        console.log("Repo is " + this.repo);
+        console.log("ID is " + this.inumber);
+        console.log("Since: " + since);
+        console.log("Per Page: " + per_page);
+        console.log("Page: " + page);
         const result = await gh.issues.getComments({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             since,
             per_page,
             page,
@@ -252,7 +258,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.replaceAllLabels({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             labels
         });
         return new Promise((resolve, reject) => {
@@ -275,7 +281,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.removeLabel({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             name
         });
         return new Promise(resolve => {
@@ -287,7 +293,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.removeAllLabels({
             owner: this.org,
             repo: this.repo,
-            number: this.id
+            number: this.inumber
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -339,7 +345,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.addLabels({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             labels
         });
         return new Promise((resolve, reject) => {
@@ -475,7 +481,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.lock({
             owner: this.org,
             repo: this.repo,
-            number: this.id,
+            number: this.inumber,
             lock_reason
         });
         return new Promise(resolve => {
@@ -487,7 +493,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.unlock({
             owner: this.org,
             repo: this.repo,
-            number: this.id
+            number: this.inumber
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -614,6 +620,9 @@ async function getGitHubIssue(owner, repo, id) {
             else {
                 pr = new issue_1.PRCorrespondingWithIssue();
             }
+            console.log("Data.ID: " + data.id);
+            console.log("Passed ID: " + id);
+            console.log("Number: " + data.number);
             const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.number, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
             resolve(gi);
         }
