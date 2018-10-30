@@ -99,9 +99,9 @@ export abstract class Issue {
   ): Promise<GitComment>;
 
   public abstract getAllComments(
-    since?: string,
-    per_page?: number,
-    page?: number
+    since: string,
+    per_page: number,
+    page: number,
   ): Promise<GitComment[]>;
 
   public abstract deleteComment(comment_id: number): Promise<boolean>;
