@@ -113,7 +113,8 @@ function openIssueTagFromCursorPosition() {
     console.log("Found " + potential_markers.length + " potential_markers");
     var target_marker;
     for (var potential_marker of potential_markers) {
-        console.log("potential_marker has properties " + Object.keys(potential_marker.getProperties()));
+        console.log("potential_marker has properties " +
+            Object.keys(potential_marker.getProperties()));
         if (potential_marker.getProperties().hasOwnProperty("minsky")) {
             target_marker = potential_marker;
             break;
@@ -126,7 +127,10 @@ function openIssueTagFromCursorPosition() {
     console.log("Found issue under cursor: " + target_marker.getBufferRange());
     var target_properties = target_marker.getProperties();
     console.log("Lookup issue #" + target_properties["minsky"]);
-    atom.workspace.open("https://www.google.com/");
+    atom.notifications.addSuccess("Minsky-Link: Loading Github Issue #" + target_properties["minsky"], {
+        dismissable: true
+    });
+    // atom.workspace.open("https://www.google.com/");
 }
 exports.openIssueTagFromCursorPosition = openIssueTagFromCursorPosition;
 //# sourceMappingURL=minskylink.js.map

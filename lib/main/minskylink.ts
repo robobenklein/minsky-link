@@ -182,5 +182,11 @@ export function openIssueTagFromCursorPosition(): void {
   var target_properties = target_marker.getProperties() as any;
   console.log("Lookup issue #" + target_properties["minsky"]);
 
-  atom.workspace.open("https://www.google.com/");
+  atom.notifications.addSuccess(
+    "Minsky-Link: Loading Github Issue #" + target_properties["minsky"],
+    {
+      dismissable: true
+    }
+  );
+  // atom.workspace.open("https://www.google.com/");
 }
