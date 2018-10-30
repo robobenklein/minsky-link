@@ -203,7 +203,7 @@ export function openIssueTagFromCursorPosition(): void {
     "Minsky-Link: Loading #" + target_properties["minsky"],
     {
       description:
-        "Creating a new pane for issue #" + target_properties["minsky"],
+        "Opening pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );

@@ -144,7 +144,7 @@ function openIssueTagFromCursorPosition() {
     var target_properties = target_marker.getProperties();
     console.log("Lookup issue #" + target_properties["minsky"]);
     atom.notifications.addSuccess("Minsky-Link: Loading #" + target_properties["minsky"], {
-        description: "Creating a new pane for issue #" + target_properties["minsky"],
+        description: "Opening pane for issue #" + target_properties["minsky"],
         dismissable: true
     });
     // working on GH62

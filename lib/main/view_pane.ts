@@ -27,7 +27,17 @@ export class MinskyEtchPane {
       <style>p {\
         font-size: var(--editor-font-size);\
       }</style>";
-      this.htmlcontainer.innerHTML += "<p>User <a href=" + github_issue_result.user.html_url + "><b>" + github_issue_result.user.login + "</b></a> wrote: </p>";
+      this.htmlcontainer.innerHTML += "<h2><a href=\"" + github_issue_result.html_url + "\">" + github_issue_result.title + "</a></h2>"
+      this.htmlcontainer.innerHTML += "<h6>Created: " + github_issue_result.created_at + "</h6>"
+      var tmp_new_labels = "<h4>Labels: ";
+      for (var some_label of github_issue_result.labels) {
+        tmp_new_labels += "<span style=\"    background-color: #" + some_label.color + ";\
+    padding: 1px 5px;\
+    border-radius: 3px;\">" + some_label.name + "</span>, ";
+      }
+      tmp_new_labels += "</h4>";
+      this.htmlcontainer.innerHTML += tmp_new_labels;
+      this.htmlcontainer.innerHTML += "<h3>User <a href=" + github_issue_result.user.html_url + "><b>" + github_issue_result.user.login + "</b></a> wrote: </h3>";
       this.htmlcontainer.innerHTML += github_issue_result.body;
 
       var promise_for_github_issue_comments = github_issue_result.getAllComments();
