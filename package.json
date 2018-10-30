@@ -53,7 +53,7 @@
   },
   "homepage": "https://github.com/utk-cs/team-minsky#readme",
   "dependencies": {
-    "@octokit/rest": "^15.11.1",
+    "@octokit/rest": "~15.15.1",
     "typescript": "^3.0.3"
   },
   "devDependencies": {
