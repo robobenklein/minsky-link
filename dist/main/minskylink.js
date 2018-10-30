@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
 const atom_1 = require("atom");
+const test_1 = require("../github/test");
 console.log(String("Loading Minsky Link"));
 // HOVER LISTENER GH40
 // TODO
@@ -65,6 +66,9 @@ subscriptions = new atom_1.CompositeDisposable();
 // This adds the Active Command to our list of commands in Atom
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:speaks": () => speaks()
+}));
+subscriptions.add(atom.commands.add("atom-workspace", {
+    "minsky:testGitHub": () => test_1.test_getComment()
 }));
 // This is an active command function. You can add more in the
 // activate function.

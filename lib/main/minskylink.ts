@@ -3,6 +3,8 @@ import { CompositeDisposable } from "atom";
 import { TextEditor } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
+import { test_getComment } from "../github/test";
+
 console.log(String("Loading Minsky Link"));
 
 // HOVER LISTENER GH40
@@ -86,6 +88,12 @@ subscriptions = new CompositeDisposable();
 subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:speaks": () => speaks()
+  })
+);
+
+subscriptions.add(
+  atom.commands.add("atom-workspace", {
+    "minsky:testGitHub": () => test_getComment()
   })
 );
 
