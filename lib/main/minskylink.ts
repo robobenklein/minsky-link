@@ -202,21 +202,17 @@ export function openIssueTagFromCursorPosition(): void {
   atom.notifications.addSuccess(
     "Minsky-Link: Loading #" + target_properties["minsky"],
     {
-      description:
-        "Opening pane for issue #" + target_properties["minsky"],
+      description: "Opening pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );
 
   // working on GH62
   // atom.workspace.open("https://www.google.com/");
-  atom.workspace.open(
-    "minsky://" + target_properties["minsky"],
-    {
-      split: "down",
-      searchAllPanes: true
-    }
-  );
+  atom.workspace.open("minsky://" + target_properties["minsky"], {
+    split: "down",
+    searchAllPanes: true
+  });
 
   console.log("End of openIssueTagFromCursorPosition.");
 }
