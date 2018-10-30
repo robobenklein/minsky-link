@@ -124,7 +124,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.editComment({
             owner: this.org,
             repo: this.repo,
-            comment_id: comment_id.toString(),
+            comment_id: comment_id,
             body,
             headers
         });
@@ -148,7 +148,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.getComment({
             owner: this.org,
             repo: this.repo,
-            comment_id: comment_id.toString(),
+            comment_id: comment_id,
             per_page,
             page,
             headers
@@ -200,7 +200,7 @@ class GitHubIssue extends issue_1.Issue {
         const result = await gh.issues.deleteComment({
             owner: this.org,
             repo: this.repo,
-            comment_id: comment_id.toString()
+            comment_id: comment_id //.toString()
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
