@@ -285,9 +285,9 @@ export class GitHubIssue extends Issue {
   }
 
   public async getAllComments(
-    since: string,
-    per_page = 30,
-    page = 1
+    since?: string,
+    per_page?: number,
+    page?: number
   ): Promise<GitComment[]> {
     const gh: Github = new Github(this.opts);
     const headers = {
