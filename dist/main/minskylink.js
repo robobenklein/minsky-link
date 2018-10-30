@@ -149,7 +149,10 @@ function openIssueTagFromCursorPosition() {
     });
     // working on GH62
     // atom.workspace.open("https://www.google.com/");
-    atom.workspace.toggle("minsky://" + target_properties["minsky"]);
+    atom.workspace.open("minsky://" + target_properties["minsky"], {
+        split: "down",
+        searchAllPanes: true
+    });
     console.log("End of openIssueTagFromCursorPosition.");
 }
 exports.openIssueTagFromCursorPosition = openIssueTagFromCursorPosition;

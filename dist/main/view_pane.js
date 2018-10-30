@@ -14,10 +14,13 @@ class MinskyEtchPane {
         this.htmlcontainer = document.createElement("div");
         this.htmlcontainer.innerHTML = "Loading Issue information...";
         this.promise_for_github_issue.then(github_issue_result => {
-            this.htmlcontainer.innerHTML = "";
-            this.htmlcontainer.innerHTML += "<p>User <b>" + github_issue_result.user.login + "</b> wrote: </p>";
+            this.htmlcontainer.innerHTML = "\
+      <style>p {\
+        font-size: var(--editor-font-size);\
+      }</style>";
+            this.htmlcontainer.innerHTML += "<p>User <a href=" + github_issue_result.user.html_url + "><b>" + github_issue_result.user.login + "</b></a> wrote: </p>";
             this.htmlcontainer.innerHTML += github_issue_result.body;
-            var promise_for_github_issue_comments = github_issue_result.getAllComments("");
+            var promise_for_github_issue_comments = github_issue_result.getAllComments();
             promise_for_github_issue_comments.then(github_issue_comments_result => {
                 for (var github_issue_comment_result of github_issue_comments_result) {
                     this.htmlcontainer.appendChild(document.createElement(github_issue_comment_result.body));
@@ -31,7 +34,7 @@ class MinskyEtchPane {
         etch.initialize(this);
     }
     getTitle() {
-        return "Minsky Link Viewer!";
+        return "Minsky Link #" + this.issue_number;
     }
     render() {
         return this.htmlcontainer;
@@ -58,7 +61,7 @@ class MinskyEtchPaneView {
         }, []);
     }
     getTitle() {
-        return "Minsky Link Something";
+        return this.internal_etch_renderer.getTitle();
     }
     getURI() {
         return this.uri;
