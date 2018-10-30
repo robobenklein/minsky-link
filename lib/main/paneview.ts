@@ -1,23 +1,29 @@
-const etch = require('etch')
+import {getGitHubIssue} from "../github/github_issue"
 
-class MyComponent {
-  // Define an ordinary constructor to initialize your component.
-  constructor (props, children) {
-    // perform custom initialization here...
-    // then call `etch.initialize`:
-    etch.initialize(this)
+export default class MyPackageView {
+
+  constructor(serializedState) {
+    // Create root element
+    this.element = document.createElement('div');
+    this.element.classList.add('my-package');
+
+    // Create message element
+    const message = document.createElement('div');
+    message.textContent = 'The MyPackage package is Alive! It\'s ALIVE!';
+    message.classList.add('message');
+    this.element.appendChild(message);
   }
 
-  // The `render` method returns a virtual DOM tree representing the
-  // current state of the component. Etch will call `render` to build and update
-  // the component's associated DOM element. Babel is instructed to call the
-  // `etch.dom` helper in compiled JSX expressions by the `@jsx` pragma above.
-  render () {
-    return <div>Hello, {name}!</div>
+  // Returns an object that can be retrieved when package is activated
+  serialize() {}
+
+  // Tear down any state and detach
+  destroy() {
+    this.element.remove();
   }
 
-  // Update the component with new properties and children.
-  update (props, children) {
-    return etch.update(this)
+  getElement() {
+    return this.element;
   }
+
 }
