@@ -1,4 +1,5 @@
 import "atom";
+import { ViewModel } from "atom";
 import * as github_get_names from "../github/get_names";
 import * as github_issue from "../github/github_issue";
 
@@ -79,7 +80,7 @@ export class MinskyEtchPane {
     etch.initialize(this);
   }
 
-  getTitle(): String {
+  getTitle(): string {
     return "Minsky Link #" + this.issue_number;
   }
 
@@ -97,7 +98,7 @@ export class MinskyEtchPane {
   }
 }
 
-export class MinskyEtchPaneView {
+export class MinskyEtchPaneView implements ViewModel {
   element: HTMLElement;
   uri: String | null;
 
@@ -120,7 +121,7 @@ export class MinskyEtchPaneView {
     );
   }
 
-  getTitle() {
+  getTitle(): string {
     return this.internal_etch_renderer.getTitle();
   }
 
