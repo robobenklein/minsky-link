@@ -197,7 +197,7 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.editComment({
       owner: this.org,
       repo: this.repo,
-      comment_id: comment_id.toString(),
+      comment_id: comment_id, //.toString(),
       body,
       headers
     } as any);
@@ -246,7 +246,7 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.getComment({
       owner: this.org,
       repo: this.repo,
-      comment_id: comment_id.toString(),
+      comment_id: comment_id, //.toString(),
       per_page,
       page,
       headers
@@ -344,7 +344,7 @@ export class GitHubIssue extends Issue {
     const result = await gh.issues.deleteComment({
       owner: this.org,
       repo: this.repo,
-      comment_id: comment_id.toString()
+      comment_id: comment_id //.toString()
     });
     return new Promise<boolean>(resolve => {
       resolve(result.status === 204);
