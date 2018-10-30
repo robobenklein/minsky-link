@@ -1,1 +1,1 @@
-{"version":3,"file":"newPaneView.js","sourceRoot":"","sources":["../lib/newPaneView.ts"],"names":[],"mappings":""}
+{"version":3,"file":"newPaneView.js","sourceRoot":"","sources":["../lib/newPaneView.ts"],"names":[],"mappings":";AAAA,8BAA8B;AAC9B,wBAAwB;AAExB,MAAM,IAAI,GAAG,OAAO,CAAC,MAAM,CAAC,CAAA;AAE5B,OAAO,CAAA;AAAC,MAAM,QAAQ;CAAE;AACtB,WAAW,CAAA;AAAC;IAAC,CAAC,CAAC,CAAA;CAAC;AAEhB,MAAM,CAAA;AAAC;IAAC,CACN,AADO,CAAA,CAAA;IACP,OAAO,CAAM,KAAK,EAAE,EAAC,IAAI,EAAE,GAAC,OAAO,CACpC,CAAA;CAAC"}

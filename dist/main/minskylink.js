@@ -72,8 +72,10 @@ subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:testGitHub": () => test_1.test_getComment()
 })
 //This should create a new pane
+//Else not check out this as an example
 , 
 //This should create a new pane
+//Else not check out this as an example
 atom.command.add('atom-workspace', {
     'package-name:show-view': () => {
         const view = new newPaneView_ts_1.AtomPane({

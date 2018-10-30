@@ -3,10 +3,10 @@
 
 const etch = require('etch')
 
-exports.AtomPane = class {
-  constructor() {
-  }
-  render () {
-    return <div>Hello, {name}!</div>
-  }
-};
+exports class AtomPane {
+  constructor {()}
+
+  render {(
+    return (<div>Hello, {name}!</div>);
+  )}
+}
