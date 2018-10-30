@@ -12,6 +12,7 @@ class MinskyEtchPane {
         this.issue_number = props["issue_number"];
         this.promise_for_github_issue = github_issue.getGitHubIssue(this.reposlug[0], this.reposlug[1], this.issue_number);
         this.htmlcontainer = document.createElement("div");
+        this.htmlcontainer.style.overflow = "scroll";
         this.htmlcontainer.innerHTML = "Loading Issue information...";
         this.promise_for_github_issue.then(github_issue_result => {
             this.htmlcontainer.innerHTML =
@@ -50,7 +51,10 @@ class MinskyEtchPane {
             var promise_for_github_issue_comments = github_issue_result.getAllComments();
             promise_for_github_issue_comments.then(github_issue_comments_result => {
                 for (var github_issue_comment_result of github_issue_comments_result) {
-                    this.htmlcontainer.appendChild(document.createElement(github_issue_comment_result.body));
+                    var thing = document.createElement("div");
+                    thing.innerHTML += "<p>User " + github_issue_comment_result.user.login + " wrote:</p>";
+                    thing.innerHTML += "<div style=\"padding-left: 10em;\">" + github_issue_comment_result.body + "</div>";
+                    this.htmlcontainer.appendChild(thing);
                 }
             });
         });
