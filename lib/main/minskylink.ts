@@ -10,7 +10,9 @@ var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
 console.log(String("Loading Minsky Link"));
 
-var map_TextEditors_DisplayMarkerLayerIds: { [TextEditorID: number]: number } = {
+var map_TextEditors_DisplayMarkerLayerIds: {
+  [TextEditorID: number]: number;
+} = {
   0: 0
 };
 
@@ -114,7 +116,8 @@ export function speaks(): void {
 
 subscriptions.add(
   atom.commands.add("atom-workspace", {
-    "minsky:openIssueTagFromCursorPosition": () => openIssueTagFromCursorPosition()
+    "minsky:openIssueTagFromCursorPosition": () =>
+      openIssueTagFromCursorPosition()
   })
 );
 
@@ -130,7 +133,11 @@ export function openIssueTagFromCursorPosition(): void {
     return;
   }
 
-  var current_minsky_marker_layer: DisplayMarkerLayer | undefined = current_editor.getMarkerLayer(map_TextEditors_DisplayMarkerLayerIds[current_editor.id]);
+  var current_minsky_marker_layer:
+    | DisplayMarkerLayer
+    | undefined = current_editor.getMarkerLayer(
+    map_TextEditors_DisplayMarkerLayerIds[current_editor.id]
+  );
   if (current_minsky_marker_layer == undefined) {
     console.log("Could not retrieve the marker layer!");
     return;
@@ -143,18 +150,23 @@ export function openIssueTagFromCursorPosition(): void {
   //   allowPrevious: true
   // });
 
-  console.log("Current cursor position: " + current_cursor.getBufferPosition())
+  console.log("Current cursor position: " + current_cursor.getBufferPosition());
 
-  var potential_markers: DisplayMarker[] = current_minsky_marker_layer.findMarkers({
-    containsBufferPosition: current_cursor.getBufferPosition()
-  });
+  var potential_markers: DisplayMarker[] = current_minsky_marker_layer.findMarkers(
+    {
+      containsBufferPosition: current_cursor.getBufferPosition()
+    }
+  );
 
   console.log("Found " + potential_markers.length + " potential_markers");
 
   var target_marker: DisplayMarker | undefined;
 
   for (var potential_marker of potential_markers) {
-    console.log("potential_marker has properties " + Object.keys(potential_marker.getProperties()));
+    console.log(
+      "potential_marker has properties " +
+        Object.keys(potential_marker.getProperties())
+    );
     if (potential_marker.getProperties().hasOwnProperty("minsky")) {
       target_marker = potential_marker;
       break;
