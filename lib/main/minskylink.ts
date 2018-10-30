@@ -3,7 +3,7 @@ import { CompositeDisposable } from "atom";
 import { TextEditor } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
-import { test_getComment } from "../github/test"
+import { test_getComment } from "../github/test";
 
 console.log(String("Loading Minsky Link"));
 
@@ -95,7 +95,7 @@ subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:testGitHub": () => test_getComment()
   })
-)
+);
 
 // This is an active command function. You can add more in the
 // activate function.
