@@ -37,7 +37,7 @@ export class MinskyEtchPane {
         github_issue_result.title +
         "</a></h2>";
       this.htmlcontainer.innerHTML +=
-        "<h6>Created: " + github_issue_result.created_at + "</h6>";
+        "<h6>Created: " + new Date(github_issue_result.created_at).toString() + "</h6>";
       var tmp_new_labels = "<h4>Labels: ";
       for (var some_label of github_issue_result.labels) {
         tmp_new_labels +=
