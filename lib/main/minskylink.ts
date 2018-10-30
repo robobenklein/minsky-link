@@ -200,7 +200,8 @@ export function openIssueTagFromCursorPosition(): void {
   atom.notifications.addSuccess(
     "Minsky-Link: Loading #" + target_properties["minsky"],
     {
-      description: "Creating a new pane for issue #" + target_properties["minsky"],
+      description:
+        "Creating a new pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );
