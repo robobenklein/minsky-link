@@ -287,18 +287,18 @@ export class GitHubIssue extends Issue {
   public async getAllComments(
     since = "1970-01-01T00:00:00",
     per_page = 30,
-    page = 1,
+    page = 1
   ): Promise<GitComment[]> {
     const gh: Github = new Github(this.opts);
     const headers = {
       accept: "Accept: application/vnd.github.v3.html+json"
     };
-    console.log("Org is " + this.org)
-    console.log("Repo is " + this.repo)
-    console.log("ID is " + this.inumber)
-    console.log("Since: " + since)
-    console.log("Per Page: " + per_page)
-    console.log("Page: " + page)
+    console.log("Org is " + this.org);
+    console.log("Repo is " + this.repo);
+    console.log("ID is " + this.inumber);
+    console.log("Since: " + since);
+    console.log("Per Page: " + per_page);
+    console.log("Page: " + page);
     const result = await gh.issues.getComments({
       owner: this.org,
       repo: this.repo,
@@ -1126,9 +1126,9 @@ export async function getGitHubIssue(
       } else {
         pr = new PRCorrespondingWithIssue();
       }
-      console.log("Data.ID: " + data.id)
-      console.log("Passed ID: " + id)
-      console.log("Number: " + data.number)
+      console.log("Data.ID: " + data.id);
+      console.log("Passed ID: " + id);
+      console.log("Number: " + data.number);
       const gi = new GitHubIssue(
         owner,
         repo,
