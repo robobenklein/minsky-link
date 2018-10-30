@@ -3,6 +3,8 @@ import { CompositeDisposable } from "atom";
 import { TextEditor } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
+import { test_getComment } from "../github/test"
+
 console.log(String("Loading Minsky Link"));
 
 // HOVER LISTENER GH40
@@ -88,6 +90,12 @@ subscriptions.add(
     "minsky:speaks": () => speaks()
   })
 );
+
+subscriptions.add(
+  atom.commands.add("atom-workspace", {
+    "minsky:testGitHub": () => test_getComment()
+  })
+)
 
 // This is an active command function. You can add more in the
 // activate function.
