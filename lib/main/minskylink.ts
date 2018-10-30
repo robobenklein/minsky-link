@@ -5,6 +5,8 @@ import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
 
+import { AtomPane } from "./newPaneView.ts"
+
 console.log(String("Loading Minsky Link"));
 
 // HOVER LISTENER GH40
@@ -95,6 +97,19 @@ subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:testGitHub": () => test_getComment()
   })
+
+  //This should create a new pane
+  //Else not check out this as an example
+  atom.command.add('atom-workspace', {
+    'package-name:show-view': () => {
+    const view = new AtomPane({
+      name: 'Brian'
+    }, [])
+    const panel = atom.workspace.addRightPanel({
+      item: view.element
+    })
+  }})
+  
 );
 
 // This is an active command function. You can add more in the

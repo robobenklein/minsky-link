@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
 const atom_1 = require("atom");
 const test_1 = require("../github/test");
+const newPaneView_ts_1 = require("./newPaneView.ts");
 console.log(String("Loading Minsky Link"));
 // HOVER LISTENER GH40
 // TODO
@@ -69,6 +70,19 @@ subscriptions.add(atom.commands.add("atom-workspace", {
 }));
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:testGitHub": () => test_1.test_getComment()
+})
+//This should create a new pane
+, 
+//This should create a new pane
+atom.command.add('atom-workspace', {
+    'package-name:show-view': () => {
+        const view = new newPaneView_ts_1.AtomPane({
+            name: 'Brian'
+        }, []);
+        const panel = atom.workspace.addRightPanel({
+            item: view.element
+        });
+    }
 }));
 // This is an active command function. You can add more in the
 // activate function.
