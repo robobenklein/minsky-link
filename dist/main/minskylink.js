@@ -65,11 +65,13 @@ atom.workspace.observeTextEditors(editor => {
     subscriptions.add(editor.onDidStopChanging(event_editorchanged => {
         // event_editorchanged.changes.forEach(text_change => {
         for (var text_change of event_editorchanged.changes) {
-            console.log("Deleted: \"" + text_change.oldText + "\"");
-            console.log("Added: \"" + text_change.newText + "\"");
+            console.log('Deleted: "' + text_change.oldText + '"');
+            console.log('Added: "' + text_change.newText + '"');
             // check if the change range is in any of our issue tags.
             if (text_change.newText.length > 0 || // if text was added, we need to rescan
-                issuetaglayer.findMarkers({ intersectsBufferRange: text_change.oldRange }).length > 0) {
+                issuetaglayer.findMarkers({
+                    intersectsBufferRange: text_change.oldRange
+                }).length > 0) {
                 // then we should re-scan
                 console.log("Re-scanning for issue tags...");
                 findIssueTags(editor, issuetaglayer);
@@ -139,8 +141,8 @@ function openIssueTagFromCursorPosition() {
     console.log("Found issue under cursor: " + target_marker.getBufferRange());
     var target_properties = target_marker.getProperties();
     console.log("Lookup issue #" + target_properties["minsky"]);
-    atom.notifications.addSuccess("Minsky-Link: Loading Github Issue #" + target_properties["minsky"], {
-        description: "",
+    atom.notifications.addSuccess("Minsky-Link: Loading #" + target_properties["minsky"], {
+        description: "Creating a new pane for issue #" + target_properties["minsky"],
         dismissable: true
     });
     // atom.workspace.open("https://www.google.com/");

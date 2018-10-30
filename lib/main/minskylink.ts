@@ -198,9 +198,9 @@ export function openIssueTagFromCursorPosition(): void {
   console.log("Lookup issue #" + target_properties["minsky"]);
 
   atom.notifications.addSuccess(
-    "Minsky-Link: Loading Github Issue #" + target_properties["minsky"],
+    "Minsky-Link: Loading #" + target_properties["minsky"],
     {
-      description: "",
+      description: "Creating a new pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );
