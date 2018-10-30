@@ -4,6 +4,8 @@ import { TextEditor } from "atom";
 import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
+import { test_getComment } from "../github/test";
+
 var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
 console.log(String("Loading Minsky Link"));
@@ -95,6 +97,12 @@ subscriptions = new CompositeDisposable();
 subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:speaks": () => speaks()
+  })
+);
+
+subscriptions.add(
+  atom.commands.add("atom-workspace", {
+    "minsky:testGitHub": () => test_getComment()
   })
 );
 

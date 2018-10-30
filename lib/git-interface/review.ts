@@ -21,6 +21,9 @@ export class Review {
   public state: Pr_State;
   public html_url: string;
   public pull_request_url: string;
+  // Repo Info
+  public org: string;
+  public repo: string;
 
   constructor(
     pr_id: number,
@@ -29,6 +32,8 @@ export class Review {
     commit_id: string,
     html_url: string,
     pr_url: string,
+    org: string,
+    repo: string,
     state = Pr_State.Pend
   ) {
     this.pr_id = pr_id;
@@ -38,5 +43,7 @@ export class Review {
     this.html_url = html_url;
     this.pull_request_url = pr_url;
     this.state = state;
+    this.org = org;
+    this.repo = repo;
   }
 }

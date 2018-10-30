@@ -7,7 +7,7 @@ var M_State;
     M_State["Closed"] = "closed";
 })(M_State = exports.M_State || (exports.M_State = {}));
 class Milestone {
-    constructor(url, html_url, labels_url, id, cnumber, title, state = M_State.Open, description = "", creator = new user_1.User(), open_issues = 0, closed_issues = 0, created_at = "", closed_at = "", due_on = "") {
+    constructor(org = "", repo = "", url = "", html_url = "", labels_url = "", id = 0, cnumber = 0, title = "", state = M_State.Open, description = "", creator = new user_1.User(), open_issues = 0, closed_issues = 0, created_at = "", closed_at = "", due_on = "") {
         this.url = url;
         this.html_url = html_url;
         this.labels_url = labels_url;
@@ -22,6 +22,8 @@ class Milestone {
         this.created_at = created_at;
         this.closed_at = closed_at;
         this.due_on = due_on;
+        this.org = org;
+        this.repo = repo;
     }
 }
 exports.Milestone = Milestone;

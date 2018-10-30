@@ -2,18 +2,21 @@ import { User } from "./user";
 
 export class GitComment {
   public id: number;
-  public comment_id: string;
   public url: string;
   public html_url: string;
   public body: string;
   public user: User;
   public created_at: string;
   public updated_at: string;
+  // Repo Info
+  public org: string;
+  public repo: string;
 
   constructor(
     c_body: string,
+    org: string,
+    repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -21,9 +24,10 @@ export class GitComment {
     updated_at = ""
   ) {
     this.id = id;
+    this.org = org;
+    this.repo = repo;
     this.body = c_body;
     this.user = user;
-    this.comment_id = comment_id;
     this.url = url;
     this.html_url = html_url;
     this.created_at = created_at;
@@ -37,8 +41,9 @@ export class GitPRComment extends GitComment {
 
   constructor(
     c_body: string,
+    org: string,
+    repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -47,7 +52,7 @@ export class GitPRComment extends GitComment {
     c_path = "",
     c_dposition = NaN
   ) {
-    super(c_body, id, comment_id, url, html_url, user, created_at, updated_at);
+    super(c_body, org, repo, id, url, html_url, user, created_at, updated_at);
     this.path = c_path;
     this.diff_position = c_dposition;
   }
@@ -58,8 +63,9 @@ export class GitReplyComment extends GitPRComment {
 
   constructor(
     c_body: string,
+    org: string,
+    repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -71,8 +77,9 @@ export class GitReplyComment extends GitPRComment {
   ) {
     super(
       c_body,
+      org,
+      repo,
       id,
-      comment_id,
       url,
       html_url,
       user,
@@ -95,8 +102,9 @@ export class GitReviewComment extends GitReplyComment {
   constructor(
     c_revid: string,
     c_body: string,
+    org: string,
+    repo: string,
     id = 0,
-    comment_id = "",
     url = "",
     html_url = "",
     user = new User(),
@@ -112,8 +120,9 @@ export class GitReviewComment extends GitReplyComment {
   ) {
     super(
       c_body,
+      org,
+      repo,
       id,
-      comment_id,
       url,
       html_url,
       user,

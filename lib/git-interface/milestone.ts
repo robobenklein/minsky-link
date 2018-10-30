@@ -21,14 +21,19 @@ export class Milestone {
   public created_at: string;
   public closed_at: string;
   public due_on: string;
+  // Repo Info
+  public org: string;
+  public repo: string;
 
   constructor(
-    url: string,
-    html_url: string,
-    labels_url: string,
-    id: number,
-    cnumber: number,
-    title: string,
+    org = "",
+    repo = "",
+    url = "",
+    html_url = "",
+    labels_url = "",
+    id = 0,
+    cnumber = 0,
+    title = "",
     state = M_State.Open,
     description = "",
     creator = new User(),
@@ -52,5 +57,7 @@ export class Milestone {
     this.created_at = created_at;
     this.closed_at = closed_at;
     this.due_on = due_on;
+    this.org = org;
+    this.repo = repo;
   }
 }
