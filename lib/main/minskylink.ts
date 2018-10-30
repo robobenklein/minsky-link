@@ -16,6 +16,10 @@ var map_TextEditors_DisplayMarkerLayerIds: {
   0: 0
 };
 
+// Hold all the disposable subscriptions
+let subscriptions: CompositeDisposable;
+subscriptions = new CompositeDisposable();
+
 // HOVER LISTENER GH40
 // TODO
 
@@ -80,20 +84,31 @@ atom.workspace.observeTextEditors(editor => {
   });
 
   findIssueTags(editor, issuetaglayer);
-
-  // TODO place hook on the buffer being edited:
-  editor.onDidStopChanging(event_editorchanged => {
-    event_editorchanged.changes.forEach(text_change => {
-      // check if the change range is in any of our issue tags.
-      console.log("Changed text: " + text_change.oldRange);
-    });
-    findIssueTags(editor, issuetaglayer);
-  });
+  subscriptions.add(
+    editor.onDidStopChanging(event_editorchanged => {
+      // event_editorchanged.changes.forEach(text_change => {
+      for (var text_change of event_editorchanged.changes) {
+        console.log('Deleted: "' + text_change.oldText + '"');
+        console.log('Added: "' + text_change.newText + '"');
+        // check if the change range is in any of our issue tags.
+        if (
+          text_change.newText.length > 0 || // if text was added, we need to rescan
+          issuetaglayer.findMarkers({
+            intersectsBufferRange: text_change.oldRange
+          }).length > 0
+        ) {
+          // then we should re-scan
+          console.log("Re-scanning for issue tags...");
+          findIssueTags(editor, issuetaglayer);
+          break;
+        } else {
+          // no need to re-scan
+          console.log("No need to re-scan change: " + text_change.oldRange);
+        }
+      } //);
+    })
+  );
 });
-
-let subscriptions: CompositeDisposable | undefined;
-
-subscriptions = new CompositeDisposable();
 
 // This adds the Active Command to our list of commands in Atom
 subscriptions.add(
@@ -116,7 +131,7 @@ export function speaks(): void {
 
 subscriptions.add(
   atom.commands.add("atom-workspace", {
-    "minsky:openIssueTagFromCursorPosition": () =>
+    "minsky:open-issue-tag-from-cursor-position": () =>
       openIssueTagFromCursorPosition()
   })
 );
@@ -185,6 +200,7 @@ export function openIssueTagFromCursorPosition(): void {
   atom.notifications.addSuccess(
     "Minsky-Link: Loading Github Issue #" + target_properties["minsky"],
     {
+      description: "",
       dismissable: true
     }
   );

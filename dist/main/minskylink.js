@@ -8,6 +8,9 @@ console.log(String("Loading Minsky Link"));
 var map_TextEditors_DisplayMarkerLayerIds = {
     0: 0
 };
+// Hold all the disposable subscriptions
+let subscriptions;
+subscriptions = new atom_1.CompositeDisposable();
 // HOVER LISTENER GH40
 // TODO
 // ISSUE TAG FINDER GH33
@@ -59,17 +62,26 @@ atom.workspace.observeTextEditors(editor => {
         class: "minskylink_issue_tag"
     });
     findIssueTags(editor, issuetaglayer);
-    // TODO place hook on the buffer being edited:
-    editor.onDidStopChanging(event_editorchanged => {
-        event_editorchanged.changes.forEach(text_change => {
+    subscriptions.add(editor.onDidStopChanging(event_editorchanged => {
+        // event_editorchanged.changes.forEach(text_change => {
+        for (var text_change of event_editorchanged.changes) {
+            console.log("Deleted: \"" + text_change.oldText + "\"");
+            console.log("Added: \"" + text_change.newText + "\"");
             // check if the change range is in any of our issue tags.
-            console.log("Changed text: " + text_change.oldRange);
-        });
-        findIssueTags(editor, issuetaglayer);
-    });
+            if (text_change.newText.length > 0 || // if text was added, we need to rescan
+                issuetaglayer.findMarkers({ intersectsBufferRange: text_change.oldRange }).length > 0) {
+                // then we should re-scan
+                console.log("Re-scanning for issue tags...");
+                findIssueTags(editor, issuetaglayer);
+                break;
+            }
+            else {
+                // no need to re-scan
+                console.log("No need to re-scan change: " + text_change.oldRange);
+            }
+        } //);
+    }));
 });
-let subscriptions;
-subscriptions = new atom_1.CompositeDisposable();
 // This adds the Active Command to our list of commands in Atom
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:speaks": () => speaks()
@@ -84,7 +96,7 @@ function speaks() {
 }
 exports.speaks = speaks;
 subscriptions.add(atom.commands.add("atom-workspace", {
-    "minsky:openIssueTagFromCursorPosition": () => openIssueTagFromCursorPosition()
+    "minsky:open-issue-tag-from-cursor-position": () => openIssueTagFromCursorPosition()
 }));
 function openIssueTagFromCursorPosition() {
     var current_editor = atom.workspace.getActiveTextEditor();
@@ -128,6 +140,7 @@ function openIssueTagFromCursorPosition() {
     var target_properties = target_marker.getProperties();
     console.log("Lookup issue #" + target_properties["minsky"]);
     atom.notifications.addSuccess("Minsky-Link: Loading Github Issue #" + target_properties["minsky"], {
+        description: "",
         dismissable: true
     });
     // atom.workspace.open("https://www.google.com/");
