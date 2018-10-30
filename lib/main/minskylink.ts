@@ -4,6 +4,7 @@ import { TextEditor } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
+import { getRepoNames } from "../github/get_names";
 
 console.log(String("Loading Minsky Link"));
 
@@ -107,6 +108,16 @@ subscriptions.add(
   })
 );
 
+subscriptions.add(
+  atom.commands.add("atom-workspace", {
+    "minsky:nameTest": () => {
+      const strs = getRepoNames();
+      console.log("Org (Outside function) is " + strs[0]);
+      console.log("Repo (Outside function) is " + strs[1]);
+    }
+  })
+);
+
 // This is an active command function. You can add more in the
 // activate function.
 export function speaks(): void {
@@ -132,10 +143,10 @@ export function nlpaneses(x: string): void {
   if (atom.workspace.panelForItem(tempItem) == null) {
     //let tempOptions = { item:{tempItem} };
     //atom.views.addViewProvider tempItem, (TextEditor) ->
-      //textEditorElement = new TextEditorElement
-      //textEditorElement.initialize(tempItem)
-      //textEditorElement
-    atom.workspace.addLeftPanel( { item:{tempItem} } );
+    //textEditorElement = new TextEditorElement
+    //textEditorElement.initialize(tempItem)
+    //textEditorElement
+    atom.workspace.addLeftPanel({ item: { tempItem } });
   } else {
     atom.workspace.panelForItem(tempItem)!.show();
   }
