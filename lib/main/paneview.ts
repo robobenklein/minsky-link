@@ -9,7 +9,7 @@ export default class paneview {
 
     // Create message element
     //const content = document.createElement('div');
-    const currentIssue = getGitHubIssue(,, url.substr(url.lastIndexOf("/") + 1));
+    const currentIssue = getGitHubIssue("utk-cs","team-minsky", url.substr(url.lastIndexOf("/") + 1));
     for (let i of currentIssue.getAllComments()) {
       const message = document.createElement('div');
       message.textContent = i.body;
