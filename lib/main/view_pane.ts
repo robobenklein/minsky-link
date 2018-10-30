@@ -1,9 +1,11 @@
 
 import "atom";
+// import * as github_get_names from "../github/get_names"
 
 //@ts-ignore
 import * as etch from "etch";
 
+//@ts-ignore
 export class MinskyEtchPane {
   //@ts-ignore
   constructor (props, children) {
@@ -33,17 +35,19 @@ export class MinskyEtchPane {
 export class MinskyEtchPaneView {
 
   element: HTMLElement;
+  uri: String | null;
 
-  //@ts-ignore
-  constructor(serializedState ?) {
+  // @ts-ignore
+  constructor(serializedState ? : any, uri ? : String) {
     this.element = document.createElement('div');
-
+    this.uri = uri ? uri : "minsky://minsky-link";
+    this.element.innerHTML = "Hello Minsky!<br>My URI is " + uri;
   }
   getTitle() {
     return "Minsky Link Something";
   }
   getURI() {
-    "atom://minsky-link"
+    return this.uri;
   }
 
   serialize() {
@@ -60,7 +64,8 @@ export class MinskyEtchPaneView {
 }
 
 atom.workspace.addOpener(uri => {
-  if (uri == "atom://minsky-link") {
-    return new MinskyEtchPaneView();
+  console.log("Opener checking URI \"" + uri + "\"");
+  if (uri.startsWith("minsky://")) {
+    return new MinskyEtchPaneView(null, uri);
   }
 });

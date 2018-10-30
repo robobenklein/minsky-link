@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
 const atom_1 = require("atom");
 const test_1 = require("../github/test");
-const view_pane_1 = require("./view_pane");
+//@ts-ignore
+require("./view_pane");
 var regex1_gh = new RegExp(/(GH([0-9]+))/, "gm");
 console.log(String("Loading Minsky Link"));
 var map_TextEditors_DisplayMarkerLayerIds = {
@@ -148,19 +149,7 @@ function openIssueTagFromCursorPosition() {
     });
     // working on GH62
     // atom.workspace.open("https://www.google.com/");
-    atom.workspace.toggle("atom://minsky-link");
-    var new_view = new view_pane_1.MinskyEtchPane({
-        issue_id: target_properties["minsky"]
-    }, []);
-    var new_pane = atom.workspace.getActivePane().addItem({
-        item: new_view,
-        visible: true
-    });
-    console.log("new_pane is " + new_pane);
-    if (new_pane == undefined) {
-        console.log("Pane is undefined!");
-        return;
-    }
+    atom.workspace.toggle("minsky://" + target_properties["minsky"]);
     console.log("End of openIssueTagFromCursorPosition.");
 }
 exports.openIssueTagFromCursorPosition = openIssueTagFromCursorPosition;

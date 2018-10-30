@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
+// import * as github_get_names from "../github/get_names"
 //@ts-ignore
 const etch = require("etch");
+//@ts-ignore
 class MinskyEtchPane {
     //@ts-ignore
     constructor(props, children) {
@@ -26,15 +28,17 @@ class MinskyEtchPane {
 }
 exports.MinskyEtchPane = MinskyEtchPane;
 class MinskyEtchPaneView {
-    //@ts-ignore
-    constructor(serializedState) {
+    // @ts-ignore
+    constructor(serializedState, uri) {
         this.element = document.createElement('div');
+        this.uri = uri ? uri : "minsky://minsky-link";
+        this.element.innerHTML = "Hello Minsky!<br>My URI is " + uri;
     }
     getTitle() {
         return "Minsky Link Something";
     }
     getURI() {
-        "atom://minsky-link";
+        return this.uri;
     }
     serialize() {
         return {
@@ -50,8 +54,9 @@ class MinskyEtchPaneView {
 }
 exports.MinskyEtchPaneView = MinskyEtchPaneView;
 atom.workspace.addOpener(uri => {
-    if (uri == "atom://minsky-link") {
-        return new MinskyEtchPaneView();
+    console.log("Opener checking URI \"" + uri + "\"");
+    if (uri.startsWith("minsky://")) {
+        return new MinskyEtchPaneView(null, uri);
     }
 });
 //# sourceMappingURL=view_pane.js.map

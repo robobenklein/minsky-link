@@ -5,7 +5,8 @@ import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
-import { MinskyEtchPane } from "./view_pane";
+//@ts-ignore
+import "./view_pane";
 
 var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
@@ -209,23 +210,7 @@ export function openIssueTagFromCursorPosition(): void {
 
   // working on GH62
   // atom.workspace.open("https://www.google.com/");
-  atom.workspace.toggle("atom://minsky-link")
-
-  var new_view = new MinskyEtchPane({
-    issue_id: target_properties["minsky"]
-  }, []);
-
-  var new_pane = atom.workspace.getActivePane().addItem({
-    item: new_view,
-    visible: true
-  });
-
-  console.log("new_pane is " + new_pane);
-
-  if (new_pane == undefined) {
-    console.log("Pane is undefined!")
-    return;
-  }
+  atom.workspace.toggle("minsky://" + target_properties["minsky"]);
 
   console.log("End of openIssueTagFromCursorPosition.");
 }
