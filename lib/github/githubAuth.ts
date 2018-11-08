@@ -21,19 +21,42 @@ class githubAuth {
 exports.githubAuth = githubAuth;
 */
 
+/*
+var GitHubApi = require("github");
+var github = new GitHubApi({
+    version: "3.0.0"
+});
+github.authenticate({
+  type: "basic",
+  username: 'YOUR USERNAME',
+  password: 'YOUR PASSWORD'
+});
+github.oauth.createAuthorization(
+  { scopes:['repo'],
+    note:'Some message to remind you'
+  }
+, function(e,d) {
+    console.log("error: " + e, "token: " + d.token);
+  }
+);
+*/
+
 import * as GitHub from "@octokit/rest";
 import * as user from "../git-interface/user";
 
+const var CLID = "";
+
 export class GitHubAuth extends AuthMe {
   //Get auth key.
-  var keyinp = readline();
+  //var keyinp = readline();
 
   //Create new user
-  var newUser = user();
+  //var newUser = user();
 
-  GitHub.authenticate({
+  GitHub.authorization.create();
+  /*({
     type: 'oauth',
     key: newUser,
     secret: keyinp
-  })
+  })*/
 }
