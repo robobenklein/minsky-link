@@ -32,118 +32,106 @@ export enum LockReason {
   Spam = "spam"
 }
 
-export abstract class Issue {
+export interface Issue {
   // Properties
-  public id!: number;
-  public url!: string;
-  public repository_url!: string;
+  id: number;
+  url: string;
+  repository_url: string;
   // The URL should end with "{/name}". That needs to be replaced with the
   // name of the label for the URL to work.
-  public labels_url!: string;
-  public comments_url!: string;
-  public events_url!: string;
-  public html_url!: string;
-  public inumber!: number;
-  public state!: IssueState;
-  public title!: string;
-  public body!: string;
-  public user!: User;
-  public labels!: Label[];
-  public assignees!: User[];
-  public milestone!: Milestone;
-  public locked!: boolean;
-  public active_lock_reason!: string;
-  public num_comments!: number;
-  public corresponding_pr!: PRCorrespondingWithIssue;
-  public created_at!: string;
-  public closed_at!: string; // Should be null by default
-  public updated_at!: string;
-  public closed_by!: User;
+  labels_url: string;
+  comments_url: string;
+  events_url: string;
+  html_url: string;
+  inumber: number;
+  state: IssueState;
+  title: string;
+  body: string;
+  user: User;
+  labels: Label[];
+  assignees: User[];
+  milestone: Milestone;
+  locked: boolean;
+  active_lock_reason: string;
+  num_comments: number;
+  corresponding_pr: PRCorrespondingWithIssue;
+  created_at: string;
+  closed_at: string; // Should be null by default
+  updated_at: string;
+  closed_by: User;
   // Repo Info
-  public org!: string;
-  public repo!: string;
+  org: string;
+  repo: string;
 
-  protected opts: Github.Options;
+  opts: Github.Options;
 
-  constructor() {
-    this.opts = { baseUrl: "https://api.github.com" };
-  }
   // Functions
 
   // Turn into Constructor for Implementations
   // createIssue(title: string, body: string, milestone: number, labels: string[],
   //    assignees: string[]): boolean;
 
-  public abstract addAssignees(assignees: string[]): Promise<boolean>;
+  addAssignees(assignees: string[]): Promise<boolean>;
 
-  public abstract getAvailableAssignees(
-    per_page: number,
-    page: number
-  ): Promise<User[]>;
+  getAvailableAssignees(per_page: number, page: number): Promise<User[]>;
 
-  public abstract checkAssignability(assignee: string): Promise<boolean>;
+  checkAssignability(assignee: string): Promise<boolean>;
 
-  public abstract removeAssignees(assignees: string[]): Promise<boolean>;
+  removeAssignees(assignees: string[]): Promise<boolean>;
 
-  public abstract createComment(body: string): Promise<GitComment>;
+  createComment(body: string): Promise<GitComment>;
 
-  public abstract editComment(
-    comment_id: number,
-    body: string
-  ): Promise<GitComment>;
+  editComment(comment_id: number, body: string): Promise<GitComment>;
 
-  public abstract getComment(
+  getComment(
     comment_id: number,
     per_page: number,
     page: number
   ): Promise<GitComment>;
 
-  public abstract getAllComments(
+  getAllComments(
     since: string,
     per_page: number,
     page: number
   ): Promise<GitComment[]>;
 
-  public abstract deleteComment(comment_id: number): Promise<boolean>;
+  deleteComment(comment_id: number): Promise<boolean>;
 
-  public abstract createLabel(
+  createLabel(
     name: string,
     color: string,
     description?: string
   ): Promise<Label>;
 
-  public abstract updateLabel(
+  updateLabel(
     current_name: string,
     new_name?: string,
     new_color?: string,
     new_description?: string
   ): Promise<Label>;
 
-  public abstract replaceAllLabels(labels: string[]): Promise<Label[]>;
+  replaceAllLabels(labels: string[]): Promise<Label[]>;
 
-  public abstract removeLabel(name: string): Promise<boolean>;
+  removeLabel(name: string): Promise<boolean>;
 
-  public abstract removeAllLabels(): Promise<boolean>;
+  removeAllLabels(): Promise<boolean>;
 
-  public abstract getAllLabels(
-    per_page: number,
-    page: number
-  ): Promise<Label[]>;
+  getAllLabels(per_page: number, page: number): Promise<Label[]>;
 
-  public abstract getLabel(name: string): Promise<Label>;
+  getLabel(name: string): Promise<Label>;
 
-  public abstract addLabels(labels: string[]): Promise<Label[]>;
+  addLabels(labels: string[]): Promise<Label[]>;
 
-  public abstract deleteLabel(name: string): Promise<boolean>;
+  deleteLabel(name: string): Promise<boolean>;
 
-  public abstract createMilestone(
+  createMilestone(
     title: string,
     description?: string,
     due_on?: string,
     state?: M_State
   ): Promise<Milestone>;
 
-  public abstract updateMilestone(
+  updateMilestone(
     milestone_id: number,
     title?: string,
     description?: string,
@@ -151,20 +139,20 @@ export abstract class Issue {
     state?: M_State
   ): Promise<Milestone>;
 
-  public abstract getMilestone(milestone_id: number): Promise<Milestone>;
+  getMilestone(milestone_id: number): Promise<Milestone>;
 
-  public abstract getMilestoneLabels(
+  getMilestoneLabels(
     milestone_id: number,
     per_page: number,
     page: number
   ): Promise<Label[]>;
 
-  public abstract deleteMilestone(milestone_id: number): Promise<boolean>;
+  deleteMilestone(milestone_id: number): Promise<boolean>;
 
   // editIssue(id: number, title: string, body: string, state: string, milestone: number,
   //    labels: string[], assignees: string[]): boolean;
 
-  public abstract lock(lock_reason: LockReason): Promise<boolean>;
+  lock(lock_reason: LockReason): Promise<boolean>;
 
-  public abstract unlock(): Promise<boolean>;
+  unlock(): Promise<boolean>;
 }

@@ -12,7 +12,34 @@ import { User } from "../git-interface/user";
 //import * as Github from "../../node_modules/@octokit/rest/index";
 import * as Github from "@octokit/rest";
 
-export class GitHubIssue extends Issue {
+export class GitHubIssue implements Issue {
+  id: number;
+  url: string;
+  repository_url: string;
+  labels_url: string;
+  comments_url: string;
+  events_url: string;
+  html_url: string;
+  inumber: number;
+  state: IssueState;
+  title: string;
+  body: string;
+  user: User;
+  labels: Label[];
+  assignees: User[];
+  milestone: Milestone;
+  locked: boolean;
+  active_lock_reason: string;
+  num_comments: number;
+  corresponding_pr: PRCorrespondingWithIssue;
+  created_at: string;
+  closed_at: string;
+  updated_at: string;
+  closed_by: User;
+  org: string;
+  repo: string;
+  opts: Github.Options;
+
   constructor(
     org: string,
     repo: string,
@@ -40,7 +67,7 @@ export class GitHubIssue extends Issue {
     updated_at = "",
     closed_by = new User()
   ) {
-    super();
+    this.opts = { baseUrl: "https://api.github.com" };
     this.org = org;
     this.repo = repo;
     this.id = id;

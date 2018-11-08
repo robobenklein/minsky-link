@@ -10,7 +10,7 @@ export interface Branch {
   repo: string;
 }
 
-export abstract class PullRequest extends Issue {
+export interface PullRequest extends Issue {
   // Properties
 
   // The following properties are inherited from the Issue interface, but
@@ -20,102 +20,92 @@ export abstract class PullRequest extends Issue {
   //   * labels_url
   //   * corresponding_pr
 
-  public diff_url!: string;
-  public patch_url!: string;
-  public issue_url!: string;
-  public commits_url!: string;
-  public review_comments_url!: string;
-  public review_comment_url!: string;
-  public statuses_url!: string;
-  public merged_at!: string;
-  public head!: Branch;
-  public base!: Branch;
-  public merge_commit_sha!: string;
-  public merged!: boolean;
-  public mergable!: boolean;
-  public merged_by!: User;
-  public num_comments!: number;
-  public num_commits!: number;
-  public num_additions!: number;
-  public num_deletions!: number;
-  public num_changed_files!: number;
-  public maintainer_can_modify!: boolean;
+  diff_url: string;
+  patch_url: string;
+  issue_url: string;
+  commits_url: string;
+  review_comments_url: string;
+  review_comment_url: string;
+  statuses_url: string;
+  merged_at: string;
+  head: Branch;
+  base: Branch;
+  merge_commit_sha: string;
+  merged: boolean;
+  mergable: boolean;
+  merged_by: User;
+  num_comments: number;
+  num_commits: number;
+  num_additions: number;
+  num_deletions: number;
+  num_changed_files: number;
+  maintainer_can_modify: boolean;
 
-  constructor() {
-    super();
-  }
+  checkMerged(): Promise<boolean>;
 
-  public abstract checkMerged(): Promise<boolean>;
-
-  public abstract createPRComment(
+  createPRComment(
     body: string,
     commit_id: string,
     path: string,
     diff_position: number
   ): Promise<GitPRComment>;
 
-  public abstract createCommentReply(
+  createCommentReply(
     body: string,
     in_reply_to: number
   ): Promise<GitReplyComment>;
 
   // More parameters need to be added
-  public abstract createReview(
+  createReview(
     commit_id: string,
     body: string,
     rev_event: string
   ): Promise<GitReviewComment>;
 
-  public abstract createReviewRequest(
+  createReviewRequest(
     reviewers: string[],
     team_reviewers: string[]
   ): Promise<boolean>;
 
-  public abstract getReview(review_id: string): Promise<any>;
+  getReview(review_id: string): Promise<any>;
 
-  public abstract getReviewComments(
+  getReviewComments(
     review_id: string,
     per_page: number,
     page: number
   ): Promise<any[]>;
 
-  public abstract getReviewRequests(
-    per_page: number,
-    page: number
-  ): Promise<any[]>;
+  getReviewRequests(per_page: number, page: number): Promise<any[]>;
 
-  public abstract getAllReviews(per_page: number, page: number): Promise<any[]>;
+  getAllReviews(per_page: number, page: number): Promise<any[]>;
 
-  public abstract submitReview(
+  submitReview(
     review_id: string,
     body: string,
     rev_event: string
   ): Promise<boolean>;
 
-  public abstract dismissReview(
-    review_id: string,
-    message: string
-  ): Promise<boolean>;
+  dismissReview(review_id: string, message: string): Promise<boolean>;
 
-  public abstract deletePendingRevew(review_id: string): Promise<boolean>;
+  deletePendingRevew(review_id: string): Promise<boolean>;
 
-  public abstract deleteReviewRequest(
+  deleteReviewRequest(
     reviewers: string[],
     team_reviewers: string[]
   ): Promise<boolean>;
 
-  public abstract getAllCommits(per_page: number, page: number): Promise<any[]>;
+  getAllCommits(per_page: number, page: number): Promise<any[]>;
 
-  public abstract getAllFiles(per_page: number, page: number): Promise<any[]>;
+  getAllFiles(per_page: number, page: number): Promise<any[]>;
 
-  public abstract merge(
+  merge(
     commit_title: string,
     commit_message: string,
     sha: string,
     merge_method: string
   ): Promise<boolean>;
 
-  public abstract update(
+  update(
     title: string,
     body: string,
     state: string,
