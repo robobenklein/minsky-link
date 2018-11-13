@@ -39,7 +39,9 @@ export class MinskyEtchPane {
         github_issue_result.title +
         "</a></h2>";
       this.htmlcontainer.innerHTML +=
-        "<h6>Created: " + new Date(github_issue_result.created_at).toString() + "</h6>";
+        "<h6>Created: " +
+        new Date(github_issue_result.created_at).toString() +
+        "</h6>";
       var tmp_new_labels = "<h4>Labels: ";
       for (var some_label of github_issue_result.labels) {
         tmp_new_labels +=
@@ -65,8 +67,12 @@ export class MinskyEtchPane {
       promise_for_github_issue_comments.then(github_issue_comments_result => {
         for (var github_issue_comment_result of github_issue_comments_result) {
           var thing = document.createElement("div");
-          thing.innerHTML += "<p>User " + github_issue_comment_result.user.login + " wrote:</p>"
-          thing.innerHTML += "<div style=\"padding-left: 10em;\">" + github_issue_comment_result.body + "</div>";
+          thing.innerHTML +=
+            "<p>User " + github_issue_comment_result.user.login + " wrote:</p>";
+          thing.innerHTML +=
+            '<div style="padding-left: 10em;">' +
+            github_issue_comment_result.body +
+            "</div>";
           this.htmlcontainer.appendChild(thing);
         }
       });
