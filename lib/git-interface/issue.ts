@@ -37,8 +37,6 @@ export interface Issue {
   id: number;
   url: string;
   repository_url: string;
-  // The URL should end with "{/name}". That needs to be replaced with the
-  // name of the label for the URL to work.
   labels_url: string;
   comments_url: string;
   events_url: string;

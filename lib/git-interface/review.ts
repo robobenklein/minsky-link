@@ -13,6 +13,12 @@ export enum Pr_State {
   Dissmiss = "DISMISSED"
 }
 
+export type ReviewComments = {
+  path: string;
+  position: number;
+  body: string;
+};
+
 export class Review {
   public pr_id: number;
   public user: User;

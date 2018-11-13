@@ -34,3 +34,37 @@ export class User {
     this.site_admin = site_admin;
   }
 }
+
+export class Team {
+  public id: number;
+  public url: string;
+  public name: string;
+  public slug: string;
+  public description: string;
+  public privacy: string;
+  public permission: string;
+  public members_url: string;
+  public repositories_url: string;
+
+  constructor(
+    id = 0,
+    url = "",
+    name = "",
+    slug = "",
+    description = "",
+    privacy = "",
+    permission = "",
+    members_url = "",
+    repositories_url = ""
+  ) {
+    this.id = id;
+    this.url = url;
+    this.name = name;
+    this.slug = slug;
+    this.description = description;
+    this.privacy = privacy;
+    this.permission = permission;
+    this.members_url = members_url;
+    this.repositories_url = repositories_url;
+  }
+}

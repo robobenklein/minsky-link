@@ -1,6 +1,7 @@
 import { Issue } from "./issue";
-import { User } from "./user";
-import { GitPRComment, GitReplyComment, GitReviewComment } from "./comment";
+import { User, Team } from "./user";
+import { GitPRComment } from "./comment";
+import { Review } from "./review";
 
 export interface Branch {
   label: string;
@@ -8,6 +9,7 @@ export interface Branch {
   sha: string;
   user: User;
   repo: string;
+  repo_url: string;
 }
 
 export interface PullRequest extends Issue {
@@ -43,37 +45,37 @@ export interface PullRequest extends Issue {
 
   checkMerged(): Promise<boolean>;
 
-  createPRComment(
+  createReviewComment(
     body: string,
     commit_id: string,
     path: string,
     diff_position: number
   ): Promise<GitPRComment>;
 
-  createCommentReply(
+  createReviewCommentReply(
     body: string,
     in_reply_to: number
-  ): Promise<GitReplyComment>;
+  ): Promise<GitPRComment>;
 
   // More parameters need to be added
   createReview(
-    commit_id: string,
-    body: string,
-    rev_event: string
-  ): Promise<GitReviewComment>;
+    commit_id?: string,
+    body?: string,
+    rev_event?: string
+  ): Promise<Review>;
 
   createReviewRequest(
-    reviewers: string[],
-    team_reviewers: string[]
-  ): Promise<boolean>;
+    reviewers?: string[],
+    team_reviewers?: string[]
+  ): Promise<[User[], Team[]]>;
 
-  getReview(review_id: string): Promise<any>;
+  getReview(review_id: number): Promise<Review>;
 
   getReviewComments(
-    review_id: string,
+    review_id: number,
     per_page: number,
     page: number
-  ): Promise<any[]>;
+  ): Promise<GitPRComment[]>;
 
   getReviewRequests(per_page: number, page: number): Promise<any[]>;
 
