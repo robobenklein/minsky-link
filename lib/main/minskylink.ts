@@ -5,6 +5,8 @@ import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
+//@ts-ignore
+import "./view_pane";
 
 var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
@@ -200,10 +202,17 @@ export function openIssueTagFromCursorPosition(): void {
   atom.notifications.addSuccess(
     "Minsky-Link: Loading #" + target_properties["minsky"],
     {
-      description:
-        "Creating a new pane for issue #" + target_properties["minsky"],
+      description: "Opening pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );
+
+  // working on GH62
   // atom.workspace.open("https://www.google.com/");
+  atom.workspace.open("minsky://" + target_properties["minsky"], {
+    split: "down",
+    searchAllPanes: true
+  });
+
+  console.log("End of openIssueTagFromCursorPosition.");
 }
