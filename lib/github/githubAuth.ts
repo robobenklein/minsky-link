@@ -1,4 +1,5 @@
 //https://www.npmjs.com/package/@octokit/rest#authentication
+//https://github.com/octokit/rest.js/blob/master/examples/addCollaborator.js
 /*
 const GitHub = require('@octokit/rest');
 const user = require("../git-interface/user");
@@ -21,42 +22,22 @@ class githubAuth {
 exports.githubAuth = githubAuth;
 */
 
-/*
-var GitHubApi = require("github");
-var github = new GitHubApi({
-    version: "3.0.0"
-});
-github.authenticate({
-  type: "basic",
-  username: 'YOUR USERNAME',
-  password: 'YOUR PASSWORD'
-});
-github.oauth.createAuthorization(
-  { scopes:['repo'],
-    note:'Some message to remind you'
-  }
-, function(e,d) {
-    console.log("error: " + e, "token: " + d.token);
-  }
-);
-*/
+import GitHub from "@octokit/rest";
+import user from "../git-interface/user";
+import Token from "getToken"
 
-import * as GitHub from "@octokit/rest";
-import * as user from "../git-interface/user";
-
-const var CLID = "";
+var CLID = Token.TokenMe();
 
 export class GitHubAuth extends AuthMe {
   //Get auth key.
-  //var keyinp = readline();
 
   //Create new user
+  //Does not seem necessary.
   //var newUser = user();
 
-  GitHub.authorization.create();
-  /*({
+  GitHub.authenticate({
     type: 'oauth',
-    key: newUser,
-    secret: keyinp
-  })*/
+    token: CLID
+    //secret: keyinp
+  })
 }
