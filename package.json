@@ -53,8 +53,9 @@
   },
   "homepage": "https://github.com/utk-cs/team-minsky#readme",
   "dependencies": {
-    "etch": "^0.14.0",
     "@octokit/rest": ">=15.15.1",
+    "etch": "^0.14.0",
+    "github": "github:atom/github",
     "typescript": "^3.0.3"
   },
   "devDependencies": {

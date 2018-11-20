@@ -216,3 +216,83 @@ export function openIssueTagFromCursorPosition(): void {
 
   console.log("End of openIssueTagFromCursorPosition.");
 }
+
+import { BareIssueishDetailController } from "github";
+
+subscriptions.add(
+  atom.commands.add("atom-workspace", {
+    "minsky:open-issue-tag-from-cursor-position": () =>
+      openIssueishFromCursorPosition()
+  })
+);
+
+export function openIssueishFromCursorPosition(): void {
+  var current_editor = atom.workspace.getActiveTextEditor();
+
+  if (current_editor == undefined) {
+    console.log("No editor in focus.");
+    return;
+  }
+  if (current_editor.hasMultipleCursors()) {
+    console.log("Dunno how to handle hasMultipleCursors!");
+    return;
+  }
+
+  var current_minsky_marker_layer:
+    | DisplayMarkerLayer
+    | undefined = current_editor.getMarkerLayer(
+    map_TextEditors_DisplayMarkerLayerIds[current_editor.id]
+  );
+  if (current_minsky_marker_layer == undefined) {
+    console.log("Could not retrieve the marker layer!");
+    return;
+  }
+
+  var current_cursor = current_editor.getLastCursor();
+  console.log("Current cursor position: " + current_cursor.getBufferPosition());
+
+  var potential_markers: DisplayMarker[] = current_minsky_marker_layer.findMarkers(
+    {
+      containsBufferPosition: current_cursor.getBufferPosition()
+    }
+  );
+
+  console.log("Found " + potential_markers.length + " potential_markers");
+
+  var target_marker: DisplayMarker | undefined;
+  for (var potential_marker of potential_markers) {
+    console.log(
+      "potential_marker has properties " +
+        Object.keys(potential_marker.getProperties())
+    );
+    if (potential_marker.getProperties().hasOwnProperty("minsky")) {
+      target_marker = potential_marker;
+      break;
+    }
+  }
+  if (target_marker == undefined) {
+    console.log("No minsky-link markers found under the cursor.");
+    return;
+  }
+
+  console.log("Found issue under cursor: " + target_marker.getBufferRange());
+
+  var target_properties = target_marker.getProperties() as any;
+  console.log("Lookup issue #" + target_properties["minsky"]);
+
+  atom.notifications.addSuccess(
+    "Minsky-Link: Hijack-Loading #" + target_properties["minsky"],
+    {
+      description: "Opening hijack pane for issue #" + target_properties["minsky"],
+      dismissable: true
+    }
+  );
+
+  // XXX new idea: hijack github views
+  var my_issueishviewcontroller: BareIssueishDetailController = new BareIssueishDetailController({
+  });
+
+  console.log(my_issueishviewcontroller);
+
+  console.log("End of openIssueishFromCursorPosition.");
+}
