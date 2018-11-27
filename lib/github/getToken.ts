@@ -5,7 +5,7 @@
 //export class getToken extends TokenMe {
 //
 //}
-
+/*
 'use babel';
 
 import { Point, TextEditor } from 'atom';
@@ -96,3 +96,4 @@ export class TokenUp extends getToken {
     }
 
 }
+*/
