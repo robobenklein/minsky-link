@@ -8,9 +8,15 @@ import { test_getComment } from "../github/test";
 //@ts-ignore
 import "./view_pane";
 
+//@ts-ignore
+import { GithubPackage } from "github";
+
 var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
 console.log(String("Loading Minsky Link"));
+
+//@ts-ignore
+console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
 
 var map_TextEditors_DisplayMarkerLayerIds: {
   [TextEditorID: number]: number;
@@ -217,7 +223,10 @@ export function openIssueTagFromCursorPosition(): void {
   console.log("End of openIssueTagFromCursorPosition.");
 }
 
-import { BareIssueishDetailController } from "github";
+/*
+ * GithubPackage hijack
+ */
+/*
 
 subscriptions.add(
   atom.commands.add("atom-workspace", {
@@ -296,3 +305,4 @@ export function openIssueishFromCursorPosition(): void {
 
   console.log("End of openIssueishFromCursorPosition.");
 }
+//*/
