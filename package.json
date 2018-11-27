@@ -55,7 +55,7 @@
   "dependencies": {
     "@octokit/rest": ">=15.15.1",
     "etch": "^0.14.0",
-    "github": "github:atom/github",
+    "github": "github:atom/github#0.20-releases",
     "typescript": "^3.0.3"
   },
   "devDependencies": {
