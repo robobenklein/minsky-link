@@ -5,7 +5,7 @@
   "main": "./dist/main/minskylink",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
   "engines": {
-    "atom": ">=1.18.0 <2.0.0"
+    "atom": ">=1.32.0 <2.0.0"
   },
   "scripts": {
     "build": "tsc -p ./lib/",
@@ -53,15 +53,15 @@
   },
   "homepage": "https://github.com/utk-cs/team-minsky#readme",
   "dependencies": {
-    "@octokit/rest": ">=15.15.1",
+    "@octokit/rest": "^16.1.0",
     "etch": "^0.14.0",
-    "github": "github:atom/github#0.20-releases",
-    "typescript": "^3.0.3"
+    "github": "github:atom/github#0.22-releases",
+    "typescript": "^3.1.6"
   },
   "devDependencies": {
     "@types/atom": "~1.28",
-    "@types/node": "^10.11.7",
-    "prettier": "^1.14.3",
+    "@types/node": "^10.12.10",
+    "prettier": "^1.15.2",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0"
   },
