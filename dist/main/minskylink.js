@@ -7,11 +7,11 @@ const get_names_1 = require("../github/get_names");
 //@ts-ignore
 // import "./view_pane";
 //@ts-ignore
-// import { GithubPackage } from "github";
+const github_package_1 = require("../../node_modules/github/lib/github-package");
 var regex1_gh = new RegExp(/(GH([0-9]+))/, "gm");
 console.log(String("Loading Minsky Link"));
 //@ts-ignore
-// console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
+console.log("GithubPackage repo: " + github_package_1.GithubPackage.getActiveRepository());
 var map_TextEditors_DisplayMarkerLayerIds = {
     0: 0
 };
@@ -245,9 +245,15 @@ function openIssueishFromCursorPosition() {
     var current_repo = atom.project.getRepositories()[0];
     var git_workdir = current_repo.getWorkingDirectory();
     atom.workspace.open("atom-github://issueish/" +
-        encodeURIComponent("https://api.github.com") + "/" +
-        reposlug[0] + "/" + reposlug[1] + "/" + target_properties["minsky"] +
-        "?workdir=" + encodeURIComponent(git_workdir));
+        encodeURIComponent("https://api.github.com") +
+        "/" +
+        reposlug[0] +
+        "/" +
+        reposlug[1] +
+        "/" +
+        target_properties["minsky"] +
+        "?workdir=" +
+        encodeURIComponent(git_workdir));
     console.log("End of openIssueishFromCursorPosition.");
 }
 exports.openIssueishFromCursorPosition = openIssueishFromCursorPosition;
