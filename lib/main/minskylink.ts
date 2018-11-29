@@ -6,7 +6,7 @@ import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
 
-import { getRepoNames } from "../github/get_names"
+import { getRepoNames } from "../github/get_names";
 
 //@ts-ignore
 // import "./view_pane";
@@ -297,7 +297,8 @@ export function openIssueishFromCursorPosition(): void {
   atom.notifications.addSuccess(
     "Minsky-Link: Hijack-Loading #" + target_properties["minsky"],
     {
-      description: "Opening hijack pane for issue #" + target_properties["minsky"],
+      description:
+        "Opening hijack pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );
@@ -310,10 +311,17 @@ export function openIssueishFromCursorPosition(): void {
   var current_repo = atom.project.getRepositories()[0];
   var git_workdir = current_repo.getWorkingDirectory();
 
-  atom.workspace.open("atom-github://issueish/" +
-    encodeURIComponent("https://api.github.com") + "/" +
-    reposlug[0] + "/" + reposlug[1] + "/" + target_properties["minsky"] +
-    "?workdir=" + encodeURIComponent(git_workdir)
+  atom.workspace.open(
+    "atom-github://issueish/" +
+      encodeURIComponent("https://api.github.com") +
+      "/" +
+      reposlug[0] +
+      "/" +
+      reposlug[1] +
+      "/" +
+      target_properties["minsky"] +
+      "?workdir=" +
+      encodeURIComponent(git_workdir)
   );
 
   console.log("End of openIssueishFromCursorPosition.");

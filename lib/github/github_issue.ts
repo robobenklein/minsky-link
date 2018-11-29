@@ -852,8 +852,8 @@ export async function createGitHubIssue(
         data.state === "open"
           ? IssueState.Open
           : data.state === "closed"
-            ? IssueState.Closed
-            : IssueState.All;
+          ? IssueState.Closed
+          : IssueState.All;
       const user = new User(
         data.user.login,
         data.user.id,
@@ -1017,8 +1017,8 @@ export async function getGitHubIssue(
         data.state === "open"
           ? IssueState.Open
           : data.state === "closed"
-            ? IssueState.Closed
-            : IssueState.All;
+          ? IssueState.Closed
+          : IssueState.All;
       const user = new User(
         data.user.login,
         data.user.id,
@@ -1197,8 +1197,8 @@ export async function editGitHubIssue(
         data.state === "open"
           ? IssueState.Open
           : data.state === "closed"
-            ? IssueState.Closed
-            : IssueState.All;
+          ? IssueState.Closed
+          : IssueState.All;
       const user = new User(
         data.user.login,
         data.user.id,
