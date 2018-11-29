@@ -5,12 +5,21 @@ import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
+
+import { getRepoNames } from "../github/get_names";
+
 //@ts-ignore
-import "./view_pane";
+// import "./view_pane";
+
+//@ts-ignore
+// import { GithubPackage } from "github";
 
 var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
 console.log(String("Loading Minsky Link"));
+
+//@ts-ignore
+// console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
 
 var map_TextEditors_DisplayMarkerLayerIds: {
   [TextEditorID: number]: number;
@@ -131,6 +140,7 @@ export function speaks(): void {
   console.log("Minsky was asked to Speak!");
 }
 
+/*
 subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:open-issue-tag-from-cursor-position": () =>
@@ -216,3 +226,104 @@ export function openIssueTagFromCursorPosition(): void {
 
   console.log("End of openIssueTagFromCursorPosition.");
 }
+//*/
+
+/*
+ * GithubPackage hijack
+ */
+//*
+
+subscriptions.add(
+  atom.commands.add("atom-workspace", {
+    "minsky:open-issue-tag-from-cursor-position": () =>
+      openIssueishFromCursorPosition()
+  })
+);
+
+export function openIssueishFromCursorPosition(): void {
+  var current_editor = atom.workspace.getActiveTextEditor();
+
+  if (current_editor == undefined) {
+    console.log("No editor in focus.");
+    return;
+  }
+  if (current_editor.hasMultipleCursors()) {
+    console.log("Dunno how to handle hasMultipleCursors!");
+    return;
+  }
+
+  var current_minsky_marker_layer:
+    | DisplayMarkerLayer
+    | undefined = current_editor.getMarkerLayer(
+    map_TextEditors_DisplayMarkerLayerIds[current_editor.id]
+  );
+  if (current_minsky_marker_layer == undefined) {
+    console.log("Could not retrieve the marker layer!");
+    return;
+  }
+
+  var current_cursor = current_editor.getLastCursor();
+  console.log("Current cursor position: " + current_cursor.getBufferPosition());
+
+  var potential_markers: DisplayMarker[] = current_minsky_marker_layer.findMarkers(
+    {
+      containsBufferPosition: current_cursor.getBufferPosition()
+    }
+  );
+
+  console.log("Found " + potential_markers.length + " potential_markers");
+
+  var target_marker: DisplayMarker | undefined;
+  for (var potential_marker of potential_markers) {
+    console.log(
+      "potential_marker has properties " +
+        Object.keys(potential_marker.getProperties())
+    );
+    if (potential_marker.getProperties().hasOwnProperty("minsky")) {
+      target_marker = potential_marker;
+      break;
+    }
+  }
+  if (target_marker == undefined) {
+    console.log("No minsky-link markers found under the cursor.");
+    return;
+  }
+
+  console.log("Found issue under cursor: " + target_marker.getBufferRange());
+
+  var target_properties = target_marker.getProperties() as any;
+  console.log("Lookup issue #" + target_properties["minsky"]);
+
+  atom.notifications.addSuccess(
+    "Minsky-Link: Hijack-Loading #" + target_properties["minsky"],
+    {
+      description:
+        "Opening hijack pane for issue #" + target_properties["minsky"],
+      dismissable: true
+    }
+  );
+
+  // XXX new idea: hijack github views
+  // for now since GH84 is in the way, let's just assume it's here
+
+  var reposlug = getRepoNames();
+
+  var current_repo = atom.project.getRepositories()[0];
+  var git_workdir = current_repo.getWorkingDirectory();
+
+  atom.workspace.open(
+    "atom-github://issueish/" +
+      encodeURIComponent("https://api.github.com") +
+      "/" +
+      reposlug[0] +
+      "/" +
+      reposlug[1] +
+      "/" +
+      target_properties["minsky"] +
+      "?workdir=" +
+      encodeURIComponent(git_workdir)
+  );
+
+  console.log("End of openIssueishFromCursorPosition.");
+}
+//*/
