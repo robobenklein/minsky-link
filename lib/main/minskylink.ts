@@ -5,18 +5,21 @@ import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
 import { test_getComment } from "../github/test";
-//@ts-ignore
-import "./view_pane";
+
+import { getRepoNames } from "../github/get_names"
 
 //@ts-ignore
-import { GithubPackage } from "github";
+// import "./view_pane";
+
+//@ts-ignore
+// import { GithubPackage } from "github";
 
 var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
 
 console.log(String("Loading Minsky Link"));
 
 //@ts-ignore
-console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
+// console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
 
 var map_TextEditors_DisplayMarkerLayerIds: {
   [TextEditorID: number]: number;
@@ -137,6 +140,7 @@ export function speaks(): void {
   console.log("Minsky was asked to Speak!");
 }
 
+/*
 subscriptions.add(
   atom.commands.add("atom-workspace", {
     "minsky:open-issue-tag-from-cursor-position": () =>
@@ -222,11 +226,12 @@ export function openIssueTagFromCursorPosition(): void {
 
   console.log("End of openIssueTagFromCursorPosition.");
 }
+//*/
 
 /*
  * GithubPackage hijack
  */
-/*
+//*
 
 subscriptions.add(
   atom.commands.add("atom-workspace", {
@@ -298,10 +303,18 @@ export function openIssueishFromCursorPosition(): void {
   );
 
   // XXX new idea: hijack github views
-  var my_issueishviewcontroller: BareIssueishDetailController = new BareIssueishDetailController({
-  });
+  // for now since GH84 is in the way, let's just assume it's here
 
-  console.log(my_issueishviewcontroller);
+  var reposlug = getRepoNames();
+
+  var current_repo = atom.project.getRepositories()[0];
+  var git_workdir = current_repo.getWorkingDirectory();
+
+  atom.workspace.open("atom-github://issueish/" +
+    encodeURIComponent("https://api.github.com") + "/" +
+    reposlug[0] + "/" + reposlug[1] + "/" + target_properties["minsky"] +
+    "?workdir=" + encodeURIComponent(git_workdir)
+  );
 
   console.log("End of openIssueishFromCursorPosition.");
 }
