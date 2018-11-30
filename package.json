@@ -17,7 +17,7 @@
   },
   "atomTranspilers": [
     {
-      "glob": "{dist,lib}/**/*.js",
+      "glob": "./node_modules/github/**/*.js",
       "transpiler": "atom-babel6-transpiler",
       "options": {
         "cacheKeyFiles": [
@@ -67,6 +67,7 @@
   "dependencies": {
     "@octokit/rest": "=15.15.1",
     "etch": "^0.14.0",
+    "github": "github:atom/github",
     "typescript": "^3.1.6"
   },
   "devDependencies": {

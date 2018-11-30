@@ -7,11 +7,11 @@ const get_names_1 = require("../github/get_names");
 //@ts-ignore
 // import "./view_pane";
 //@ts-ignore
-// import { GithubPackage } from "github";
+const github_package_1 = require("../../node_modules/github/lib/github-package");
 var regex1_gh = new RegExp(/(GH([0-9]+))/, "gm");
 console.log(String("Loading Minsky Link"));
 //@ts-ignore
-// console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
+console.log("GithubPackage repo: " + github_package_1.GithubPackage.getActiveRepository());
 var map_TextEditors_DisplayMarkerLayerIds = {
     0: 0
 };
