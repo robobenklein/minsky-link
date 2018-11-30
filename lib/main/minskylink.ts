@@ -239,6 +239,19 @@ subscriptions.add(
       openIssueishFromCursorPosition()
   })
 );
+atom.contextMenu.add({
+  "atom-text-editor": [
+    {
+      label: "Minsky",
+      submenu: [
+        {
+          label: "Open Issue",
+          command: "minsky:open-issue-tag-from-cursor-position"
+        }
+      ]
+    }
+  ]
+});
 
 export function openIssueishFromCursorPosition(): void {
   var current_editor = atom.workspace.getActiveTextEditor();
