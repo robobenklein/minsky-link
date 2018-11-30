@@ -77,15 +77,15 @@ export interface PullRequest extends Issue {
     page: number
   ): Promise<GitPRComment[]>;
 
-  getReviewRequests(per_page: number, page: number): Promise<any[]>;
+  getReviewRequests(per_page: number, page: number): Promise<[User[], Team[]]>;
 
-  getAllReviews(per_page: number, page: number): Promise<any[]>;
+  getAllReviews(per_page: number, page: number): Promise<Review[]>;
 
   submitReview(
-    review_id: string,
-    body: string,
-    rev_event: string
-  ): Promise<boolean>;
+    review_id: number,
+    rev_event: string,
+    body?: string
+  ): Promise<Review>;
 
   dismissReview(review_id: string, message: string): Promise<boolean>;
 

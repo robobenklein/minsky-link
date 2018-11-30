@@ -608,15 +608,168 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     });
   }
 
-  getReviewRequests(per_page: number, page: number): Promise<any[]>;
+  public async getReviewRequests(per_page=30, page=1): Promise<[User[], Team[]]>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.getReviewRequests({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      per_page,
+      page
+    });
+    return new Promise<[User[], Team[]]>((resolve, reject) => {
+      if (result.status == 200) {
+        const data = result.data;
+        var reviewers = new Array<User>();
+        for (const req of data.users) {
+          const rev = new User(
+            req.login,
+            req.id,
+            req.avatar_url,
+            req.gravatar_id,
+            req.url,
+            req.html_url,
+            req.events_url,
+            req.received_events_url,
+            req.type,
+            req.site_admin
+          );
+          reviewers.push(rev);
+        }
+        var teams = new Array<Team>();
+        for (const ret of data.teams) {
+          const tea = new Team(
+            ret.id,
+            ret.url,
+            ret.name,
+            ret.slug,
+            ret.description,
+            ret.privacy,
+            ret.permission,
+            ret.members_url,
+            ret.repositories_url
+          );
+          teams.push(tea);
+        }
+        resolve([reviewers, teams]);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
+    });
+  }
 
-  getAllReviews(per_page: number, page: number): Promise<any[]>;
+  public async getAllReviews(per_page=30, page=1): Promise<Review[]>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.getReviews({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      per_page, 
+      page
+    });
+    return new Promise<Review[]>((resolve, reject) => {
+      if (result.status == 200) {
+        var revs = Array<Review>();
+        const data = result.data;
+        for (const d of data)
+        {
+            const us = new User(
+              d.user.login,
+              d.user.id,
+              d.user.avatar_url,
+              d.user.gravatar_id,
+              d.user.url,
+              d.user.html_url,
+              d.user.events_url,
+              d.user.received_events_url,
+              d.user.type,
+              d.user.site_admin
+            );
+            const rstate =
+              d.state == "APPROVED"
+                ? Pr_State.Appr
+                : d.state == "PENDING"
+                  ? Pr_State.Pend
+                  : d.state == "CHANGES_REQUESTED"
+                    ? Pr_State.Change
+                    : Pr_State.Dissmiss;
+            const rev = new Review(
+              d.id,
+              us,
+              d.body,
+              d.commit_id,
+              d.html_url,
+              d.pull_request_url,
+              this.org,
+              this.repo,
+              rstate
+            );
+            revs.push(rev);
+        }
+        resolve(revs);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
+    });
+  }
 
-  submitReview(
-    review_id: string,
-    body: string,
-    rev_event: string
-  ): Promise<boolean>;
+  public async submitReview(
+    review_id: number,
+    rev_event: Pr_Event,
+    body?: string
+  ): Promise<Review>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.submitReview({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      review_id,
+      body,
+      event: rev_event
+    });
+    return new Promise<Review>((resolve, reject) => {
+      if (result.status == 200) {
+        const data = result.data;
+        const us = new User(
+          data.user.login,
+          data.user.id,
+          data.user.avatar_url,
+          data.user.gravatar_id,
+          data.user.url,
+          data.user.html_url,
+          data.user.events_url,
+          data.user.received_events_url,
+          data.user.type,
+          data.user.site_admin
+        );
+        const rstate =
+          data.state == "APPROVED"
+            ? Pr_State.Appr
+            : data.state == "PENDING"
+              ? Pr_State.Pend
+              : data.state == "CHANGES_REQUESTED"
+                ? Pr_State.Change
+                : Pr_State.Dissmiss;
+        const rev = new Review(
+          data.id,
+          us,
+          data.body,
+          data.commit_id,
+          data.html_url,
+          data.pull_request_url,
+          this.org,
+          this.repo,
+          rstate
+        );
+        resolve(rev);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
+    });
+  }
 
   dismissReview(review_id: string, message: string): Promise<boolean>;
 
