@@ -11,7 +11,7 @@ var Pr_State;
     Pr_State["Appr"] = "APPROVED";
     Pr_State["Pend"] = "PENDING";
     Pr_State["Change"] = "CHANGES_REQUESTED";
-    Pr_State["Dissmiss"] = "DISMISSED";
+    Pr_State["Dismiss"] = "DISMISSED";
 })(Pr_State = exports.Pr_State || (exports.Pr_State = {}));
 class Review {
     constructor(pr_id, user, body, commit_id, html_url, pr_url, org, repo, state = Pr_State.Pend) {

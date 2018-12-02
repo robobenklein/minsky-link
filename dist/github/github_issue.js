@@ -7,9 +7,9 @@ const milestone_1 = require("../git-interface/milestone");
 const user_1 = require("../git-interface/user");
 //import * as Github from "../../node_modules/@octokit/rest/index";
 const Github = require("@octokit/rest");
-class GitHubIssue extends issue_1.Issue {
-    constructor(org, repo, id, title = "", url = "", repository_url = "", labels_url = "", comments_url = "", events_url = "", html_url = "", inumber = 0, state = issue_1.IssueState.Open, body = "", user = new user_1.User(), labels = new Array(), assignees = new Array(), milestone = new milestone_1.Milestone(), locked = false, active_lock_reason = "", num_comments = 0, corresponding_pr = new issue_1.PRCorrespondingWithIssue(), created_at = "", closed_at = "", updated_at = "", closed_by = new user_1.User()) {
-        super();
+class GitHubIssue {
+    constructor(org, repo, inumber, title = "", url = "", repository_url = "", labels_url = "", comments_url = "", events_url = "", html_url = "", id = 0, state = issue_1.IssueState.Open, body = "", user = new user_1.User(), labels = new Array(), assignees = new Array(), milestone = new milestone_1.Milestone(), locked = false, active_lock_reason = "", num_comments = 0, corresponding_pr = new issue_1.PRCorrespondingWithIssue(), created_at = "", closed_at = "", updated_at = "", closed_by = new user_1.User()) {
+        this.opts = { baseUrl: "https://api.github.com" };
         this.org = org;
         this.repo = repo;
         this.id = id;
@@ -558,7 +558,7 @@ async function createGitHubIssue(owner, repo, title, body = "", milestone, label
             else {
                 pr = new issue_1.PRCorrespondingWithIssue();
             }
-            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.number, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
+            const gi = new GitHubIssue(owner, repo, data.number, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.id, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
             resolve(gi);
         }
         else {
@@ -623,7 +623,7 @@ async function getGitHubIssue(owner, repo, id) {
             console.log("Data.ID: " + data.id);
             console.log("Passed ID: " + id);
             console.log("Number: " + data.number);
-            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.number, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
+            const gi = new GitHubIssue(owner, repo, data.number, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.id, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
             resolve(gi);
         }
         else {
@@ -691,7 +691,7 @@ async function editGitHubIssue(owner, repo, id, title, body, state, milestone, l
             else {
                 pr = new issue_1.PRCorrespondingWithIssue();
             }
-            const gi = new GitHubIssue(owner, repo, data.id, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.number, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
+            const gi = new GitHubIssue(owner, repo, data.number, data.title, data.url, data.repository_url, data.labels_url, data.comments_url, data.events_url, data.html_url, data.id, state, data.body_html, user, labels, assignees, mile, data.locked, data.active_lock_reason, data.comments, pr, data.created_at, data.closed_at, data.updated_at, closer);
             resolve(gi);
         }
         else {

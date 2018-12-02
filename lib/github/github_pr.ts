@@ -1,8 +1,6 @@
 import {
   PRCorrespondingWithIssue,
   IssueState,
-  LockReason,
-  Issue
 } from "../git-interface/issue";
 import { User, Team } from "../git-interface/user";
 import { Label } from "../git-interface/label";
@@ -14,18 +12,12 @@ import {
   Pr_Event,
   Pr_State
 } from "../git-interface/review";
-import { Branch, PullRequest } from "../git-interface/pull_request";
+import { Branch, MergeData, PullRequest } from "../git-interface/pull_request";
 import { GitHubIssue } from "./github_issue";
+import { Commit, CommitParent } from "../git-interface/commit";
+import { GitFile } from "../git-interface/file";
 
 import * as Github from "@octokit/rest";
-
-/*export interface Branch {
-  label: string;
-  ref: string;
-  sha: string;
-  user: User;
-  repo: string;
-}*/
 
 export class GitHubPR extends GitHubIssue implements PullRequest {
   // Properties
@@ -313,7 +305,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
               ? Pr_State.Pend
               : data.state == "CHANGES_REQUESTED"
                 ? Pr_State.Change
-                : Pr_State.Dissmiss;
+                : Pr_State.Dismiss;
         const rev = new Review(
           data.id,
           us,
@@ -530,7 +522,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
               ? Pr_State.Pend
               : data.state == "CHANGES_REQUESTED"
                 ? Pr_State.Change
-                : Pr_State.Dissmiss;
+                : Pr_State.Dismiss;
         const rev = new Review(
           data.id,
           us,
@@ -694,7 +686,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
                   ? Pr_State.Pend
                   : d.state == "CHANGES_REQUESTED"
                     ? Pr_State.Change
-                    : Pr_State.Dissmiss;
+                    : Pr_State.Dismiss;
             const rev = new Review(
               d.id,
               us,
@@ -752,7 +744,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
               ? Pr_State.Pend
               : data.state == "CHANGES_REQUESTED"
                 ? Pr_State.Change
-                : Pr_State.Dissmiss;
+                : Pr_State.Dismiss;
         const rev = new Review(
           data.id,
           us,
@@ -771,31 +763,387 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     });
   }
 
-  dismissReview(review_id: string, message: string): Promise<boolean>;
+  public async dismissReview(review_id: number, message: string): Promise<Review>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.dismissReview({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      review_id,
+      message
+    });
+    return new Promise<Review>((resolve, reject) => {
+      if (result.status == 200) {
+        const data = result.data;
+        const us = new User(
+          data.user.login,
+          data.user.id,
+          data.user.avatar_url,
+          data.user.gravatar_id,
+          data.user.url,
+          data.user.html_url,
+          data.user.events_url,
+          data.user.received_events_url,
+          data.user.type,
+          data.user.site_admin
+        );
+        const rstate =
+          data.state == "APPROVED"
+            ? Pr_State.Appr
+            : data.state == "PENDING"
+              ? Pr_State.Pend
+              : data.state == "CHANGES_REQUESTED"
+                ? Pr_State.Change
+                : Pr_State.Dismiss;
+        if (rstate != Pr_State.Dismiss)
+        {
+          console.log("Odd data returned from GitHub API. dismissReview should produce a DISMISSED PR state.");
+        }
+        const rev = new Review(
+          data.id,
+          us,
+          data.body,
+          data.commit_id,
+          data.html_url,
+          data.pull_request_url,
+          this.org,
+          this.repo,
+          rstate
+        );
+        resolve(rev);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
+    });
+  }
 
-  deletePendingRevew(review_id: string): Promise<boolean>;
+  public async deletePendingRevew(review_id: number): Promise<Review>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.deletePendingReview({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      review_id
+    });
+    return new Promise<Review>((resolve, reject) => {
+      if (result.status == 200) {
+        const data = result.data;
+        const us = new User(
+          data.user.login,
+          data.user.id,
+          data.user.avatar_url,
+          data.user.gravatar_id,
+          data.user.url,
+          data.user.html_url,
+          data.user.events_url,
+          data.user.received_events_url,
+          data.user.type,
+          data.user.site_admin
+        );
+        const rstate =
+          data.state == "APPROVED"
+            ? Pr_State.Appr
+            : data.state == "PENDING"
+              ? Pr_State.Pend
+              : data.state == "CHANGES_REQUESTED"
+                ? Pr_State.Change
+                : Pr_State.Dismiss;
+        if (rstate != Pr_State.Dismiss)
+        {
+          console.log("Odd data returned from GitHub API. dismissReview should produce a DISMISSED PR state.");
+        }
+        const rev = new Review(
+          data.id,
+          us,
+          data.body,
+          data.commit_id,
+          data.html_url,
+          data.pull_request_url,
+          this.org,
+          this.repo,
+          rstate
+        );
+        resolve(rev);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
+    });
+  }
 
-  deleteReviewRequest(
-    reviewers: string[],
-    team_reviewers: string[]
-  ): Promise<boolean>;
+  public async deleteReviewRequest(
+    reviewers?: string[],
+    team_reviewers?: string[]
+  ): Promise<boolean>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.deleteReviewRequest({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      reviewers,
+      team_reviewers
+    });
+    return new Promise<boolean>(resolve => { resolve(result.status == 200); });
+  }
 
-  getAllCommits(per_page: number, page: number): Promise<any[]>;
+  public async getAllCommits(per_page=30, page=1): Promise<Commit[]>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.getCommits({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      per_page,
+      page
+    });
+    return new Promise<Commit[]>((resolve, reject) => {
+        if (result.status == 200)
+        {
+            const data = result.data;
+            var commits = new Array<Commit>();
+            for (const com of data)
+            {
+                var pars = new Array<CommitParent>();
+                for (const p of com.parents)
+                {
+                    pars.push(new CommitParent(p));
+                }
+                var author = new User(com.author.login, com.author.id, com.author.avatar_url,
+                                      com.author.gravatar_id, com.author.url, com.author.html_url,
+                                      com.author.events_url, com.author.received_events_url,
+                                      com.author.type, com.author.site_admin);
+                var committer = new User(com.committer.login, com.committer.id, 
+                                         com.committer.avatar_url, com.committer.gravatar_id, 
+                                         com.committer.url, com.committer.html_url,
+                                         com.committer.events_url, 
+                                         com.committer.received_events_url, com.committer.type, 
+                                         com.committer.site_admin);
+                commits.push(new Commit(
+                    com.url, com.sha, com.html_url, com.comments_url, com.commit.url,
+                    com.commit.author.name, com.commit.author.email, com.commit.author.date,
+                    com.commit.committer.name, com.commit.committer.email, 
+                    com.commit.committer.date, com.commit.message, com.commit.tree.url,
+                    com.commit.tree.sha, com.commit.comment_count, 
+                    com.commit.verification.verified, com.commit.verification.reason, author,
+                    committer, pars
+                ));
+            }
+            resolve(commits);
+        }
+        else
+        {
+            reject(new Error("HTML Request Failed."));
+        }
+    });
+  }
 
-  getAllFiles(per_page: number, page: number): Promise<any[]>;
+  public async getAllFiles(per_page=30, page=1): Promise<GitFile[]>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.getFiles({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      per_page,
+      page
+    });
+    return new Promise<GitFile[]>((resolve, reject) => {
+        if (result.status == 200)
+        {
+            const data = result.data;
+            var files = new Array<GitFile>();
+            for (const f of data)
+            {
+                files.push(new GitFile(
+                    f.sha, f.filename, f.status, f.additions, f.deletions, f.changes,
+                    f.blob_url, f.raw_url, f.contents_url, f.patch
+                ));
+            }
+            resolve(files);
+        }
+        else
+        {
+            reject(new Error("HTML Request Failed."));
+        }
+    });
+  }
 
-  merge(
-    commit_title: string,
-    commit_message: string,
-    sha: string,
-    merge_method: string
-  ): Promise<boolean>;
+  public async merge(
+    commit_title?: string,
+    commit_message?: string,
+    sha?: string,
+    merge_method?: "merge" | "squash" | "rebase"
+  ): Promise<MergeData>
+  {
+    var method: "merge" | "squash" | "rebase";
+    if (merge_method === undefined)
+    {
+        method = "merge";
+    }
+    else
+    {
+        method = merge_method;
+    }
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.merge({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      commit_title,
+      commit_message,
+      sha,
+      merge_method: method
+    });
+    return new Promise<MergeData>((resolve, reject) => {
+        if (result.status == 200)
+        {
+            var data: MergeData = {
+                sha: result.data.sha,
+                merged: result.data.merged,
+                message: result.data.message
+            };
+            resolve(data);
+        }
+        else
+        {
+            reject(new Error("HTML Request Failed."));
+        }
+    });
+  }
 
-  update(
-    title: string,
-    body: string,
-    state: string,
-    base: string,
-    maintainer_can_modify: boolean
-  ): Promise<boolean>;
+  public async update(
+    title?: string,
+    body?: string,
+    state?: "open" | "closed",
+    base?: string,
+    maintainer_can_modify?: boolean
+  ): Promise<boolean>
+  {
+    const gh: Github = new Github(this.opts);
+    const result = await gh.pullRequests.update({
+      owner: this.org,
+      repo: this.repo,
+      number: this.inumber,
+      title, body, state, base, maintainer_can_modify
+    });
+    return new Promise<boolean>(resolve => {
+      const data = result.data;
+      this.id = data.id;
+      this.url = data.url;
+      this.html_url = data.html_url;
+      this.diff_url = data.diff_url;
+      this.patch_url = data.patch_url;
+      this.issue_url = data.issue_url;
+      this.commits_url = data.commits_url;
+      this.review_comments_url = data.review_comments_url;
+      this.review_comment_url = data.review_comment_url;
+      this.comments_url = data.comments_url;
+      this.statuses_url = data.statuses_url;
+      this.inumber = data.number;
+      this.state =
+        data.state == "open"
+          ? IssueState.Open
+          : data.state == "closed"
+            ? IssueState.Closed
+            : IssueState.All;
+      this.title = data.title;
+      this.body = data.body;
+      // Empties the labels array
+      this.labels.splice(0, this.labels.length);
+      for (const labdat of data.labels) {
+        const lab = new Label(
+          labdat.id,
+          labdat.url,
+          labdat.name,
+          labdat.color,
+          this.org,
+          this.repo,
+          labdat.description,
+          labdat.default
+        );
+        this.labels.push(lab);
+      }
+      const mstate =
+        data.milestone.state == "open" ? M_State.Open : M_State.Closed;
+      const mcreator = new User(
+        data.milestone.creator.login,
+        data.milestone.creator.id,
+        data.milestone.creator.avatar_url,
+        data.milestone.creator.gravatar_id,
+        data.milestone.creator.url,
+        data.milestone.creator.html_url,
+        data.milestone.creator.events_url,
+        data.milestone.creator.received_events_url,
+        data.milestone.creator.type,
+        data.milestone.creator.site_admin
+      );
+      this.milestone = new Milestone(
+        this.org,
+        this.repo,
+        data.milestone.url,
+        data.milestone.html_url,
+        data.milestone.labels_url,
+        data.milestone.id,
+        data.milestone.number,
+        data.milestone.title,
+        mstate,
+        data.milestone.description,
+        mcreator,
+        data.milestone.open_issues,
+        data.milestone.closed_issues,
+        data.milestone.created_at,
+        data.milestone.closed_at,
+        data.milestone.due_on
+      );
+      this.locked = data.locked;
+      this.active_lock_reason = data.active_lock_reason;
+      this.created_at = data.created_at;
+      this.closed_at = data.closed_at;
+      this.updated_at = data.updated_at;
+      this.merged_at = data.merged_at;
+      const headUser = new User(
+        data.head.user.login,
+        data.head.user.id,
+        data.head.user.avatar_url,
+        data.head.user.gravatar_id,
+        data.head.user.url,
+        data.head.user.html_url,
+        data.head.user.events_url,
+        data.head.user.received_events_url,
+        data.head.user.type,
+        data.head.user.site_admin
+      );
+      this.head = {
+        label: data.head.label,
+        ref: data.head.ref,
+        sha: data.head.sha,
+        user: headUser,
+        repo: data.head.repo.name,
+        repo_url: data.head.repo.html_url
+      } as Branch;
+      const baseUser = new User(
+        data.base.user.login,
+        data.base.user.id,
+        data.base.user.avatar_url,
+        data.base.user.gravatar_id,
+        data.base.user.url,
+        data.base.user.html_url,
+        data.base.user.events_url,
+        data.base.user.received_events_url,
+        data.base.user.type,
+        data.base.user.site_admin
+      );
+      this.base = {
+        label: data.base.label,
+        ref: data.base.ref,
+        sha: data.base.sha,
+        user: baseUser,
+        repo: data.base.repo.name,
+        repo_url: data.base.repo.html_url
+      } as Branch;
+      resolve(result.status == 200);
+    });
+  }
 }

@@ -10,7 +10,7 @@ export enum Pr_State {
   Appr = "APPROVED",
   Pend = "PENDING",
   Change = "CHANGES_REQUESTED",
-  Dissmiss = "DISMISSED"
+  Dismiss = "DISMISSED"
 }
 
 export type ReviewComments = {

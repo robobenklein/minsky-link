@@ -2,6 +2,8 @@ import { Issue } from "./issue";
 import { User, Team } from "./user";
 import { GitPRComment } from "./comment";
 import { Review } from "./review";
+import { Commit } from "./commit";
+import { GitFile } from "./file";
 
 export interface Branch {
   label: string;
@@ -11,6 +13,12 @@ export interface Branch {
   repo: string;
   repo_url: string;
 }
+
+export type MergeData = {
+    sha: string;
+    merged: boolean;
+    message: string;
+};
 
 export interface PullRequest extends Issue {
   // Properties
@@ -87,31 +95,31 @@ export interface PullRequest extends Issue {
     body?: string
   ): Promise<Review>;
 
-  dismissReview(review_id: string, message: string): Promise<boolean>;
+  dismissReview(review_id: number, message: string): Promise<Review>;
 
-  deletePendingRevew(review_id: string): Promise<boolean>;
+  deletePendingRevew(review_id: number): Promise<Review>;
 
   deleteReviewRequest(
-    reviewers: string[],
-    team_reviewers: string[]
+    reviewers?: string[],
+    team_reviewers?: string[]
   ): Promise<boolean>;
 
-  getAllCommits(per_page: number, page: number): Promise<any[]>;
+  getAllCommits(per_page: number, page: number): Promise<Commit[]>;
 
-  getAllFiles(per_page: number, page: number): Promise<any[]>;
+  getAllFiles(per_page: number, page: number): Promise<GitFile[]>;
 
   merge(
-    commit_title: string,
-    commit_message: string,
-    sha: string,
-    merge_method: string
-  ): Promise<boolean>;
+    commit_title?: string,
+    commit_message?: string,
+    sha?: string,
+    merge_method?: "merge" | "squash" | "rebase"
+  ): Promise<MergeData>;
 
   update(
-    title: string,
-    body: string,
-    state: string,
-    base: string,
-    maintainer_can_modify: boolean
+    title?: string,
+    body?: string,
+    state?: "open" | "closed",
+    base?: string,
+    maintainer_can_modify?: boolean
   ): Promise<boolean>;
 }
