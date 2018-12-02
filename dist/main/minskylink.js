@@ -1,4 +1,5 @@
 "use strict";
+'use babel';
 Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
 const atom_1 = require("atom");
@@ -7,11 +8,11 @@ const get_names_1 = require("../github/get_names");
 //@ts-ignore
 // import "./view_pane";
 //@ts-ignore
-// import { GithubPackage } from "github";
+const github_1 = require("github");
 var regex1_gh = new RegExp(/(GH([0-9]+))/, "gm");
 console.log(String("Loading Minsky Link"));
 //@ts-ignore
-// console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
+console.log("GithubPackage repo: " + github_1.GithubPackage.getActiveRepository());
 var map_TextEditors_DisplayMarkerLayerIds = {
     0: 0
 };
@@ -198,15 +199,18 @@ export function openIssueTagFromCursorPosition(): void {
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:open-issue-tag-from-cursor-position": () => openIssueishFromCursorPosition()
 }));
-atom.contextMenu.add({ 'atom-text-editor': [{
-            "label": "Minsky",
-            "submenu": [
+atom.contextMenu.add({
+    "atom-text-editor": [
+        {
+            label: "Minsky",
+            submenu: [
                 {
-                    "label": "Open Issue",
-                    "command": "minsky:open-issue-tag-from-cursor-position"
+                    label: "Open Issue",
+                    command: "minsky:open-issue-tag-from-cursor-position"
                 }
             ]
-        }]
+        }
+    ]
 });
 function openIssueishFromCursorPosition() {
     var current_editor = atom.workspace.getActiveTextEditor();

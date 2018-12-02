@@ -13,7 +13,8 @@
     "prettier-check": "ts-node scripts/prettier.ts check",
     "typecheck": "tsc --noEmit -p ./lib && tsc --noEmit -p ./scripts",
     "lint": "tslint --project ./lib",
-    "test": "npm run typecheck && npm run lint && npm run prettier-check"
+    "test": "npm run typecheck && npm run lint && npm run prettier-check",
+    "babel": "babel --presets=es2015 node_modules/github -o dist/github/github"
   },
   "atomTranspilers": [
     {
@@ -73,6 +74,7 @@
   "devDependencies": {
     "@types/atom": "~1.28",
     "@types/node": "^10.12.10",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "prettier": "^1.15.2",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0"
