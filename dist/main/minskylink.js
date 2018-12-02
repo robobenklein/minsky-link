@@ -198,6 +198,16 @@ export function openIssueTagFromCursorPosition(): void {
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:open-issue-tag-from-cursor-position": () => openIssueishFromCursorPosition()
 }));
+atom.contextMenu.add({ 'atom-text-editor': [{
+            "label": "Minsky",
+            "submenu": [
+                {
+                    "label": "Open Issue",
+                    "command": "minsky:open-issue-tag-from-cursor-position"
+                }
+            ]
+        }]
+});
 function openIssueishFromCursorPosition() {
     var current_editor = atom.workspace.getActiveTextEditor();
     if (current_editor == undefined) {
@@ -245,9 +255,15 @@ function openIssueishFromCursorPosition() {
     var current_repo = atom.project.getRepositories()[0];
     var git_workdir = current_repo.getWorkingDirectory();
     atom.workspace.open("atom-github://issueish/" +
-        encodeURIComponent("https://api.github.com") + "/" +
-        reposlug[0] + "/" + reposlug[1] + "/" + target_properties["minsky"] +
-        "?workdir=" + encodeURIComponent(git_workdir));
+        encodeURIComponent("https://api.github.com") +
+        "/" +
+        reposlug[0] +
+        "/" +
+        reposlug[1] +
+        "/" +
+        target_properties["minsky"] +
+        "?workdir=" +
+        encodeURIComponent(git_workdir));
     console.log("End of openIssueishFromCursorPosition.");
 }
 exports.openIssueishFromCursorPosition = openIssueishFromCursorPosition;
