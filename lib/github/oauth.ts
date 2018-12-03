@@ -124,6 +124,7 @@ export class GitHubOauth
         gh.authenticate({type: "oauth", token: this.token.access_token});
     }
 
+    // public check_if_already_authorized(): boolean
     // private read_token_from_file(): void
     // private write_token_to_file(): void
 }
