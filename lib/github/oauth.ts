@@ -124,6 +124,28 @@ export class GitHubOauth
         gh.authenticate({type: "oauth", token: this.token.access_token});
     }
 
+    public async validate(): Promise<boolean>
+    {
+        const result = await octokitRequest("GET /applications/:client_id/tokens/:access_token", {
+            client_id: this.options.client_id,
+            access_token: this.token.access_token
+        });
+        return new Promise<boolean>((resolve, reject) => {
+            if (result.status === 200)
+            {
+                resolve(true);
+            }
+            else if (result.status === 404)
+            {
+                resolve(false);
+            }
+            else
+            {
+                reject(new Error("An error occurred during validation."))
+            }
+        });
+    }
+
     // public check_if_already_authorized(): boolean
     // private read_token_from_file(): void
     // private write_token_to_file(): void
