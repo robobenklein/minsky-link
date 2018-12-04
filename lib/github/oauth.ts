@@ -19,6 +19,7 @@ export class GitHubOauth {
   private windowheight: number;
   //private node_integration: boolean;
   private wind: electron.remote.BrowserWindow;
+  //@ts-ignore
   private opts: Github.Options;
   private rand: string;
   public validated: -1 | 0 | 1;
@@ -165,10 +166,11 @@ export class GitHubOauth {
     return this.token_promise;
   }
 
-  public authenticate(): void {
-    const gh: Github = new Github(this.opts);
+  public authenticate(): string {
+    /*const gh: Github = new Github(this.opts);
     console.log("Authenticating");
-    gh.authenticate({ type: "oauth", token: this.token.access_token });
+    gh.authenticate({ type: "oauth", token: this.token.access_token });*/
+    return this.token.access_token;
   }
 
   private set_validated(error: any, response: any, body: any): void {

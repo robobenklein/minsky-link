@@ -17,9 +17,9 @@ function test_oauth() {
             const ghprom = github_issue_1.getGitHubIssue("utk-cs", "team-minsky", 56);
             ghprom.then(gh => {
                 gh.setOauth(oauth);
-                const gcomm = gh.createComment("Hello World! I am a comment");
-                gcomm.then(comment => {
-                    console.log("Produced comment " + comment.body + "\n  URL = " + comment.url);
+                const gcomm = gh.createLabel("OAuth", "000000", "The Hell of GitHub");
+                gcomm.then(label => {
+                    console.log("Produced label " + label.name + "\n  Color = " + label.color + "\n  Description: " + label.description);
                 });
                 gcomm.catch(err => {
                     throw err;

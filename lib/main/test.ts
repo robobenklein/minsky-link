@@ -16,11 +16,10 @@ export function test_oauth(): void {
       const ghprom = getGitHubIssue("utk-cs", "team-minsky", 56);
       ghprom.then(gh => {
         gh.setOauth(oauth);
-        const gcomm = gh.createComment("Hello World! I am a comment");
-        gcomm.then(comment => {
+        const gcomm = gh.createLabel("OAuth", "000000", "The Hell of GitHub");
+        gcomm.then(label => {
           console.log(
-            "Produced comment " + comment.body + "\n  URL = " + comment.url
-          );
+            "Produced label " + label.name + "\n  Color = " + label.color + "\n  Description: " + label.description);
         });
         gcomm.catch(err => {
           throw err;

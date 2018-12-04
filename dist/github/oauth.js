@@ -7,7 +7,6 @@ const electron = require("electron");
 //import { BrowserWindow } from "electron";
 //import * as octokitRequest from "@octokit/request";
 const request = require("request");
-const Github = require("@octokit/rest");
 class GitHubOauth {
     constructor(opts, width = 800, height = 800 //, node_integration=false)
     ) {
@@ -125,9 +124,10 @@ class GitHubOauth {
         return this.token_promise;
     }
     authenticate() {
-        const gh = new Github(this.opts);
+        /*const gh: Github = new Github(this.opts);
         console.log("Authenticating");
-        gh.authenticate({ type: "oauth", token: this.token.access_token });
+        gh.authenticate({ type: "oauth", token: this.token.access_token });*/
+        return this.token.access_token;
     }
     set_validated(error, response, body) {
         console.log("Error:", error);

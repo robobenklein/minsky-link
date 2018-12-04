@@ -86,11 +86,19 @@ class GitHubIssue {
     }
     async removeAssignees(assignees) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.removeAssigneesFromIssue({
             owner: this.org,
             repo: this.repo,
             number: this.inumber,
-            assignees
+            assignees,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 200);
@@ -98,12 +106,17 @@ class GitHubIssue {
     }
     async createComment(body) {
         const gh = new Github(this.opts);
-        const headers = {
-            accept: "Accept: application/vnd.github.v3.html+json"
-        };
+        var headers;
         if (this.oauth !== undefined) {
-            console.log("Auth pre-comment creation");
-            this.oauth.authenticate();
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
+        else {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json"
+            };
         }
         const result = await gh.issues.createComment({
             owner: this.org,
@@ -126,9 +139,18 @@ class GitHubIssue {
     }
     async editComment(comment_id, body) {
         const gh = new Github(this.opts);
-        const headers = {
-            accept: "Accept: application/vnd.github.v3.html+json"
-        };
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
+        else {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json"
+            };
+        }
         const result = await gh.issues.editComment({
             owner: this.org,
             repo: this.repo,
@@ -211,10 +233,18 @@ class GitHubIssue {
     }
     async deleteComment(comment_id) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.deleteComment({
             owner: this.org,
             repo: this.repo,
-            comment_id: comment_id //.toString()
+            comment_id: comment_id,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -222,12 +252,20 @@ class GitHubIssue {
     }
     async createLabel(name, color, description) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.createLabel({
             owner: this.org,
             repo: this.repo,
             name,
             color,
-            description
+            description,
+            headers
         });
         return new Promise((resolve, reject) => {
             if (result.status >= 200 && result.status < 205) {
@@ -242,13 +280,21 @@ class GitHubIssue {
     }
     async updateLabel(current_name, new_name, new_color, new_description) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.updateLabel({
             owner: this.org,
             repo: this.repo,
             current_name,
             name: new_name,
             color: new_color,
-            description: new_description
+            description: new_description,
+            headers
         });
         return new Promise((resolve, reject) => {
             if (result.status >= 200 && result.status < 205) {
@@ -263,11 +309,19 @@ class GitHubIssue {
     }
     async replaceAllLabels(labels) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.replaceAllLabels({
             owner: this.org,
             repo: this.repo,
             number: this.inumber,
-            labels
+            labels,
+            headers
         });
         return new Promise((resolve, reject) => {
             if (result.status >= 200 && result.status < 205) {
@@ -286,11 +340,19 @@ class GitHubIssue {
     }
     async removeLabel(name) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.removeLabel({
             owner: this.org,
             repo: this.repo,
             number: this.inumber,
-            name
+            name,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 200);
@@ -298,10 +360,18 @@ class GitHubIssue {
     }
     async removeAllLabels() {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.removeAllLabels({
             owner: this.org,
             repo: this.repo,
-            number: this.inumber
+            number: this.inumber,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -350,11 +420,19 @@ class GitHubIssue {
     }
     async addLabels(labels) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.addLabels({
             owner: this.org,
             repo: this.repo,
             number: this.inumber,
-            labels
+            labels,
+            headers
         });
         return new Promise((resolve, reject) => {
             if (result.status >= 200 && result.status < 205) {
@@ -373,10 +451,18 @@ class GitHubIssue {
     }
     async deleteLabel(name) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.deleteLabel({
             owner: this.org,
             repo: this.repo,
-            name
+            name,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -384,13 +470,21 @@ class GitHubIssue {
     }
     async createMilestone(title, description, due_on, state = milestone_1.M_State.Open) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.createMilestone({
             owner: this.org,
             repo: this.repo,
             title,
             state,
             description,
-            due_on
+            due_on,
+            headers
         });
         return new Promise((resolve, reject) => {
             if (result.status === 201) {
@@ -407,6 +501,13 @@ class GitHubIssue {
     }
     async updateMilestone(milestone_id, title, description, due_on, state = milestone_1.M_State.Open) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.updateMilestone({
             owner: this.org,
             repo: this.repo,
@@ -414,7 +515,8 @@ class GitHubIssue {
             title,
             state,
             description,
-            due_on
+            due_on,
+            headers
         });
         return new Promise((resolve, reject) => {
             if (result.status === 200) {
@@ -475,10 +577,18 @@ class GitHubIssue {
     }
     async deleteMilestone(milestone_id) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.deleteMilestone({
             owner: this.org,
             repo: this.repo,
-            number: milestone_id
+            number: milestone_id,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -486,11 +596,19 @@ class GitHubIssue {
     }
     async lock(lock_reason = issue_1.LockReason.Resolved) {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.lock({
             owner: this.org,
             repo: this.repo,
             number: this.inumber,
-            lock_reason
+            lock_reason,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -498,10 +616,18 @@ class GitHubIssue {
     }
     async unlock() {
         const gh = new Github(this.opts);
+        var headers;
+        if (this.oauth !== undefined) {
+            headers = {
+                accept: "Accept: application/vnd.github.v3.html+json",
+                authorization: "token " + this.oauth.authenticate()
+            };
+        }
         const result = await gh.issues.unlock({
             owner: this.org,
             repo: this.repo,
-            number: this.inumber
+            number: this.inumber,
+            headers
         });
         return new Promise(resolve => {
             resolve(result.status === 204);
@@ -509,11 +635,20 @@ class GitHubIssue {
     }
 }
 exports.GitHubIssue = GitHubIssue;
-async function createGitHubIssue(owner, repo, title, body = "", milestone, labels, assignees) {
+async function createGitHubIssue(owner, repo, title, oauth, body = "", milestone, labels, assignees) {
     const gh = new Github({ baseUrl: "https://api.github.com" });
-    const headers = {
-        accept: "Accept: application/vnd.github.v3.html+json"
-    };
+    var headers;
+    if (oauth !== undefined) {
+        headers = {
+            accept: "Accept: application/vnd.github.v3.html+json",
+            authorization: "token " + oauth.authenticate()
+        };
+    }
+    else {
+        headers = {
+            accept: "Accept: application/vnd.github.v3.html+json"
+        };
+    }
     const result = await gh.issues.create({
         owner: owner,
         repo: repo,
