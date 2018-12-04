@@ -1,6 +1,6 @@
 {
   "name": "minsky-link",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "An Atom Plugin to bring Github/Gitlab Issues to the Atom UI.",
   "main": "./dist/main/minskylink",
   "atomTestRunner": "./node_modules/atom-ts-spec-runner/runner.js",
@@ -100,10 +100,22 @@
           "type": "string",
           "default": "down",
           "enum": [
-            { "value": "down", "description": "Open the new pane BELOW the active pane." },
-            { "value": "right", "description": "Open the new pane RIGHT OF the active pane." },
-            { "value": "left", "description": "Open the new pane LEFT OF the active pane." },
-            { "value": "up", "description": "Open the new pane ABOVE the active pane." }
+            {
+              "value": "down",
+              "description": "Open the new pane BELOW the active pane."
+            },
+            {
+              "value": "right",
+              "description": "Open the new pane RIGHT OF the active pane."
+            },
+            {
+              "value": "left",
+              "description": "Open the new pane LEFT OF the active pane."
+            },
+            {
+              "value": "up",
+              "description": "Open the new pane ABOVE the active pane."
+            }
           ],
           "order": 32
         }
