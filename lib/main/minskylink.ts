@@ -4,7 +4,7 @@ import { TextEditor } from "atom";
 import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
-import { test_getComment } from "../github/test";
+// import { test_getComment } from "../github/test";
 
 import { getRepoNames } from "../github/get_names";
 
@@ -122,17 +122,17 @@ atom.workspace.observeTextEditors(editor => {
 });
 
 // This adds the Active Command to our list of commands in Atom
-subscriptions.add(
-  atom.commands.add("atom-workspace", {
-    "minsky:speaks": () => speaks()
-  })
-);
+// subscriptions.add(
+//   atom.commands.add("atom-workspace", {
+//     "minsky:speaks": () => speaks()
+//   })
+// );
 
-subscriptions.add(
-  atom.commands.add("atom-workspace", {
-    "minsky:testGitHub": () => test_getComment()
-  })
-);
+// subscriptions.add(
+//   atom.commands.add("atom-workspace", {
+//     "minsky:testGitHub": () => test_getComment()
+//   })
+// );
 
 // This is an active command function. You can add more in the
 // activate function.
@@ -258,10 +258,24 @@ export function openIssueishFromCursorPosition(): void {
 
   if (current_editor == undefined) {
     console.log("No editor in focus.");
+    atom.notifications.addError(
+      "Minsky Link: No editor in focus!",
+      {
+        description: "Please focus a text editor pane and tag, then try again.",
+        dismissable: true
+      }
+    )
     return;
   }
   if (current_editor.hasMultipleCursors()) {
     console.log("Dunno how to handle hasMultipleCursors!");
+    atom.notifications.addError(
+      "Minsky Link cannot handle multiple cursors!",
+      {
+        description: "This may later be implemented.",
+        dismissable: true
+      }
+    )
     return;
   }
 
@@ -272,6 +286,13 @@ export function openIssueishFromCursorPosition(): void {
   );
   if (current_minsky_marker_layer == undefined) {
     console.log("Could not retrieve the marker layer!");
+    atom.notifications.addFatalError(
+      "Minsky Link encountered an unknown error.",
+      {
+        description: "Error: undefined current_minsky_marker_layer",
+        dismissable: true
+      }
+    )
     return;
   }
 
@@ -299,6 +320,14 @@ export function openIssueishFromCursorPosition(): void {
   }
   if (target_marker == undefined) {
     console.log("No minsky-link markers found under the cursor.");
+    atom.notifications.addWarning(
+      "Couldn't parse tag.",
+      {
+        description:
+          "Please place the text cursor on the issue tag and try again.",
+        dismissable: true
+      }
+    )
     return;
   }
 
@@ -308,10 +337,10 @@ export function openIssueishFromCursorPosition(): void {
   console.log("Lookup issue #" + target_properties["minsky"]);
 
   atom.notifications.addSuccess(
-    "Minsky-Link: Hijack-Loading #" + target_properties["minsky"],
+    "Minsky-Link: Loading Issue #" + target_properties["minsky"],
     {
       description:
-        "Opening hijack pane for issue #" + target_properties["minsky"],
+        "Opening pane for issue #" + target_properties["minsky"],
       dismissable: true
     }
   );

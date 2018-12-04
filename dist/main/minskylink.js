@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
 const atom_1 = require("atom");
-const test_1 = require("../github/test");
+// import { test_getComment } from "../github/test";
 const get_names_1 = require("../github/get_names");
 //@ts-ignore
 // import "./view_pane";
@@ -92,12 +92,16 @@ atom.workspace.observeTextEditors(editor => {
     }));
 });
 // This adds the Active Command to our list of commands in Atom
-subscriptions.add(atom.commands.add("atom-workspace", {
-    "minsky:speaks": () => speaks()
-}));
-subscriptions.add(atom.commands.add("atom-workspace", {
-    "minsky:testGitHub": () => test_1.test_getComment()
-}));
+// subscriptions.add(
+//   atom.commands.add("atom-workspace", {
+//     "minsky:speaks": () => speaks()
+//   })
+// );
+// subscriptions.add(
+//   atom.commands.add("atom-workspace", {
+//     "minsky:testGitHub": () => test_getComment()
+//   })
+// );
 // This is an active command function. You can add more in the
 // activate function.
 function speaks() {
@@ -198,29 +202,44 @@ export function openIssueTagFromCursorPosition(): void {
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:open-issue-tag-from-cursor-position": () => openIssueishFromCursorPosition()
 }));
-atom.contextMenu.add({ 'atom-text-editor': [{
-            "label": "Minsky",
-            "submenu": [
+atom.contextMenu.add({
+    "atom-text-editor": [
+        {
+            label: "Minsky",
+            submenu: [
                 {
-                    "label": "Open Issue",
-                    "command": "minsky:open-issue-tag-from-cursor-position"
+                    label: "Open Issue",
+                    command: "minsky:open-issue-tag-from-cursor-position"
                 }
             ]
-        }]
+        }
+    ]
 });
 function openIssueishFromCursorPosition() {
     var current_editor = atom.workspace.getActiveTextEditor();
     if (current_editor == undefined) {
         console.log("No editor in focus.");
+        atom.notifications.addError("Minsky Link: No editor in focus!", {
+            description: "Please focus a text editor pane and tag, then try again.",
+            dismissable: true
+        });
         return;
     }
     if (current_editor.hasMultipleCursors()) {
         console.log("Dunno how to handle hasMultipleCursors!");
+        atom.notifications.addError("Minsky Link cannot handle multiple cursors!", {
+            description: "This may later be implemented.",
+            dismissable: true
+        });
         return;
     }
     var current_minsky_marker_layer = current_editor.getMarkerLayer(map_TextEditors_DisplayMarkerLayerIds[current_editor.id]);
     if (current_minsky_marker_layer == undefined) {
         console.log("Could not retrieve the marker layer!");
+        atom.notifications.addFatalError("Minsky Link encountered an unknown error.", {
+            description: "Error: undefined current_minsky_marker_layer",
+            dismissable: true
+        });
         return;
     }
     var current_cursor = current_editor.getLastCursor();
@@ -240,13 +259,17 @@ function openIssueishFromCursorPosition() {
     }
     if (target_marker == undefined) {
         console.log("No minsky-link markers found under the cursor.");
+        atom.notifications.addWarning("Couldn't parse tag.", {
+            description: "Please place the text cursor on the issue tag and try again.",
+            dismissable: true
+        });
         return;
     }
     console.log("Found issue under cursor: " + target_marker.getBufferRange());
     var target_properties = target_marker.getProperties();
     console.log("Lookup issue #" + target_properties["minsky"]);
-    atom.notifications.addSuccess("Minsky-Link: Hijack-Loading #" + target_properties["minsky"], {
-        description: "Opening hijack pane for issue #" + target_properties["minsky"],
+    atom.notifications.addSuccess("Minsky-Link: Loading Issue #" + target_properties["minsky"], {
+        description: "Opening pane for issue #" + target_properties["minsky"],
         dismissable: true
     });
     // XXX new idea: hijack github views
