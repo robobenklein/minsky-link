@@ -293,10 +293,13 @@ function openIssueishFromCursorPosition() {
         pending: true,
         searchAllPanes: true
     });
-    pane_promise.catch((reason) => {
+    pane_promise.catch(reason => {
         loading_notif.dismiss();
         atom.notifications.addError("Failed to open URI", {
-            description: "Minsky Link caught an error when opening " + new_uri_to_open + " with error " + reason,
+            description: "Minsky Link caught an error when opening " +
+                new_uri_to_open +
+                " with error " +
+                reason,
             dismissable: true
         });
     });

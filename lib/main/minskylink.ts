@@ -247,7 +247,7 @@ atom.contextMenu.add({
       // submenu: [
       //   {
       //     label: "Open Issue",
-          command: "minsky:open-issue-tag-from-cursor-position"
+      command: "minsky:open-issue-tag-from-cursor-position"
       //   }
       // ]
     }
@@ -259,24 +259,18 @@ export function openIssueishFromCursorPosition(): void {
 
   if (current_editor == undefined) {
     console.log("No editor in focus.");
-    atom.notifications.addError(
-      "Minsky Link: No editor in focus!",
-      {
-        description: "Please focus a text editor pane and tag, then try again.",
-        dismissable: true
-      }
-    )
+    atom.notifications.addError("Minsky Link: No editor in focus!", {
+      description: "Please focus a text editor pane and tag, then try again.",
+      dismissable: true
+    });
     return;
   }
   if (current_editor.hasMultipleCursors()) {
     console.log("Dunno how to handle hasMultipleCursors!");
-    atom.notifications.addError(
-      "Minsky Link cannot handle multiple cursors!",
-      {
-        description: "This may later be implemented.",
-        dismissable: true
-      }
-    )
+    atom.notifications.addError("Minsky Link cannot handle multiple cursors!", {
+      description: "This may later be implemented.",
+      dismissable: true
+    });
     return;
   }
 
@@ -293,7 +287,7 @@ export function openIssueishFromCursorPosition(): void {
         description: "Error: undefined current_minsky_marker_layer",
         dismissable: true
       }
-    )
+    );
     return;
   }
 
@@ -321,14 +315,11 @@ export function openIssueishFromCursorPosition(): void {
   }
   if (target_marker == undefined) {
     console.log("No minsky-link markers found under the cursor.");
-    atom.notifications.addWarning(
-      "Couldn't parse tag.",
-      {
-        description:
-          "Please place the text cursor on the issue tag and try again.",
-        dismissable: false
-      }
-    )
+    atom.notifications.addWarning("Couldn't parse tag.", {
+      description:
+        "Please place the text cursor on the issue tag and try again.",
+      dismissable: false
+    });
     return;
   }
 
@@ -340,8 +331,7 @@ export function openIssueishFromCursorPosition(): void {
   var loading_notif = atom.notifications.addSuccess(
     "Minsky-Link: Loading Issue #" + target_properties["minsky"],
     {
-      description:
-        "Opening pane for issue #" + target_properties["minsky"],
+      description: "Opening pane for issue #" + target_properties["minsky"],
       dismissable: false // will disappear on it's own
     }
   );
@@ -354,7 +344,8 @@ export function openIssueishFromCursorPosition(): void {
   var current_repo = atom.project.getRepositories()[0];
   var git_workdir = current_repo.getWorkingDirectory();
 
-  var new_uri_to_open = "atom-github://issueish/" +
+  var new_uri_to_open =
+    "atom-github://issueish/" +
     encodeURIComponent("https://api.github.com") +
     "/" +
     reposlug[0] +
@@ -364,24 +355,22 @@ export function openIssueishFromCursorPosition(): void {
     target_properties["minsky"] +
     "?workdir=" +
     encodeURIComponent(git_workdir);
-  var pane_promise: Promise<object> = atom.workspace.open(
-    new_uri_to_open,
-      {
-        split: "down",
-        pending: true,
-        searchAllPanes: true
-      }
-  );
+  var pane_promise: Promise<object> = atom.workspace.open(new_uri_to_open, {
+    split: "down",
+    pending: true,
+    searchAllPanes: true
+  });
 
-  pane_promise.catch((reason) => {
+  pane_promise.catch(reason => {
     loading_notif.dismiss();
-    atom.notifications.addError(
-      "Failed to open URI",
-      {
-        description: "Minsky Link caught an error when opening " + new_uri_to_open + " with error " + reason,
-        dismissable: true
-      }
-    );
+    atom.notifications.addError("Failed to open URI", {
+      description:
+        "Minsky Link caught an error when opening " +
+        new_uri_to_open +
+        " with error " +
+        reason,
+      dismissable: true
+    });
   });
 
   console.log("End of openIssueishFromCursorPosition.");
