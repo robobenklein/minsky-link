@@ -14,7 +14,15 @@ import { getRepoNames } from "../github/get_names";
 //@ts-ignore
 // import { GithubPackage } from "github";
 
-var regex1_gh: RegExp = new RegExp(/(GH([0-9]+))/, "gm");
+// this is for #69!
+var regex1_gh: RegExp = new RegExp(atom.config.get("minsky-link.issue_tag_regex"), "gm");
+
+atom.config.onDidChange("minsky-link.issue_tag_regex", ({newValue, oldValue}) => {
+  console.log("Regex tag changed from " + oldValue + " to " + newValue);
+
+  // changes the internal regex but does not rescan changes
+  regex1_gh = new RegExp(newValue, "gm");
+});
 
 console.log(String("Loading Minsky Link"));
 
@@ -32,7 +40,7 @@ let subscriptions: CompositeDisposable;
 subscriptions = new CompositeDisposable();
 
 // HOVER LISTENER GH40
-// TODO
+// TODO #40
 
 // ISSUE TAG FINDER GH33
 // search for issue tags in a TextBuffer and apply markers to them
@@ -41,8 +49,8 @@ function findIssueTags(
   issuetaglayer: DisplayMarkerLayer
 ) {
   textToSearch.scan(regex1_gh, scanResult => {
-    var issue_number: number = parseInt(scanResult.match[2]);
-    console.log("Found issue tag: " + scanResult.matchText);
+    var issue_number: number = parseInt(scanResult.match[1]);
+    // console.log("Found issue tag: " + scanResult.matchText);
     // check if there already exists a marker on this layer:
     var existing_markers = issuetaglayer.findMarkers({
       intersectsBufferRange: scanResult.range
@@ -50,19 +58,19 @@ function findIssueTags(
     for (var marker_to_check of existing_markers) {
       if (marker_to_check.isValid() == true) {
         // still is valid? don't bother
-        console.log(
-          "Issue tag #" +
-            issue_number +
-            " already known: " +
-            marker_to_check.getBufferRange()
-        );
+        // console.log(
+        //   "Issue tag #" +
+        //     issue_number +
+        //     " already known: " +
+        //     marker_to_check.getBufferRange()
+        // );
         return;
       } else {
         // destroy the invalid marker:
         marker_to_check.destroy();
       }
     }
-    console.log("Creating marker on " + scanResult.range);
+    // console.log("Creating marker on " + scanResult.range);
     var new_marker = issuetaglayer.markBufferRange(scanResult.range, {
       invalidate: "touch"
     });
@@ -316,8 +324,9 @@ export function openIssueishFromCursorPosition(): void {
   if (target_marker == undefined) {
     console.log("No minsky-link markers found under the cursor.");
     atom.notifications.addWarning("Couldn't parse tag.", {
-      description:
-        "Please place the text cursor on the issue tag and try again.",
+      detail:
+        "Please place the text cursor on the issue tag and try again.\n\
+You may need to change the Issue Tag Regex in the plugin settings if your tags are not being recognized.",
       dismissable: false
     });
     return;
@@ -356,7 +365,7 @@ export function openIssueishFromCursorPosition(): void {
     "?workdir=" +
     encodeURIComponent(git_workdir);
   var pane_promise: Promise<object> = atom.workspace.open(new_uri_to_open, {
-    split: "down",
+    split: atom.config.get("minsky-link.pane_options.viewmode_panes_direction"),
     pending: true,
     searchAllPanes: true
   });
