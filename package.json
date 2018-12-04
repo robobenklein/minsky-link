@@ -66,7 +66,10 @@
   "homepage": "https://github.com/utk-cs/team-minsky#readme",
   "dependencies": {
     "@octokit/rest": "=15.15.1",
+    "@types/request": "^2.48.1",
+    "atom-babel6-transpiler": "^1.2.0",
     "etch": "^0.14.0",
+    "request": "^2.88.0",
     "typescript": "^3.1.6"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@ import { TextEditor } from "atom";
 import { DisplayMarker } from "atom";
 import { DisplayMarkerLayer } from "atom";
 
-import { test_getComment } from "../github/test";
+import { test_oauth } from "./test";
 
 import { getRepoNames } from "../github/get_names";
 
@@ -130,7 +130,7 @@ subscriptions.add(
 
 subscriptions.add(
   atom.commands.add("atom-workspace", {
-    "minsky:testGitHub": () => test_getComment()
+    "minsky:testOauth": () => test_oauth()
   })
 );
 
