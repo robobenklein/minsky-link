@@ -15,18 +15,6 @@
     "lint": "tslint --project ./lib",
     "test": "npm run typecheck && npm run lint && npm run prettier-check"
   },
-  "atomTranspilers": [
-    {
-      "glob": "{dist,lib}/**/*.js",
-      "transpiler": "atom-babel6-transpiler",
-      "options": {
-        "cacheKeyFiles": [
-          "package.json"
-        ],
-        "setBabelEnv": "ATOM_MINSKYLINK_BABEL_ENV"
-      }
-    }
-  ],
   "providedServices": {
     "autocomplete.provider": {
       "versions": {
