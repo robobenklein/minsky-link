@@ -8,11 +8,13 @@ import { GitComment } from "../git-interface/comment";
 import { Label } from "../git-interface/label";
 import { M_State, Milestone } from "../git-interface/milestone";
 import { User } from "../git-interface/user";
+import { GitHubOauth } from "./oauth";
 
 //import * as Github from "../../node_modules/@octokit/rest/index";
 import * as Github from "@octokit/rest";
 
 export class GitHubIssue extends Issue {
+  private oauth?: GitHubOauth;
   constructor(
     org: string,
     repo: string,
@@ -38,7 +40,8 @@ export class GitHubIssue extends Issue {
     created_at = "",
     closed_at = "",
     updated_at = "",
-    closed_by = new User()
+    closed_by = new User(),
+    oauth?: GitHubOauth
   ) {
     super();
     this.org = org;
@@ -65,6 +68,11 @@ export class GitHubIssue extends Issue {
     this.closed_at = closed_at;
     this.updated_at = updated_at;
     this.closed_by = closed_by;
+    this.oauth = oauth;
+  }
+
+  public setOauth(oauth: GitHubOauth): void {
+    this.oauth = oauth;
   }
 
   // All functions use async/await
@@ -146,6 +154,10 @@ export class GitHubIssue extends Issue {
     const headers = {
       accept: "Accept: application/vnd.github.v3.html+json"
     };
+    if (this.oauth !== undefined) {
+      console.log("Auth pre-comment creation");
+      this.oauth.authenticate();
+    }
     const result = await gh.issues.createComment({
       owner: this.org,
       repo: this.repo,

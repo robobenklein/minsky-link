@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("atom");
 const atom_1 = require("atom");
-const test_1 = require("../github/test");
+const test_1 = require("./test");
 const get_names_1 = require("../github/get_names");
 //@ts-ignore
 // import "./view_pane";
@@ -96,7 +96,7 @@ subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:speaks": () => speaks()
 }));
 subscriptions.add(atom.commands.add("atom-workspace", {
-    "minsky:testGitHub": () => test_1.test_getComment()
+    "minsky:testOauth": () => test_1.test_oauth()
 }));
 // This is an active command function. You can add more in the
 // activate function.
@@ -198,15 +198,18 @@ export function openIssueTagFromCursorPosition(): void {
 subscriptions.add(atom.commands.add("atom-workspace", {
     "minsky:open-issue-tag-from-cursor-position": () => openIssueishFromCursorPosition()
 }));
-atom.contextMenu.add({ 'atom-text-editor': [{
-            "label": "Minsky",
-            "submenu": [
+atom.contextMenu.add({
+    "atom-text-editor": [
+        {
+            label: "Minsky",
+            submenu: [
                 {
-                    "label": "Open Issue",
-                    "command": "minsky:open-issue-tag-from-cursor-position"
+                    label: "Open Issue",
+                    command: "minsky:open-issue-tag-from-cursor-position"
                 }
             ]
-        }]
+        }
+    ]
 });
 function openIssueishFromCursorPosition() {
     var current_editor = atom.workspace.getActiveTextEditor();

@@ -8,7 +8,7 @@ const user_1 = require("../git-interface/user");
 //import * as Github from "../../node_modules/@octokit/rest/index";
 const Github = require("@octokit/rest");
 class GitHubIssue extends issue_1.Issue {
-    constructor(org, repo, id, title = "", url = "", repository_url = "", labels_url = "", comments_url = "", events_url = "", html_url = "", inumber = 0, state = issue_1.IssueState.Open, body = "", user = new user_1.User(), labels = new Array(), assignees = new Array(), milestone = new milestone_1.Milestone(), locked = false, active_lock_reason = "", num_comments = 0, corresponding_pr = new issue_1.PRCorrespondingWithIssue(), created_at = "", closed_at = "", updated_at = "", closed_by = new user_1.User()) {
+    constructor(org, repo, id, title = "", url = "", repository_url = "", labels_url = "", comments_url = "", events_url = "", html_url = "", inumber = 0, state = issue_1.IssueState.Open, body = "", user = new user_1.User(), labels = new Array(), assignees = new Array(), milestone = new milestone_1.Milestone(), locked = false, active_lock_reason = "", num_comments = 0, corresponding_pr = new issue_1.PRCorrespondingWithIssue(), created_at = "", closed_at = "", updated_at = "", closed_by = new user_1.User(), oauth) {
         super();
         this.org = org;
         this.repo = repo;
@@ -34,6 +34,10 @@ class GitHubIssue extends issue_1.Issue {
         this.closed_at = closed_at;
         this.updated_at = updated_at;
         this.closed_by = closed_by;
+        this.oauth = oauth;
+    }
+    setOauth(oauth) {
+        this.oauth = oauth;
     }
     // All functions use async/await
     async addAssignees(assignees) {
@@ -97,6 +101,10 @@ class GitHubIssue extends issue_1.Issue {
         const headers = {
             accept: "Accept: application/vnd.github.v3.html+json"
         };
+        if (this.oauth !== undefined) {
+            console.log("Auth pre-comment creation");
+            this.oauth.authenticate();
+        }
         const result = await gh.issues.createComment({
             owner: this.org,
             repo: this.repo,
