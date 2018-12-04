@@ -109,9 +109,10 @@
         }
       }
     },
-    "drawer_options": {
+    "drawer_options_NYI": {
       "type": "object",
       "order": 40,
+      "description": "Not yet implemented.",
       "properties": {
         "enable_viewmode_drawers": {
           "title": "Enable Drawers",
@@ -136,9 +137,10 @@
       "default": "origin",
       "order": 21
     },
-    "hover_popup_options": {
+    "hover_popup_options_NYI": {
       "type": "object",
       "order": 50,
+      "description": "Not yet implemented.",
       "properties": {
         "enable_viewmode_hoverover": {
           "title": "Show snippets on hover",
