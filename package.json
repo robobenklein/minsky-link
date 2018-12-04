@@ -77,82 +77,114 @@
     "tslint": "^5.11.0"
   },
   "configSchema": {
-    "enable_viewmode_drawers": {
-      "title": "Enable Drawers",
-      "description": "Enables inline, resizable and collapsible drawers.",
-      "type": "boolean",
-      "default": true,
-      "order": 42
-    },
-    "enable_viewmode_hoverover": {
-      "title": "Show snippets on hover",
-      "description": "Enables snippets to be shown when you hover over a issue tag.",
-      "type": "boolean",
-      "default": true,
-      "order": 41
-    },
-    "enable_viewmode_panes": {
-      "title": "Enable Panes",
-      "description": "Enables issue pages to be expanded to full panes.",
-      "type": "boolean",
-      "default": true,
-      "order": 43
-    },
     "issue_tag_regex": {
       "title": "Issue Regex Tag",
-      "description": "Allows changing the regex used to locate issue tags",
+      "description": "Allows changing the regex used to locate issue tags, use (?:...) for non-capturing groups, and capture the number in group 1.",
       "type": "string",
-      "default": "(GH([0-9]+))",
-      "order": 44
+      "default": "(?:(?:GH|#)([0-9]+))",
+      "order": 11
+    },
+    "pane_options": {
+      "type": "object",
+      "order": 30,
+      "properties": {
+        "enable_viewmode_panes": {
+          "title": "Enable Panes",
+          "description": "Enables issue pages to be expanded to full panes.",
+          "type": "boolean",
+          "default": true,
+          "order": 31
+        },
+        "viewmode_panes_direction": {
+          "title": "Direction to open the pane in, relative to current active editor.",
+          "type": "string",
+          "default": "down",
+          "enum": [
+            { "value": "down", "description": "Open the new pane BELOW the active pane." },
+            { "value": "right", "description": "Open the new pane RIGHT OF the active pane." },
+            { "value": "left", "description": "Open the new pane LEFT OF the active pane." },
+            { "value": "up", "description": "Open the new pane ABOVE the active pane." }
+          ],
+          "order": 32
+        }
+      }
+    },
+    "drawer_options_NYI": {
+      "type": "object",
+      "order": 40,
+      "description": "Not yet implemented.",
+      "properties": {
+        "enable_viewmode_drawers": {
+          "title": "Enable Drawers",
+          "description": "Enables inline, resizable and collapsible drawers.",
+          "type": "boolean",
+          "default": true,
+          "order": 41
+        },
+        "default_drawer_height": {
+          "title": "Drawer Height",
+          "description": "Change the drawer height, number of lines shown. This is resizeable in use as well",
+          "type": "integer",
+          "default": 12,
+          "order": 42
+        }
+      }
     },
     "default_git_remote": {
       "title": "Default Git Remote",
-      "description": "Changes the Git remote",
+      "description": "Changes the Git remote used to scan for the remote API.",
       "type": "string",
       "default": "origin",
-      "order": 45
+      "order": 21
     },
-    "default_drawer_height": {
-      "title": "Drawer Height",
-      "description": "Change the drawer height, number of lines shown. This is resizeable in use as well",
-      "type": "integer",
-      "default": 12,
-      "order": 46
-    },
-    "extended_popup_description": {
-      "title": "Extend Popup Description",
-      "description": "Shows the issue description box in popup",
-      "type": "boolean",
-      "default": true,
-      "order": 47
-    },
-    "extended_popup_milestone": {
-      "title": "Extend Popup Milestone",
-      "description": "Show the issue milestone box in popup",
-      "type": "boolean",
-      "default": false,
-      "order": 48
-    },
-    "extended_popup_project": {
-      "title": "Extend Popup Project",
-      "description": "Show the issue project box in popup",
-      "type": "boolean",
-      "default": false,
-      "order": 49
-    },
-    "extended_popup_assignee": {
-      "title": "Extend Popup Assignee",
-      "description": "Show the users assigned box in popup",
-      "type": "boolean",
-      "default": false,
-      "order": 50
-    },
-    "extended_popup_label": {
-      "title": "Extend Popup Label",
-      "description": "Show the issue labels box in popup",
-      "type": "boolean",
-      "default": false,
-      "order": 51
+    "hover_popup_options_NYI": {
+      "type": "object",
+      "order": 50,
+      "description": "Not yet implemented.",
+      "properties": {
+        "enable_viewmode_hoverover": {
+          "title": "Show snippets on hover",
+          "description": "Enables snippets to be shown when you hover over a issue tag.",
+          "type": "boolean",
+          "default": true,
+          "order": 51
+        },
+        "extended_popup_description": {
+          "title": "Extend Popup Description",
+          "description": "Shows the issue description box in popup",
+          "type": "boolean",
+          "default": true,
+          "order": 52
+        },
+        "extended_popup_milestone": {
+          "title": "Extend Popup Milestone",
+          "description": "Show the issue milestone box in popup",
+          "type": "boolean",
+          "default": false,
+          "order": 53
+        },
+        "extended_popup_project": {
+          "title": "Extend Popup Project",
+          "description": "Show the issue project box in popup",
+          "type": "boolean",
+          "default": false,
+          "order": 54
+        },
+        "extended_popup_assignee": {
+          "title": "Extend Popup Assignee",
+          "description": "Show the users assigned box in popup",
+          "type": "boolean",
+          "default": false,
+          "order": 55
+        },
+        "extended_popup_label": {
+          "title": "Extend Popup Label",
+          "description": "Show the issue labels box in popup",
+          "type": "boolean",
+          "default": false,
+          "order": 56
+        }
+      }
     }
   }
 }
