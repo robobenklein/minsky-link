@@ -22,10 +22,4 @@ var LockReason;
     LockReason["Resolved"] = "resolved";
     LockReason["Spam"] = "spam";
 })(LockReason = exports.LockReason || (exports.LockReason = {}));
-class Issue {
-    constructor() {
-        this.opts = { baseUrl: "https://api.github.com" };
-    }
-}
-exports.Issue = Issue;
 //# sourceMappingURL=issue.js.map

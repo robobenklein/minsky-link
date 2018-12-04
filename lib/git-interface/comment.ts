@@ -36,71 +36,17 @@ export class GitComment {
 }
 
 export class GitPRComment extends GitComment {
-  public path: string; // path to file that necessitates the comment
-  public diff_position: number;
-
-  constructor(
-    c_body: string,
-    org: string,
-    repo: string,
-    id = 0,
-    url = "",
-    html_url = "",
-    user = new User(),
-    created_at = "",
-    updated_at = "",
-    c_path = "",
-    c_dposition = NaN
-  ) {
-    super(c_body, org, repo, id, url, html_url, user, created_at, updated_at);
-    this.path = c_path;
-    this.diff_position = c_dposition;
-  }
-}
-
-export class GitReplyComment extends GitPRComment {
-  public in_reply_to_id: number;
-
-  constructor(
-    c_body: string,
-    org: string,
-    repo: string,
-    id = 0,
-    url = "",
-    html_url = "",
-    user = new User(),
-    created_at = "",
-    updated_at = "",
-    c_path = "",
-    c_dposition = NaN,
-    c_irt = NaN
-  ) {
-    super(
-      c_body,
-      org,
-      repo,
-      id,
-      url,
-      html_url,
-      user,
-      created_at,
-      updated_at,
-      c_path,
-      c_dposition
-    );
-    this.in_reply_to_id = c_irt;
-  }
-}
-
-export class GitReviewComment extends GitReplyComment {
-  public review_id: string;
+  public review_id: number;
   public diff_hunk: string;
+  public path: string; // path to file that necessitates the comment
   public position: number;
   public original_position: number;
+  public commit_id: string;
   public original_commit_id: string;
+  public in_reply_to_id: number;
+  public pull_request_url: string;
 
   constructor(
-    c_revid: string,
     c_body: string,
     org: string,
     repo: string,
@@ -110,32 +56,25 @@ export class GitReviewComment extends GitReplyComment {
     user = new User(),
     created_at = "",
     updated_at = "",
-    c_path = "",
-    c_dposition = NaN,
-    c_irt = NaN,
+    review_id = 0,
     diff_hunk = "",
-    position = 0,
+    path = "",
+    diff_position = 0,
     original_position = 0,
-    original_commit_id = ""
+    commit_id = "",
+    original_commit_id = "",
+    in_reply_to_id = 0,
+    pull_request_url = ""
   ) {
-    super(
-      c_body,
-      org,
-      repo,
-      id,
-      url,
-      html_url,
-      user,
-      created_at,
-      updated_at,
-      c_path,
-      c_dposition,
-      c_irt
-    );
-    this.review_id = c_revid;
+    super(c_body, org, repo, id, url, html_url, user, created_at, updated_at);
+    this.review_id = review_id;
     this.diff_hunk = diff_hunk;
-    this.position = position;
+    this.path = path;
+    this.position = diff_position;
     this.original_position = original_position;
+    this.commit_id = commit_id;
     this.original_commit_id = original_commit_id;
+    this.in_reply_to_id = in_reply_to_id;
+    this.pull_request_url = pull_request_url;
   }
 }

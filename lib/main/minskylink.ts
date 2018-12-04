@@ -239,16 +239,17 @@ subscriptions.add(
       openIssueishFromCursorPosition()
   })
 );
+// added with GH91
 atom.contextMenu.add({
   "atom-text-editor": [
     {
-      label: "Minsky",
-      submenu: [
-        {
-          label: "Open Issue",
-          command: "minsky:open-issue-tag-from-cursor-position"
-        }
-      ]
+      label: "Minsky Link",
+      // submenu: [
+      //   {
+      //     label: "Open Issue",
+      command: "minsky:open-issue-tag-from-cursor-position"
+      //   }
+      // ]
     }
   ]
 });
@@ -258,10 +259,18 @@ export function openIssueishFromCursorPosition(): void {
 
   if (current_editor == undefined) {
     console.log("No editor in focus.");
+    atom.notifications.addError("Minsky Link: No editor in focus!", {
+      description: "Please focus a text editor pane and tag, then try again.",
+      dismissable: true
+    });
     return;
   }
   if (current_editor.hasMultipleCursors()) {
     console.log("Dunno how to handle hasMultipleCursors!");
+    atom.notifications.addError("Minsky Link cannot handle multiple cursors!", {
+      description: "This may later be implemented.",
+      dismissable: true
+    });
     return;
   }
 
@@ -272,6 +281,13 @@ export function openIssueishFromCursorPosition(): void {
   );
   if (current_minsky_marker_layer == undefined) {
     console.log("Could not retrieve the marker layer!");
+    atom.notifications.addFatalError(
+      "Minsky Link encountered an unknown error.",
+      {
+        description: "Error: undefined current_minsky_marker_layer",
+        dismissable: true
+      }
+    );
     return;
   }
 
@@ -299,6 +315,11 @@ export function openIssueishFromCursorPosition(): void {
   }
   if (target_marker == undefined) {
     console.log("No minsky-link markers found under the cursor.");
+    atom.notifications.addWarning("Couldn't parse tag.", {
+      description:
+        "Please place the text cursor on the issue tag and try again.",
+      dismissable: false
+    });
     return;
   }
 
@@ -307,12 +328,11 @@ export function openIssueishFromCursorPosition(): void {
   var target_properties = target_marker.getProperties() as any;
   console.log("Lookup issue #" + target_properties["minsky"]);
 
-  atom.notifications.addSuccess(
-    "Minsky-Link: Hijack-Loading #" + target_properties["minsky"],
+  var loading_notif = atom.notifications.addSuccess(
+    "Minsky-Link: Loading Issue #" + target_properties["minsky"],
     {
-      description:
-        "Opening hijack pane for issue #" + target_properties["minsky"],
-      dismissable: true
+      description: "Opening pane for issue #" + target_properties["minsky"],
+      dismissable: false // will disappear on it's own
     }
   );
 
@@ -324,18 +344,34 @@ export function openIssueishFromCursorPosition(): void {
   var current_repo = atom.project.getRepositories()[0];
   var git_workdir = current_repo.getWorkingDirectory();
 
-  atom.workspace.open(
+  var new_uri_to_open =
     "atom-github://issueish/" +
-      encodeURIComponent("https://api.github.com") +
-      "/" +
-      reposlug[0] +
-      "/" +
-      reposlug[1] +
-      "/" +
-      target_properties["minsky"] +
-      "?workdir=" +
-      encodeURIComponent(git_workdir)
-  );
+    encodeURIComponent("https://api.github.com") +
+    "/" +
+    reposlug[0] +
+    "/" +
+    reposlug[1] +
+    "/" +
+    target_properties["minsky"] +
+    "?workdir=" +
+    encodeURIComponent(git_workdir);
+  var pane_promise: Promise<object> = atom.workspace.open(new_uri_to_open, {
+    split: "down",
+    pending: true,
+    searchAllPanes: true
+  });
+
+  pane_promise.catch(reason => {
+    loading_notif.dismiss();
+    atom.notifications.addError("Failed to open URI", {
+      description:
+        "Minsky Link caught an error when opening " +
+        new_uri_to_open +
+        " with error " +
+        reason,
+      dismissable: true
+    });
+  });
 
   console.log("End of openIssueishFromCursorPosition.");
 }

@@ -10,8 +10,14 @@ export enum Pr_State {
   Appr = "APPROVED",
   Pend = "PENDING",
   Change = "CHANGES_REQUESTED",
-  Dissmiss = "DISMISSED"
+  Dismiss = "DISMISSED"
 }
+
+export type ReviewComments = {
+  path: string;
+  position: number;
+  body: string;
+};
 
 export class Review {
   public pr_id: number;
