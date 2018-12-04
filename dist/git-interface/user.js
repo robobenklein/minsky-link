@@ -15,4 +15,18 @@ class User {
     }
 }
 exports.User = User;
+class Team {
+    constructor(id = 0, url = "", name = "", slug = "", description = "", privacy = "", permission = "", members_url = "", repositories_url = "") {
+        this.id = id;
+        this.url = url;
+        this.name = name;
+        this.slug = slug;
+        this.description = description;
+        this.privacy = privacy;
+        this.permission = permission;
+        this.members_url = members_url;
+        this.repositories_url = repositories_url;
+    }
+}
+exports.Team = Team;
 //# sourceMappingURL=user.js.map

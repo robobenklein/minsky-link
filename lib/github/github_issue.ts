@@ -12,11 +12,38 @@ import { User } from "../git-interface/user";
 //import * as Github from "../../node_modules/@octokit/rest/index";
 import * as Github from "@octokit/rest";
 
-export class GitHubIssue extends Issue {
+export class GitHubIssue implements Issue {
+  id: number;
+  url: string;
+  repository_url: string;
+  labels_url: string;
+  comments_url: string;
+  events_url: string;
+  html_url: string;
+  inumber: number;
+  state: IssueState;
+  title: string;
+  body: string;
+  user: User;
+  labels: Label[];
+  assignees: User[];
+  milestone: Milestone;
+  locked: boolean;
+  active_lock_reason: string;
+  num_comments: number;
+  corresponding_pr: PRCorrespondingWithIssue;
+  created_at: string;
+  closed_at: string;
+  updated_at: string;
+  closed_by: User;
+  org: string;
+  repo: string;
+  opts: Github.Options;
+
   constructor(
     org: string,
     repo: string,
-    id: number,
+    inumber: number,
     title = "",
     url = "",
     repository_url = "",
@@ -24,7 +51,7 @@ export class GitHubIssue extends Issue {
     comments_url = "",
     events_url = "",
     html_url = "",
-    inumber = 0,
+    id = 0,
     state = IssueState.Open,
     body = "",
     user = new User(),
@@ -40,7 +67,7 @@ export class GitHubIssue extends Issue {
     updated_at = "",
     closed_by = new User()
   ) {
-    super();
+    this.opts = { baseUrl: "https://api.github.com" };
     this.org = org;
     this.repo = repo;
     this.id = id;
@@ -964,7 +991,7 @@ export async function createGitHubIssue(
       const gi = new GitHubIssue(
         owner,
         repo,
-        data.id,
+        data.number,
         data.title,
         data.url,
         data.repository_url,
@@ -972,7 +999,7 @@ export async function createGitHubIssue(
         data.comments_url,
         data.events_url,
         data.html_url,
-        data.number,
+        data.id,
         state,
         data.body_html,
         user,
@@ -1132,7 +1159,7 @@ export async function getGitHubIssue(
       const gi = new GitHubIssue(
         owner,
         repo,
-        data.id,
+        data.number,
         data.title,
         data.url,
         data.repository_url,
@@ -1140,7 +1167,7 @@ export async function getGitHubIssue(
         data.comments_url,
         data.events_url,
         data.html_url,
-        data.number,
+        data.id,
         state,
         data.body_html,
         user,
@@ -1309,7 +1336,7 @@ export async function editGitHubIssue(
       const gi = new GitHubIssue(
         owner,
         repo,
-        data.id,
+        data.number,
         data.title,
         data.url,
         data.repository_url,
@@ -1317,7 +1344,7 @@ export async function editGitHubIssue(
         data.comments_url,
         data.events_url,
         data.html_url,
-        data.number,
+        data.id,
         state,
         data.body_html,
         user,
