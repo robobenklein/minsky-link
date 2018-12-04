@@ -414,7 +414,9 @@ class GitHubPR extends github_issue_1.GitHubIssue {
             reviewers,
             team_reviewers
         });
-        return new Promise(resolve => { resolve(result.status == 200); });
+        return new Promise(resolve => {
+            resolve(result.status == 200);
+        });
     }
     async getAllCommits(per_page = 30, page = 1) {
         const gh = new Github(this.opts);
@@ -506,7 +508,11 @@ class GitHubPR extends github_issue_1.GitHubIssue {
             owner: this.org,
             repo: this.repo,
             number: this.inumber,
-            title, body, state, base, maintainer_can_modify
+            title,
+            body,
+            state,
+            base,
+            maintainer_can_modify
         });
         return new Promise(resolve => {
             const data = result.data;

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = require("./user");
 // Basic class for storing the Parent field of the return type for getCommits (Pull Requests).
-// It is used instead of casting because "as" casting between two objects is generally 
+// It is used instead of casting because "as" casting between two objects is generally
 // considered harmful.
 class CommitParent {
     constructor(ghparents) {

@@ -15,9 +15,9 @@ export interface Branch {
 }
 
 export type MergeData = {
-    sha: string;
-    merged: boolean;
-    message: string;
+  sha: string;
+  merged: boolean;
+  message: string;
 };
 
 export interface PullRequest extends Issue {

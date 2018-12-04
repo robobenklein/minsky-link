@@ -1,7 +1,4 @@
-import {
-  PRCorrespondingWithIssue,
-  IssueState,
-} from "../git-interface/issue";
+import { PRCorrespondingWithIssue, IssueState } from "../git-interface/issue";
 import { User, Team } from "../git-interface/user";
 import { Label } from "../git-interface/label";
 import { Milestone, M_State } from "../git-interface/milestone";
@@ -302,10 +299,10 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
           data.state == "APPROVED"
             ? Pr_State.Appr
             : data.state == "PENDING"
-              ? Pr_State.Pend
-              : data.state == "CHANGES_REQUESTED"
-                ? Pr_State.Change
-                : Pr_State.Dismiss;
+            ? Pr_State.Pend
+            : data.state == "CHANGES_REQUESTED"
+            ? Pr_State.Change
+            : Pr_State.Dismiss;
         const rev = new Review(
           data.id,
           us,
@@ -354,8 +351,8 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
         data.state == "open"
           ? IssueState.Open
           : data.state == "closed"
-            ? IssueState.Closed
-            : IssueState.All;
+          ? IssueState.Closed
+          : IssueState.All;
       this.title = data.title;
       this.body = data.body;
       // Empties the labels array
@@ -519,10 +516,10 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
           data.state == "APPROVED"
             ? Pr_State.Appr
             : data.state == "PENDING"
-              ? Pr_State.Pend
-              : data.state == "CHANGES_REQUESTED"
-                ? Pr_State.Change
-                : Pr_State.Dismiss;
+            ? Pr_State.Pend
+            : data.state == "CHANGES_REQUESTED"
+            ? Pr_State.Change
+            : Pr_State.Dismiss;
         const rev = new Review(
           data.id,
           us,
@@ -600,8 +597,10 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     });
   }
 
-  public async getReviewRequests(per_page=30, page=1): Promise<[User[], Team[]]>
-  {
+  public async getReviewRequests(
+    per_page = 30,
+    page = 1
+  ): Promise<[User[], Team[]]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.getReviewRequests({
       owner: this.org,
@@ -651,54 +650,52 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     });
   }
 
-  public async getAllReviews(per_page=30, page=1): Promise<Review[]>
-  {
+  public async getAllReviews(per_page = 30, page = 1): Promise<Review[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.getReviews({
       owner: this.org,
       repo: this.repo,
       number: this.inumber,
-      per_page, 
+      per_page,
       page
     });
     return new Promise<Review[]>((resolve, reject) => {
       if (result.status == 200) {
         var revs = Array<Review>();
         const data = result.data;
-        for (const d of data)
-        {
-            const us = new User(
-              d.user.login,
-              d.user.id,
-              d.user.avatar_url,
-              d.user.gravatar_id,
-              d.user.url,
-              d.user.html_url,
-              d.user.events_url,
-              d.user.received_events_url,
-              d.user.type,
-              d.user.site_admin
-            );
-            const rstate =
-              d.state == "APPROVED"
-                ? Pr_State.Appr
-                : d.state == "PENDING"
-                  ? Pr_State.Pend
-                  : d.state == "CHANGES_REQUESTED"
-                    ? Pr_State.Change
-                    : Pr_State.Dismiss;
-            const rev = new Review(
-              d.id,
-              us,
-              d.body,
-              d.commit_id,
-              d.html_url,
-              d.pull_request_url,
-              this.org,
-              this.repo,
-              rstate
-            );
-            revs.push(rev);
+        for (const d of data) {
+          const us = new User(
+            d.user.login,
+            d.user.id,
+            d.user.avatar_url,
+            d.user.gravatar_id,
+            d.user.url,
+            d.user.html_url,
+            d.user.events_url,
+            d.user.received_events_url,
+            d.user.type,
+            d.user.site_admin
+          );
+          const rstate =
+            d.state == "APPROVED"
+              ? Pr_State.Appr
+              : d.state == "PENDING"
+              ? Pr_State.Pend
+              : d.state == "CHANGES_REQUESTED"
+              ? Pr_State.Change
+              : Pr_State.Dismiss;
+          const rev = new Review(
+            d.id,
+            us,
+            d.body,
+            d.commit_id,
+            d.html_url,
+            d.pull_request_url,
+            this.org,
+            this.repo,
+            rstate
+          );
+          revs.push(rev);
         }
         resolve(revs);
       } else {
@@ -711,8 +708,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     review_id: number,
     rev_event: Pr_Event,
     body?: string
-  ): Promise<Review>
-  {
+  ): Promise<Review> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.submitReview({
       owner: this.org,
@@ -741,10 +737,10 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
           data.state == "APPROVED"
             ? Pr_State.Appr
             : data.state == "PENDING"
-              ? Pr_State.Pend
-              : data.state == "CHANGES_REQUESTED"
-                ? Pr_State.Change
-                : Pr_State.Dismiss;
+            ? Pr_State.Pend
+            : data.state == "CHANGES_REQUESTED"
+            ? Pr_State.Change
+            : Pr_State.Dismiss;
         const rev = new Review(
           data.id,
           us,
@@ -763,8 +759,10 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     });
   }
 
-  public async dismissReview(review_id: number, message: string): Promise<Review>
-  {
+  public async dismissReview(
+    review_id: number,
+    message: string
+  ): Promise<Review> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.dismissReview({
       owner: this.org,
@@ -792,13 +790,14 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
           data.state == "APPROVED"
             ? Pr_State.Appr
             : data.state == "PENDING"
-              ? Pr_State.Pend
-              : data.state == "CHANGES_REQUESTED"
-                ? Pr_State.Change
-                : Pr_State.Dismiss;
-        if (rstate != Pr_State.Dismiss)
-        {
-          console.log("Odd data returned from GitHub API. dismissReview should produce a DISMISSED PR state.");
+            ? Pr_State.Pend
+            : data.state == "CHANGES_REQUESTED"
+            ? Pr_State.Change
+            : Pr_State.Dismiss;
+        if (rstate != Pr_State.Dismiss) {
+          console.log(
+            "Odd data returned from GitHub API. dismissReview should produce a DISMISSED PR state."
+          );
         }
         const rev = new Review(
           data.id,
@@ -818,8 +817,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     });
   }
 
-  public async deletePendingRevew(review_id: number): Promise<Review>
-  {
+  public async deletePendingRevew(review_id: number): Promise<Review> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.deletePendingReview({
       owner: this.org,
@@ -846,13 +844,14 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
           data.state == "APPROVED"
             ? Pr_State.Appr
             : data.state == "PENDING"
-              ? Pr_State.Pend
-              : data.state == "CHANGES_REQUESTED"
-                ? Pr_State.Change
-                : Pr_State.Dismiss;
-        if (rstate != Pr_State.Dismiss)
-        {
-          console.log("Odd data returned from GitHub API. dismissReview should produce a DISMISSED PR state.");
+            ? Pr_State.Pend
+            : data.state == "CHANGES_REQUESTED"
+            ? Pr_State.Change
+            : Pr_State.Dismiss;
+        if (rstate != Pr_State.Dismiss) {
+          console.log(
+            "Odd data returned from GitHub API. dismissReview should produce a DISMISSED PR state."
+          );
         }
         const rev = new Review(
           data.id,
@@ -875,8 +874,7 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
   public async deleteReviewRequest(
     reviewers?: string[],
     team_reviewers?: string[]
-  ): Promise<boolean>
-  {
+  ): Promise<boolean> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.deleteReviewRequest({
       owner: this.org,
@@ -885,11 +883,12 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
       reviewers,
       team_reviewers
     });
-    return new Promise<boolean>(resolve => { resolve(result.status == 200); });
+    return new Promise<boolean>(resolve => {
+      resolve(result.status == 200);
+    });
   }
 
-  public async getAllCommits(per_page=30, page=1): Promise<Commit[]>
-  {
+  public async getAllCommits(per_page = 30, page = 1): Promise<Commit[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.getCommits({
       owner: this.org,
@@ -899,48 +898,71 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
       page
     });
     return new Promise<Commit[]>((resolve, reject) => {
-        if (result.status == 200)
-        {
-            const data = result.data;
-            var commits = new Array<Commit>();
-            for (const com of data)
-            {
-                var pars = new Array<CommitParent>();
-                for (const p of com.parents)
-                {
-                    pars.push(new CommitParent(p));
-                }
-                var author = new User(com.author.login, com.author.id, com.author.avatar_url,
-                                      com.author.gravatar_id, com.author.url, com.author.html_url,
-                                      com.author.events_url, com.author.received_events_url,
-                                      com.author.type, com.author.site_admin);
-                var committer = new User(com.committer.login, com.committer.id, 
-                                         com.committer.avatar_url, com.committer.gravatar_id, 
-                                         com.committer.url, com.committer.html_url,
-                                         com.committer.events_url, 
-                                         com.committer.received_events_url, com.committer.type, 
-                                         com.committer.site_admin);
-                commits.push(new Commit(
-                    com.url, com.sha, com.html_url, com.comments_url, com.commit.url,
-                    com.commit.author.name, com.commit.author.email, com.commit.author.date,
-                    com.commit.committer.name, com.commit.committer.email, 
-                    com.commit.committer.date, com.commit.message, com.commit.tree.url,
-                    com.commit.tree.sha, com.commit.comment_count, 
-                    com.commit.verification.verified, com.commit.verification.reason, author,
-                    committer, pars
-                ));
-            }
-            resolve(commits);
+      if (result.status == 200) {
+        const data = result.data;
+        var commits = new Array<Commit>();
+        for (const com of data) {
+          var pars = new Array<CommitParent>();
+          for (const p of com.parents) {
+            pars.push(new CommitParent(p));
+          }
+          var author = new User(
+            com.author.login,
+            com.author.id,
+            com.author.avatar_url,
+            com.author.gravatar_id,
+            com.author.url,
+            com.author.html_url,
+            com.author.events_url,
+            com.author.received_events_url,
+            com.author.type,
+            com.author.site_admin
+          );
+          var committer = new User(
+            com.committer.login,
+            com.committer.id,
+            com.committer.avatar_url,
+            com.committer.gravatar_id,
+            com.committer.url,
+            com.committer.html_url,
+            com.committer.events_url,
+            com.committer.received_events_url,
+            com.committer.type,
+            com.committer.site_admin
+          );
+          commits.push(
+            new Commit(
+              com.url,
+              com.sha,
+              com.html_url,
+              com.comments_url,
+              com.commit.url,
+              com.commit.author.name,
+              com.commit.author.email,
+              com.commit.author.date,
+              com.commit.committer.name,
+              com.commit.committer.email,
+              com.commit.committer.date,
+              com.commit.message,
+              com.commit.tree.url,
+              com.commit.tree.sha,
+              com.commit.comment_count,
+              com.commit.verification.verified,
+              com.commit.verification.reason,
+              author,
+              committer,
+              pars
+            )
+          );
         }
-        else
-        {
-            reject(new Error("HTML Request Failed."));
-        }
+        resolve(commits);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
     });
   }
 
-  public async getAllFiles(per_page=30, page=1): Promise<GitFile[]>
-  {
+  public async getAllFiles(per_page = 30, page = 1): Promise<GitFile[]> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.getFiles({
       owner: this.org,
@@ -950,23 +972,29 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
       page
     });
     return new Promise<GitFile[]>((resolve, reject) => {
-        if (result.status == 200)
-        {
-            const data = result.data;
-            var files = new Array<GitFile>();
-            for (const f of data)
-            {
-                files.push(new GitFile(
-                    f.sha, f.filename, f.status, f.additions, f.deletions, f.changes,
-                    f.blob_url, f.raw_url, f.contents_url, f.patch
-                ));
-            }
-            resolve(files);
+      if (result.status == 200) {
+        const data = result.data;
+        var files = new Array<GitFile>();
+        for (const f of data) {
+          files.push(
+            new GitFile(
+              f.sha,
+              f.filename,
+              f.status,
+              f.additions,
+              f.deletions,
+              f.changes,
+              f.blob_url,
+              f.raw_url,
+              f.contents_url,
+              f.patch
+            )
+          );
         }
-        else
-        {
-            reject(new Error("HTML Request Failed."));
-        }
+        resolve(files);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
     });
   }
 
@@ -975,16 +1003,12 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     commit_message?: string,
     sha?: string,
     merge_method?: "merge" | "squash" | "rebase"
-  ): Promise<MergeData>
-  {
+  ): Promise<MergeData> {
     var method: "merge" | "squash" | "rebase";
-    if (merge_method === undefined)
-    {
-        method = "merge";
-    }
-    else
-    {
-        method = merge_method;
+    if (merge_method === undefined) {
+      method = "merge";
+    } else {
+      method = merge_method;
     }
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.merge({
@@ -997,19 +1021,16 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
       merge_method: method
     });
     return new Promise<MergeData>((resolve, reject) => {
-        if (result.status == 200)
-        {
-            var data: MergeData = {
-                sha: result.data.sha,
-                merged: result.data.merged,
-                message: result.data.message
-            };
-            resolve(data);
-        }
-        else
-        {
-            reject(new Error("HTML Request Failed."));
-        }
+      if (result.status == 200) {
+        var data: MergeData = {
+          sha: result.data.sha,
+          merged: result.data.merged,
+          message: result.data.message
+        };
+        resolve(data);
+      } else {
+        reject(new Error("HTML Request Failed."));
+      }
     });
   }
 
@@ -1019,14 +1040,17 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
     state?: "open" | "closed",
     base?: string,
     maintainer_can_modify?: boolean
-  ): Promise<boolean>
-  {
+  ): Promise<boolean> {
     const gh: Github = new Github(this.opts);
     const result = await gh.pullRequests.update({
       owner: this.org,
       repo: this.repo,
       number: this.inumber,
-      title, body, state, base, maintainer_can_modify
+      title,
+      body,
+      state,
+      base,
+      maintainer_can_modify
     });
     return new Promise<boolean>(resolve => {
       const data = result.data;
@@ -1046,8 +1070,8 @@ export class GitHubPR extends GitHubIssue implements PullRequest {
         data.state == "open"
           ? IssueState.Open
           : data.state == "closed"
-            ? IssueState.Closed
-            : IssueState.All;
+          ? IssueState.Closed
+          : IssueState.All;
       this.title = data.title;
       this.body = data.body;
       // Empties the labels array
