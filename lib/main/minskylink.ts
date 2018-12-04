@@ -8,18 +8,13 @@ import { DisplayMarkerLayer } from "atom";
 
 import { getRepoNames } from "../github/get_names";
 
-//@ts-ignore
-// import "./view_pane";
-
-//@ts-ignore
-// import { GithubPackage } from "github";
-
 // this is for #69!
 var regex1_gh: RegExp = new RegExp(
   atom.config.get("minsky-link.issue_tag_regex"),
   "gm"
 );
 
+// working for #94
 atom.config.onDidChange(
   "minsky-link.issue_tag_regex",
   ({ newValue, oldValue }) => {
@@ -31,9 +26,6 @@ atom.config.onDidChange(
 );
 
 console.log(String("Loading Minsky Link"));
-
-//@ts-ignore
-// console.log("GithubPackage repo: " + GithubPackage.getActiveRepository());
 
 var map_TextEditors_DisplayMarkerLayerIds: {
   [TextEditorID: number]: number;
@@ -98,8 +90,8 @@ function findIssueTags(
 
 // Execute once for every opened editor
 atom.workspace.observeTextEditors(editor => {
-  console.log("Opening editor: " + editor.getLongTitle());
-  console.log("Running scan on " + editor.getLongTitle());
+  console.log("Minsky Link observing editor: " + editor.getLongTitle());
+  // console.log("Running scan on " + editor.getLongTitle());
 
   var issuetaglayer: DisplayMarkerLayer = editor.addMarkerLayer({});
   map_TextEditors_DisplayMarkerLayerIds[editor.id] = parseInt(issuetaglayer.id);
@@ -113,8 +105,8 @@ atom.workspace.observeTextEditors(editor => {
     editor.onDidStopChanging(event_editorchanged => {
       // event_editorchanged.changes.forEach(text_change => {
       for (var text_change of event_editorchanged.changes) {
-        console.log('Deleted: "' + text_change.oldText + '"');
-        console.log('Added: "' + text_change.newText + '"');
+        // console.log('Deleted: "' + text_change.oldText + '"');
+        // console.log('Added: "' + text_change.newText + '"');
         // check if the change range is in any of our issue tags.
         if (
           text_change.newText.length > 0 || // if text was added, we need to rescan
@@ -126,10 +118,11 @@ atom.workspace.observeTextEditors(editor => {
           console.log("Re-scanning for issue tags...");
           findIssueTags(editor, issuetaglayer);
           break;
-        } else {
-          // no need to re-scan
-          console.log("No need to re-scan change: " + text_change.oldRange);
         }
+        // else {
+        //   // no need to re-scan
+        //   console.log("No need to re-scan change: " + text_change.oldRange);
+        // }
       } //);
     })
   );
@@ -378,11 +371,11 @@ You may need to change the Issue Tag Regex in the plugin settings if your tags a
 
   pane_promise.catch(reason => {
     loading_notif.dismiss();
-    atom.notifications.addError("Failed to open URI", {
-      description:
-        "Minsky Link caught an error when opening " +
+    atom.notifications.addFatalError("Failed to open URI", {
+      detail:
+        "Minsky Link caught an error when opening \n" +
         new_uri_to_open +
-        " with error " +
+        "\n with error: \n" +
         reason,
       dismissable: true
     });
