@@ -239,16 +239,17 @@ subscriptions.add(
       openIssueishFromCursorPosition()
   })
 );
+// added with GH91
 atom.contextMenu.add({
   "atom-text-editor": [
     {
-      label: "Minsky",
-      submenu: [
-        {
-          label: "Open Issue",
+      label: "Minsky Link",
+      // submenu: [
+      //   {
+      //     label: "Open Issue",
           command: "minsky:open-issue-tag-from-cursor-position"
-        }
-      ]
+      //   }
+      // ]
     }
   ]
 });
@@ -325,7 +326,7 @@ export function openIssueishFromCursorPosition(): void {
       {
         description:
           "Please place the text cursor on the issue tag and try again.",
-        dismissable: true
+        dismissable: false
       }
     )
     return;
@@ -336,12 +337,12 @@ export function openIssueishFromCursorPosition(): void {
   var target_properties = target_marker.getProperties() as any;
   console.log("Lookup issue #" + target_properties["minsky"]);
 
-  atom.notifications.addSuccess(
+  var loading_notif = atom.notifications.addSuccess(
     "Minsky-Link: Loading Issue #" + target_properties["minsky"],
     {
       description:
         "Opening pane for issue #" + target_properties["minsky"],
-      dismissable: true
+      dismissable: false // will disappear on it's own
     }
   );
 
@@ -353,18 +354,35 @@ export function openIssueishFromCursorPosition(): void {
   var current_repo = atom.project.getRepositories()[0];
   var git_workdir = current_repo.getWorkingDirectory();
 
-  atom.workspace.open(
-    "atom-github://issueish/" +
-      encodeURIComponent("https://api.github.com") +
-      "/" +
-      reposlug[0] +
-      "/" +
-      reposlug[1] +
-      "/" +
-      target_properties["minsky"] +
-      "?workdir=" +
-      encodeURIComponent(git_workdir)
+  var new_uri_to_open = "atom-github://issueish/" +
+    encodeURIComponent("https://api.github.com") +
+    "/" +
+    reposlug[0] +
+    "/" +
+    reposlug[1] +
+    "/" +
+    target_properties["minsky"] +
+    "?workdir=" +
+    encodeURIComponent(git_workdir);
+  var pane_promise: Promise<object> = atom.workspace.open(
+    new_uri_to_open,
+      {
+        split: "down",
+        pending: true,
+        searchAllPanes: true
+      }
   );
+
+  pane_promise.catch((reason) => {
+    loading_notif.dismiss();
+    atom.notifications.addError(
+      "Failed to open URI",
+      {
+        description: "Minsky Link caught an error when opening " + new_uri_to_open + " with error " + reason,
+        dismissable: true
+      }
+    );
+  });
 
   console.log("End of openIssueishFromCursorPosition.");
 }
