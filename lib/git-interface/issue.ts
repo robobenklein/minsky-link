@@ -88,9 +88,9 @@ export interface Issue {
   ): Promise<GitComment>;
 
   getAllComments(
-    since: string,
-    per_page: number,
-    page: number
+    since?: string,
+    per_page?: number,
+    page?: number
   ): Promise<GitComment[]>;
 
   deleteComment(comment_id: number): Promise<boolean>;
