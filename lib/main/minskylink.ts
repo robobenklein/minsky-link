@@ -15,14 +15,20 @@ import { getRepoNames } from "../github/get_names";
 // import { GithubPackage } from "github";
 
 // this is for #69!
-var regex1_gh: RegExp = new RegExp(atom.config.get("minsky-link.issue_tag_regex"), "gm");
+var regex1_gh: RegExp = new RegExp(
+  atom.config.get("minsky-link.issue_tag_regex"),
+  "gm"
+);
 
-atom.config.onDidChange("minsky-link.issue_tag_regex", ({newValue, oldValue}) => {
-  console.log("Regex tag changed from " + oldValue + " to " + newValue);
+atom.config.onDidChange(
+  "minsky-link.issue_tag_regex",
+  ({ newValue, oldValue }) => {
+    console.log("Regex tag changed from " + oldValue + " to " + newValue);
 
-  // changes the internal regex but does not rescan changes
-  regex1_gh = new RegExp(newValue, "gm");
-});
+    // changes the internal regex but does not rescan changes
+    regex1_gh = new RegExp(newValue, "gm");
+  }
+);
 
 console.log(String("Loading Minsky Link"));
 
