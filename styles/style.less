@@ -1,6 +1,17 @@
 
 // GH39 styles should go here
 
-.minskylink_issue_tag {
-  background-color: #FF8200;
+.minskylink_issue_tag.region {
+  // background-color: #FF8255;
+  border-bottom: 0.2em double #FF8255;
+}
+
+.minskylink_issue_tag.region:before {
+  position: relative;
+  right: 0.3em;
+  top: -0.4em;
+  font-size: 110%;
+  content: "◊";
+  color: #FF8255;
+  transform: rotate(45deg);
 }
