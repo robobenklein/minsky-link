@@ -55,14 +55,14 @@
   "dependencies": {
     "@octokit/rest": "=15.15.1",
     "etch": "^0.14.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@types/atom": "~1.28",
-    "@types/node": "^10.14.8",
-    "prettier": "^1.18.0",
+    "@types/node": "^10.14.12",
+    "prettier": "^1.18.2",
     "ts-node": "^7.0.1",
-    "tslint": "^5.17.0"
+    "tslint": "^5.18.0"
   },
   "configSchema": {
     "issue_tag_regex": {
