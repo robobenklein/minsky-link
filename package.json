@@ -59,10 +59,10 @@
   },
   "devDependencies": {
     "@types/atom": "~1.28",
-    "@types/node": "^10.14.12",
+    "@types/node": "^10.14.16",
     "prettier": "^1.18.2",
     "ts-node": "^7.0.1",
-    "tslint": "^5.18.0"
+    "tslint": "^5.19.0"
   },
   "configSchema": {
     "issue_tag_regex": {
